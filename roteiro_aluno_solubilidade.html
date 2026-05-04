@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roteiro do Aluno – Solubilidade</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface2: #f7f9f8;
+    --accent: #c85a00;
+    --accent2: #e8a020;
+    --accent3: #c0392b;
+    --text: #1c1c1c;
+    --muted: #555555;
+    --border: #e0e8e4;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.7;
+    color-scheme: light;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--accent);
+    color: white;
+    padding: 40px 40px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    width: 350px; height: 350px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    top: -80px; right: -60px;
+  }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--accent2);
+    border-radius: 20px; padding: 4px 14px;
+    font-size: 12px; font-weight: 700; color: #1c1c1c;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 400; margin-bottom: 8px; line-height: 1.2;
+  }
+  header p { opacity: 0.88; font-size: 15px; max-width: 560px; }
+  .header-meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 8px; font-size: 13px; opacity: 0.9; }
+
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* SECTION LABEL + H2 */
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: white;
+    background: var(--accent); display: inline-block;
+    padding: 3px 10px; border-radius: 4px; margin-bottom: 8px;
+  }
+  h2 {
+    font-family: 'DM Serif Display', serif; font-size: 24px;
+    color: #ffffff; background: var(--accent);
+    display: inline-block; padding: 6px 16px 8px;
+    border-radius: 6px; margin-bottom: 16px;
+  }
+  h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+
+  /* CARD */
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px 28px; margin-bottom: 20px;
+  }
+  .card-accent-left  { border-left: 4px solid var(--accent); }
+  .card-accent-yellow { border-left: 4px solid var(--accent2); }
+  .card-accent-red   { border-left: 4px solid var(--accent3); }
+
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  /* OBJETIVOS */
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .obj-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; }
+  .obj-num {
+    min-width: 28px; height: 28px; background: var(--accent); color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+  }
+
+  /* CONCEITO — grid de solventes */
+  .solvente-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0;
+  }
+  .solvente-card {
+    border-radius: 10px; padding: 16px 14px; text-align: center;
+    border: 1px solid var(--border);
+  }
+  .solvente-card.polar   { background: #fff4eb; border-color: #f5c89a; }
+  .solvente-card.medio   { background: #fef9e7; border-color: #f5d87a; }
+  .solvente-card.apolar  { background: #fdf2f0; border-color: #f5c6b8; }
+  .solvente-icon { font-size: 28px; margin-bottom: 8px; }
+  .solvente-card h4 { font-size: 13px; margin-bottom: 4px; }
+  .solvente-card p  { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .solvente-badge {
+    display: inline-block; margin-top: 8px;
+    font-size: 10px; font-weight: 700; padding: 2px 8px;
+    border-radius: 10px; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .polar  .solvente-badge { background: #c85a00; color: white; }
+  .medio  .solvente-badge { background: #e8a020; color: #1c1c1c; }
+  .apolar .solvente-badge { background: #c0392b; color: white; }
+
+  /* PARTES — steps numerados */
+  .step-list { display: flex; flex-direction: column; gap: 12px; }
+  .step { display: flex; gap: 14px; }
+  .step-num {
+    min-width: 28px; height: 28px; background: var(--accent); color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 3px;
+  }
+  .step-body h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .step-body p  { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .step-tip {
+    margin-top: 8px; background: #fff8e6; border-left: 3px solid var(--accent2);
+    padding: 6px 10px; border-radius: 4px; font-size: 13px; color: #7a5500;
+  }
+
+  /* ALERTAS */
+  .alert {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px; border-radius: 8px; font-size: 14px; margin: 12px 0;
+  }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-tip    { background: #fff4eb; border: 1px solid #f5c89a; }
+  .alert-info   { background: #f0f7ff; border: 1px solid #bdd8f5; }
+  .alert-danger { background: #fdf2f2; border: 1px solid #f5c6c6; }
+
+  /* TABELAS */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th {
+    background: var(--accent); color: white;
+    padding: 10px 14px; text-align: left; font-weight: 600; font-size: 13px;
+  }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f7faf8; }
+  .td-resposta { min-height: 48px; background: #fafafa; }
+  .td-cabecalho { background: var(--surface2); font-weight: 600; font-size: 13px; }
+
+  /* PARTE HEADER */
+  .parte-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+  }
+  .parte-badge {
+    background: var(--accent); color: white;
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    padding: 4px 12px; border-radius: 20px; text-transform: uppercase; white-space: nowrap;
+  }
+  .parte-title { font-size: 17px; font-weight: 600; color: var(--text); }
+
+  /* SAFETY */
+  .safety-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+  }
+  .safety-item {
+    display: flex; align-items: flex-start; gap: 8px; font-size: 13px;
+    color: var(--muted); line-height: 1.4;
+  }
+  .safety-icon { font-size: 18px; flex-shrink: 0; }
+
+  /* RELATÓRIO */
+  .report-items { display: flex; flex-direction: column; gap: 10px; }
+  .report-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 14px; background: var(--surface2);
+    border-radius: 8px; font-size: 14px; line-height: 1.5;
+  }
+  .report-q {
+    min-width: 28px; height: 28px; background: var(--accent2); color: #1c1c1c;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* NAV INDEX */
+  .nav-index {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px 22px; margin: 24px 0 28px;
+  }
+  .nav-index-title { font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .nav-index-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .nav-index-list li { display: flex; align-items: center; gap: 8px; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .nav-index-list a { color: var(--accent); font-size: 14px; text-decoration: none; font-weight: 500; }
+
+  footer {
+    text-align: center; padding: 28px; font-size: 12px;
+    color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px;
+  }
+
+  /* ===================== PRINT ===================== */
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { margin: 15mm; size: A4 portrait; }
+
+    .nav-index, .back-top { display: none !important; }
+
+    body        { font-size: 10px !important; line-height: 1.35 !important; }
+    main        { padding: 8px 0 !important; max-width: 100% !important; }
+
+    header      { padding: 16px 20px !important; }
+    header h1   { font-size: 20px !important; margin-bottom: 3px !important; }
+    header p    { font-size: 10px !important; }
+    header h1, header p, .meta-item { color: white !important; }
+    .header-badge { font-size: 8px !important; padding: 2px 8px !important; margin-bottom: 6px !important; }
+    .header-meta  { margin-top: 8px !important; gap: 12px !important; }
+    .meta-item    { font-size: 9px !important; }
+
+    .section-label { font-size: 8px !important; padding: 2px 7px !important; margin-bottom: 4px !important; break-after: avoid !important; }
+    h2  { font-size: 13px !important; padding: 3px 10px 4px !important; margin-bottom: 6px !important; break-after: avoid !important; }
+    h3  { font-size: 11px !important; margin-bottom: 3px !important; break-after: avoid !important; }
+    h4  { font-size: 10px !important; break-after: avoid !important; }
+
+    .section-label + h2             { break-before: avoid !important; }
+    .section-label + h2 + div,
+    .section-label + h2 + p        { break-before: avoid !important; }
+
+    .card       { padding: 8px 12px !important; margin-bottom: 7px !important; border: 1px solid #ccc !important; break-inside: avoid !important; }
+    .divider    { margin: 4px 0 !important; break-after: avoid !important; }
+
+    .solvente-grid { grid-template-columns: repeat(3,1fr) !important; gap: 6px !important; margin: 6px 0 !important; }
+    .solvente-card { padding: 8px !important; }
+    .solvente-icon { font-size: 18px !important; margin-bottom: 3px !important; }
+    .solvente-card h4 { font-size: 9px !important; }
+    .solvente-card p  { font-size: 8px !important; }
+    .solvente-badge   { font-size: 8px !important; padding: 1px 6px !important; margin-top: 4px !important; }
+
+    .parte-header { margin-bottom: 6px !important; gap: 8px !important; }
+    .parte-badge  { font-size: 8px !important; padding: 2px 8px !important; }
+    .parte-title  { font-size: 12px !important; }
+
+    .step-list  { gap: 6px !important; }
+    .step       { gap: 8px !important; }
+    .step-num   { min-width: 20px !important; height: 20px !important; font-size: 9px !important; }
+    .step-body p { font-size: 9px !important; }
+    .step-body h4 { font-size: 10px !important; }
+    .step-tip   { font-size: 8px !important; padding: 4px 8px !important; margin-top: 4px !important; }
+    .step-block { break-inside: avoid !important; }
+
+    .alert      { padding: 4px 8px !important; font-size: 9px !important; margin: 4px 0 !important; break-inside: avoid !important; }
+    .alert-icon { font-size: 13px !important; }
+
+    table       { font-size: 9px !important; break-inside: avoid !important; }
+    th          { padding: 4px 8px !important; font-size: 9px !important; }
+    td          { padding: 5px 8px !important; font-size: 9px !important; }
+    .td-resposta { min-height: 28px !important; }
+
+    .safety-grid  { grid-template-columns: repeat(2,1fr) !important; gap: 5px !important; }
+    .safety-item  { font-size: 9px !important; }
+    .safety-icon  { font-size: 13px !important; }
+
+    .report-items { gap: 4px !important; }
+    .report-item  { padding: 5px 9px !important; font-size: 9px !important; break-inside: avoid !important; }
+    .report-q     { min-width: 18px !important; height: 18px !important; font-size: 8px !important; }
+
+    .obj-list li  { font-size: 10px !important; gap: 6px !important; }
+    .obj-num      { min-width: 20px !important; height: 20px !important; font-size: 9px !important; }
+
+    footer { font-size: 8px !important; padding: 6px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Aula 1 · Marystela · Eng. Florestal</div>
+  <h1>Solubilidade</h1>
+  <p>Investigação do fenômeno de solubilidade e miscibilidade em solventes de diferentes polaridades.</p>
+  <div class="header-meta">
+    <div class="meta-item"><span>⏱️</span> ~3 horas</div>
+    <div class="meta-item"><span>👥</span> Grupos de 4</div>
+    <div class="meta-item"><span>🧪</span> 4 Experimentos</div>
+    <div class="meta-item"><span>🥼</span> Avental + Óculos obrigatórios</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ÍNDICE -->
+  <div class="nav-index">
+    <div class="nav-index-title">Nesta aula</div>
+    <ul class="nav-index-list">
+      <li><span class="nav-dot"></span><a href="#fundamentos">Fundamentos — polaridade e solubilidade</a></li>
+      <li><span class="nav-dot"></span><a href="#parteA">Parte A — Sólidos em solventes</a></li>
+      <li><span class="nav-dot"></span><a href="#parteB">Parte B — Miscibilidade de álcoois</a></li>
+      <li><span class="nav-dot"></span><a href="#parteC">Parte C — Pares miscíveis ou imiscíveis</a></li>
+      <li><span class="nav-dot"></span><a href="#parteD">Parte D — Ácidos e bases orgânicos</a></li>
+      <li><span class="nav-dot"></span><a href="#seguranca">Segurança</a></li>
+      <li><span class="nav-dot"></span><a href="#relatorio">Relatório</a></li>
+    </ul>
+  </div>
+
+  <!-- OBJETIVOS -->
+  <div class="section-label">Objetivos</div>
+  <h2>O que você vai aprender</h2>
+  <div class="card card-accent-left">
+    <ul class="obj-list">
+      <li><div class="obj-num">1</div><span>Compreender o fenômeno de <strong>solubilidade</strong> e como a polaridade do soluto e do solvente determina se a dissolução ocorre</span></li>
+      <li><div class="obj-num">2</div><span>Distinguir experimentalmente os conceitos de <strong>solúvel, insolúvel e parcialmente solúvel</strong></span></li>
+      <li><div class="obj-num">3</div><span>Investigar a <strong>miscibilidade</strong> de álcoois e solventes orgânicos entre si e com a água</span></li>
+      <li><div class="obj-num">4</div><span>Compreender como o <strong>pH do meio</strong> altera a solubilidade de ácidos e bases orgânicos</span></li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FUNDAMENTOS -->
+  <div id="fundamentos" class="section-label">Fundamentos</div>
+  <h2>Polaridade e Solubilidade</h2>
+
+  <div class="card card-accent-left">
+    <p style="font-size:15px; margin-bottom:14px;">A regra central da solubilidade é <strong>"semelhante dissolve semelhante"</strong> — compostos polares se dissolvem em solventes polares, e apolares em apolares. Isso ocorre porque as forças intermoleculares precisam ser compatíveis entre soluto e solvente.</p>
+
+    <div class="solvente-grid">
+      <div class="solvente-card polar">
+        <div class="solvente-icon">💧</div>
+        <h4>Água</h4>
+        <p>Altamente polar. Forma pontes de hidrogênio. Dissolve sais, açúcares e ácidos com grupos -OH ou -COOH.</p>
+        <span class="solvente-badge">Polar</span>
+      </div>
+      <div class="solvente-card medio">
+        <div class="solvente-icon">🍶</div>
+        <h4>Álcool Metílico</h4>
+        <p>Polaridade intermediária. Possui -OH (polar) e cadeia carbônica curta (apolar). Dissolve compostos de ambas as classes.</p>
+        <span class="solvente-badge">Intermediário</span>
+      </div>
+      <div class="solvente-card apolar">
+        <div class="solvente-icon">⛽</div>
+        <h4>Hexano</h4>
+        <p>Completamente apolar. Cadeia carbônica sem grupos funcionais polares. Dissolve lipídeos, óleos e compostos apolares.</p>
+        <span class="solvente-badge">Apolar</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Critério de observação</h3>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px;">
+      <div style="background:#fff4eb; border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:22px; margin-bottom:6px;">✅</div>
+        <strong style="font-size:13px;">Solúvel</strong>
+        <p style="font-size:12px; color:var(--muted); margin-top:4px;">Composto dissolve completamente após agitação de 60s</p>
+      </div>
+      <div style="background:#fff8e6; border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:22px; margin-bottom:6px;">⚠️</div>
+        <strong style="font-size:13px;">Parc. Solúvel</strong>
+        <p style="font-size:12px; color:var(--muted); margin-top:4px;">≥50% dissolve — se não ficar claro, considere insolúvel</p>
+      </div>
+      <div style="background:#fdf2f0; border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:22px; margin-bottom:6px;">❌</div>
+        <strong style="font-size:13px;">Insolúvel</strong>
+        <p style="font-size:12px; color:var(--muted); margin-top:4px;">Composto não dissolve — precipitado ou turvação visível</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE A -->
+  <div id="parteA" class="section-label">Experimento</div>
+  <h2>Parte A — Sólidos em Solventes</h2>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Parte A</span>
+      <span class="parte-title">Solubilidade de Compostos Sólidos</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Preparar os tubos</h4>
+          <p>Numere três tubos de ensaio secos. Adicione em cada um cerca de <strong>30 mg de difenilamina</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Adicionar solventes</h4>
+          <p>Tubo 1: <strong>1 mL de água</strong> · Tubo 2: <strong>1 mL de álcool metílico</strong> · Tubo 3: <strong>1 mL de hexano</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Agitar e observar</h4>
+          <p>Agite cada tubo por <strong>60 segundos</strong>. Observe e registre: solúvel, insolúvel ou parcialmente solúvel.</p>
+          <div class="step-tip">⏱️ Se o composto for solúvel, anote o tempo que levou para dissolver completamente.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-yellow">
+    <h3 style="margin-bottom:12px;">📋 Tabela A — Registre seus resultados</h3>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Composto</th>
+          <th>Tubo 1: Água<br><span style="font-weight:400;font-size:11px;">(Polar)</span></th>
+          <th>Tubo 2: Álcool Metílico<br><span style="font-weight:400;font-size:11px;">(Intermediário)</span></th>
+          <th>Tubo 3: Hexano<br><span style="font-weight:400;font-size:11px;">(Apolar)</span></th>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Difenilamina</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE B -->
+  <div id="parteB" class="section-label">Experimento</div>
+  <h2>Parte B — Miscibilidade de Álcoois</h2>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Parte B</span>
+      <span class="parte-title">Álcoois em Água e Hexano</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Butanol em água</h4>
+          <p>Coloque <strong>1 mL de água</strong> num tubo de ensaio. Adicione <strong>butanol gota a gota até 20 gotas</strong>, agitando após cada gota. Observe.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Registrar</h4>
+          <p>Anote: <strong>miscível</strong> (mistura homogênea), <strong>parcialmente miscível</strong> (segunda camada se forma) ou <strong>imiscível</strong>.</p>
+          <div class="step-tip">💡 Se o álcool for parcialmente miscível, as primeiras gotas se dissolvem mas depois forma segunda camada.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Repetir com etanol e metanol</h4>
+          <p>Repita o procedimento substituindo butanol por <strong>etanol</strong> e depois por <strong>álcool metílico</strong>. Teste cada um em água (Tubo 1) e hexano (Tubo 2).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-yellow">
+    <h3 style="margin-bottom:12px;">📋 Tabela B — Registre seus resultados</h3>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Álcool</th>
+          <th>Tubo 1: Água</th>
+          <th>Tubo 2: Hexano</th>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Butanol</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Etanol</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Álcool Metílico</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE C -->
+  <div id="parteC" class="section-label">Experimento</div>
+  <h2>Parte C — Pares Miscíveis ou Imiscíveis</h2>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Parte C</span>
+      <span class="parte-title">Combinações de Solventes</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Preparar os tubos</h4>
+          <p>Prepare cada tubo conforme a tabela abaixo — use os volumes indicados e deixe os campos com *** sem nada.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Agitar e observar</h4>
+          <p>Agite cada tubo por <strong>20 segundos</strong>. Observe se os líquidos são <strong>miscíveis</strong> (uma camada) ou <strong>imiscíveis</strong> (duas camadas).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-yellow">
+    <h3 style="margin-bottom:12px;">📋 Tabela C — Registre seus resultados</h3>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Tubo</th>
+          <th>Água</th>
+          <th>Álcool Etílico</th>
+          <th>Éter</th>
+          <th>Hexano</th>
+          <th>Miscibilidade</th>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Tubo 1</td>
+          <td>1 mL</td><td>1 mL</td><td>—</td><td>—</td>
+          <td class="td-resposta"></td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Tubo 2</td>
+          <td>1 mL</td><td>—</td><td>1 mL</td><td>—</td>
+          <td class="td-resposta"></td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Tubo 3</td>
+          <td>1 mL</td><td>—</td><td>—</td><td>1 mL</td>
+          <td class="td-resposta"></td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Tubo 4</td>
+          <td>—</td><td>—</td><td>1 mL</td><td>1 mL</td>
+          <td class="td-resposta"></td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Tubo 5</td>
+          <td>—</td><td>1 mL</td><td>—</td><td>1 mL</td>
+          <td class="td-resposta"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE D -->
+  <div id="parteD" class="section-label">Experimento</div>
+  <h2>Parte D — Ácidos e Bases Orgânicos</h2>
+
+  <div class="alert alert-info">
+    <span class="alert-icon">💡</span>
+    <span>Nesta parte você vai ver como o <strong>estado de ionização</strong> de um composto orgânico altera sua solubilidade. Um ácido neutro pode ser insolúvel em água, mas sua forma ionizada (sal) é solúvel.</span>
+  </div>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Parte D</span>
+      <span class="parte-title">Ácido Benzóico e Acetato de Etila</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Preparar 3 tubos com ácido benzóico</h4>
+          <p>Coloque ~<strong>30 mg de ácido benzóico</strong> em cada um de três tubos. Adicione: Tubo 1 → <strong>1 mL de água</strong>, Tubo 2 → <strong>1 mL de NaOH 1 mol·L⁻¹</strong>, Tubo 3 → <strong>1 mL de HCl 1 mol·L⁻¹</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Agitar e registrar</h4>
+          <p>Agite cada tubo por <strong>20 segundos</strong>. Observe e anote a solubilidade na tabela.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Acidificar o tubo com NaOH</h4>
+          <p>Pegue o Tubo 2 (ácido benzóico + NaOH). Adicione <strong>HCl 6 mol·L⁻¹ gota a gota</strong> até a solução ficar ácida — confirme com papel indicador de pH. Agite 20s e observe.</p>
+          <div class="step-tip">⚠️ Adicione o HCl 6M devagar — reação pode ser vigorosa. Use sempre dentro da capela.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Repetir com ureia e acetato de etila</h4>
+          <p>Repita os passos 1 e 2 com <strong>ureia</strong> (mesmos 3 tubos: água, NaOH 1M, HCl 1M). Em seguida, repita com <strong>acetato de etila</strong>. No tubo com HCl do acetato de etila, adicione <strong>NaOH 6 mol·L⁻¹</strong> gota a gota até a solução ficar básica (papel de pH). Agite e observe.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-yellow">
+    <h3 style="margin-bottom:12px;">📋 Tabela D — Registre seus resultados</h3>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Composto</th>
+          <th>Tubo 1: Água</th>
+          <th>Tubo 2: NaOH 1 mol·L⁻¹</th>
+          <th>Tubo 3: HCl 1 mol·L⁻¹</th>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Ácido Benzóico</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta" style="position:relative;">
+            <div style="font-size:10px;color:var(--muted);margin-top:4px;">+ HCl 6 mol·L⁻¹ →</div>
+            <div class="td-resposta" style="margin-top:4px;border-top:1px dashed #ccc;padding-top:4px;"></div>
+          </td>
+          <td class="td-resposta"></td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Ureia</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Acetato de Etila</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta" style="position:relative;">
+            <div style="font-size:10px;color:var(--muted);margin-top:4px;">+ NaOH 6 mol·L⁻¹ →</div>
+            <div class="td-resposta" style="margin-top:4px;border-top:1px dashed #ccc;padding-top:4px;"></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SEGURANÇA -->
+  <div id="seguranca" class="section-label">Segurança</div>
+  <h2>Normas do Laboratório</h2>
+
+  <div class="card">
+    <div class="safety-grid">
+      <div class="safety-item"><span class="safety-icon">🥼</span><span>Avental fechado e óculos de proteção <strong>obrigatórios</strong> durante toda a prática</span></div>
+      <div class="safety-item"><span class="safety-icon">🧤</span><span>Use luvas ao manusear HCl e NaOH concentrados (6 mol·L⁻¹)</span></div>
+      <div class="safety-item"><span class="safety-icon">🌬️</span><span>Trabalhe com <strong>hexano, éter e metanol na capela</strong> — vapores inflamáveis</span></div>
+      <div class="safety-item"><span class="safety-icon">👟</span><span>Calçado fechado obrigatório — sem sandálias ou bermudas</span></div>
+      <div class="safety-item"><span class="safety-icon">🍽️</span><span>Proibido comer, beber ou fumar dentro do laboratório</span></div>
+      <div class="safety-item"><span class="safety-icon">🔥</span><span>Hexano e éter são <strong>inflamáveis</strong> — mantenha longe de chamas e faíscas</span></div>
+    </div>
+    <div class="alert alert-danger" style="margin-top:14px; margin-bottom:0;">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>HCl e NaOH 6 mol·L⁻¹ são corrosivos.</strong> Adicione sempre gota a gota. Em caso de contato com a pele, lave imediatamente com água abundante por 15 minutos.</span>
+    </div>
+  </div>
+
+  <!-- RELATÓRIO -->
+  <div id="relatorio" class="section-label">Relatório</div>
+  <h2>O que entregar</h2>
+
+  <div class="report-items">
+    <div class="report-item">
+      <div class="report-q">A</div>
+      <span><strong>Parte A:</strong> Resuma os resultados em tabela. Explique cada resultado levando em conta a polaridade dos compostos e do solvente, além das forças secundárias (pontes de H, dipolo-dipolo, London).</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">B</div>
+      <span><strong>Parte B:</strong> Resuma em tabela. Explique a miscibilidade de cada álcool com água e com hexano em termos de polaridade e forças secundárias.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">C</div>
+      <span><strong>Parte C:</strong> Resuma em tabela. Explique os resultados em termos de polaridades e forças secundárias entre cada par de solventes.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">D</div>
+      <span><strong>Parte D — Ácido Benzóico:</strong> Explique o resultado com NaOH 1M. Escreva a reação. Descreva o que aconteceu ao adicionar HCl 6M e justifique.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">E</div>
+      <span><strong>Parte D — Acetato de Etila:</strong> Repita a análise para o acetato de etila, incluindo a reação com NaOH 6M e o efeito na solubilidade.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">1</div>
+      <span><strong>Questão:</strong> Defina solubilidade e miscibilidade. Como prever os critérios de solubilidade? Quais as principais forças envolvidas?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">2</div>
+      <span><strong>Questão:</strong> Preveja e justifique a solubilidade dos pares: ácido málico em água · naftaleno em água · aspirina em água · ibuprofeno em éter dietílico. Mostre as estruturas.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">3</div>
+      <span><strong>Questão:</strong> Preveja se os pares são miscíveis ou imiscíveis e justifique: a) hexano e benzeno · b) água e tolueno · c) cloreto de metileno e benzeno · d) água e álcool etílico.</span>
+    </div>
+  </div>
+
+  <!-- PÁGINA VISUAL — FLUXOGRAMA PARTE A -->
+  <div class="divider" style="break-before: page;"></div>
+  <div class="section-label">Guia Visual</div>
+  <h2>Parte A — Passo a Passo Ilustrado</h2>
+
+  <div class="card" style="padding: 28px 24px;">
+
+    <!-- ETAPA 0: Pesar -->
+    <div style="text-align:center; margin-bottom: 28px;">
+      <div style="display:inline-block; background:#fff4eb; border: 2px solid #c85a00; border-radius:12px; padding:10px 28px;">
+        <span style="font-size:13px; font-weight:700; color:#c85a00; letter-spacing:1px; text-transform:uppercase;">Etapa 0 — Preparação</span>
+        <p style="font-size:13px; color:#444; margin-top:4px;">Separe <strong>6 tubos de ensaio secos</strong> e numere-os de 1 a 6 · Pese as amostras com balança analítica</p>
+      </div>
+    </div>
+
+    <!-- SETA CENTRAL -->
+    <div style="text-align:center; font-size:22px; color:#c85a00; margin-bottom:20px;">↓</div>
+
+    <!-- GRID UM COMPOSTO -->
+    <div style="display:grid; grid-template-columns:1fr; gap:24px; max-width:480px; margin:0 auto;">
+
+      <!-- DIFENILAMINA -->
+      <div>
+        <div style="background:#c85a00; color:white; border-radius:8px 8px 0 0; padding:8px 14px; font-size:13px; font-weight:700; text-align:center; letter-spacing:0.5px;">
+          DIFENILAMINA · Tubos 1, 2 e 3
+        </div>
+        <div style="border: 1.5px solid #c85a00; border-top:none; border-radius:0 0 8px 8px; padding:16px 14px;">
+
+          <!-- Linha dos 3 tubos SVG -->
+          <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:360px; display:block; margin:0 auto 12px;">
+            <defs>
+              <!-- Tubo base reutilizável -->
+            </defs>
+
+            <!-- === TUBO 1 === -->
+            <g transform="translate(20,10)">
+              <!-- corpo do tubo -->
+              <rect x="30" y="20" width="36" height="90" rx="4" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+              <!-- fundo arredondado -->
+              <ellipse cx="48" cy="110" rx="18" ry="7" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+              <!-- boca do tubo -->
+              <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+              <!-- sólido no fundo (pó) -->
+              <ellipse cx="48" cy="106" rx="12" ry="4" fill="#d4a850" opacity="0.85"/>
+              <!-- líquido água -->
+              <rect x="31" y="62" width="34" height="46" rx="2" fill="#a8d8f0" opacity="0.6"/>
+              <!-- label sólido -->
+              <text x="48" y="130" text-anchor="middle" font-size="7.5" fill="#7a5500" font-family="sans-serif">0,03 g difenilamina</text>
+              <!-- seta add água -->
+              <text x="48" y="148" text-anchor="middle" font-size="8.5" fill="#1a73c0" font-family="sans-serif" font-weight="bold">+ 1 mL H₂O</text>
+              <!-- label tubo -->
+              <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Tubo 1</text>
+            </g>
+
+            <!-- SETA entre tubos -->
+            <text x="116" y="95" text-anchor="middle" font-size="18" fill="#c85a00" font-family="sans-serif">→</text>
+
+            <!-- === TUBO 2 === -->
+            <g transform="translate(130,10)">
+              <rect x="30" y="20" width="36" height="90" rx="4" fill="#fef9ed" stroke="#aaa" stroke-width="1.5"/>
+              <ellipse cx="48" cy="110" rx="18" ry="7" fill="#fef9ed" stroke="#aaa" stroke-width="1.5"/>
+              <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+              <ellipse cx="48" cy="106" rx="12" ry="4" fill="#d4a850" opacity="0.85"/>
+              <rect x="31" y="62" width="34" height="46" rx="2" fill="#f5e6b0" opacity="0.7"/>
+              <text x="48" y="130" text-anchor="middle" font-size="7.5" fill="#7a5500" font-family="sans-serif">0,03 g difenilamina</text>
+              <text x="48" y="144" text-anchor="middle" font-size="7.5" fill="#b07000" font-family="sans-serif" font-weight="bold">+ 1 mL MeOH</text>
+              <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Tubo 2</text>
+            </g>
+
+            <!-- SETA -->
+            <text x="226" y="95" text-anchor="middle" font-size="18" fill="#c85a00" font-family="sans-serif">→</text>
+
+            <!-- === TUBO 3 === -->
+            <g transform="translate(240,10)">
+              <rect x="30" y="20" width="36" height="90" rx="4" fill="#fffbf0" stroke="#aaa" stroke-width="1.5"/>
+              <ellipse cx="48" cy="110" rx="18" ry="7" fill="#fffbf0" stroke="#aaa" stroke-width="1.5"/>
+              <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+              <ellipse cx="48" cy="106" rx="12" ry="4" fill="#d4a850" opacity="0.85"/>
+              <rect x="31" y="62" width="34" height="46" rx="2" fill="#f0e8c0" opacity="0.5"/>
+              <text x="48" y="130" text-anchor="middle" font-size="7.5" fill="#7a5500" font-family="sans-serif">0,03 g difenilamina</text>
+              <text x="48" y="144" text-anchor="middle" font-size="8" fill="#7a4400" font-family="sans-serif" font-weight="bold">+ 1 mL Hexano</text>
+              <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Tubo 3</text>
+            </g>
+          </svg>
+
+          <!-- Etapa agitar -->
+          <div style="display:flex; align-items:center; gap:8px; background:#fff4eb; border-radius:8px; padding:8px 12px; margin-bottom:8px;">
+            <span style="font-size:20px;">🔄</span>
+            <span style="font-size:12px;"><strong>Agitar por 60 segundos</strong> · Observar e anotar</span>
+          </div>
+
+          <!-- Legenda resultado -->
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:11px; background:#f0fff4; border:1px solid #6dbf8a; border-radius:6px; padding:3px 9px;">✅ Solúvel</span>
+            <span style="font-size:11px; background:#fff8e6; border:1px solid #e8c460; border-radius:6px; padding:3px 9px;">⚠️ Parc. solúvel</span>
+            <span style="font-size:11px; background:#fff0f0; border:1px solid #e89090; border-radius:6px; padding:3px 9px;">❌ Insolúvel</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- fim grid -->
+
+    <!-- FLUXO FINAL -->
+    <div style="text-align:center; margin-top:24px; font-size:22px; color:#c85a00;">↓</div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:12px; text-align:center;">
+      <div style="background:#f0fff4; border:1px solid #6dbf8a; border-radius:10px; padding:12px 8px;">
+        <div style="font-size:26px; margin-bottom:4px;">✅</div>
+        <strong style="font-size:12px;">Solúvel</strong>
+        <p style="font-size:11px; color:#555; margin-top:4px;">Dissolve completamente · anote tempo</p>
+      </div>
+      <div style="background:#fff8e6; border:1px solid #e8c460; border-radius:10px; padding:12px 8px;">
+        <div style="font-size:26px; margin-bottom:4px;">⚠️</div>
+        <strong style="font-size:12px;">Parc. solúvel</strong>
+        <p style="font-size:11px; color:#555; margin-top:4px;">≥50% dissolve · se dúvida → insolúvel</p>
+      </div>
+      <div style="background:#fff0f0; border:1px solid #e89090; border-radius:10px; padding:12px 8px;">
+        <div style="font-size:26px; margin-bottom:4px;">❌</div>
+        <strong style="font-size:12px;">Insolúvel</strong>
+        <p style="font-size:11px; color:#555; margin-top:4px;">Precipitado ou turvação visível</p>
+      </div>
+    </div>
+
+  </div><!-- fim card A -->
+
+  <!-- ===================== PARTE B ===================== -->
+  <div class="divider" style="break-before: page;"></div>
+  <div class="section-label">Guia Visual</div>
+  <h2>Parte B — Miscibilidade de Álcoois</h2>
+
+  <div class="card" style="padding: 28px 24px;">
+
+    <div style="text-align:center; margin-bottom:20px;">
+      <div style="display:inline-block; background:#fff4eb; border: 2px solid #c85a00; border-radius:12px; padding:10px 28px;">
+        <span style="font-size:13px; font-weight:700; color:#c85a00; letter-spacing:1px; text-transform:uppercase;">Preparação</span>
+        <p style="font-size:13px; color:#444; margin-top:4px;">6 tubos de ensaio · 1 mL de água (Tubo 1) ou hexano (Tubo 2) em cada · adicione o álcool <strong>gota a gota até 20 gotas</strong></p>
+      </div>
+    </div>
+    <div style="text-align:center; font-size:22px; color:#c85a00; margin-bottom:20px;">↓</div>
+
+    <!-- 3 linhas: butanol, etanol, metanol -->
+    <div style="display:flex; flex-direction:column; gap:18px;">
+
+      <!-- BUTANOL -->
+      <div>
+        <div style="background:#c85a00; color:white; border-radius:8px 8px 0 0; padding:6px 14px; font-size:12px; font-weight:700; letter-spacing:0.5px;">BUTANOL</div>
+        <div style="border:1.5px solid #c85a00; border-top:none; border-radius:0 0 8px 8px; padding:14px;">
+          <svg viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:360px; display:block; margin:0 auto 8px;">
+            <!-- TUBO 1 água + butanol -->
+            <g transform="translate(60,5)">
+              <rect x="30" y="20" width="36" height="75" rx="4" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+              <ellipse cx="48" cy="95" rx="18" ry="6" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+              <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+              <rect x="31" y="55" width="34" height="38" rx="2" fill="#a8d8f0" opacity="0.7"/>
+              <rect x="31" y="42" width="34" height="13" rx="2" fill="#f5d58a" opacity="0.8"/>
+              <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Tubo 1</text>
+              <!-- instrução explícita -->
+              <text x="48" y="114" text-anchor="middle" font-size="8.5" fill="#1a73c0" font-family="sans-serif" font-weight="bold">1 mL água</text>
+              <text x="48" y="126" text-anchor="middle" font-size="8.5" fill="#c85a00" font-family="sans-serif" font-weight="bold">+ 20 gotas butanol</text>
+              <text x="48" y="140" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">gota a gota, agitando</text>
+            </g>
+            <text x="180" y="65" text-anchor="middle" font-size="18" fill="#c85a00" font-family="sans-serif">→</text>
+            <!-- TUBO 2 hexano + butanol -->
+            <g transform="translate(200,5)">
+              <rect x="30" y="20" width="36" height="75" rx="4" fill="#fffbf0" stroke="#aaa" stroke-width="1.5"/>
+              <ellipse cx="48" cy="95" rx="18" ry="6" fill="#fffbf0" stroke="#aaa" stroke-width="1.5"/>
+              <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+              <rect x="31" y="42" width="34" height="51" rx="2" fill="#f0e8c0" opacity="0.8"/>
+              <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Tubo 2</text>
+              <text x="48" y="114" text-anchor="middle" font-size="8.5" fill="#7a4400" font-family="sans-serif" font-weight="bold">1 mL hexano</text>
+              <text x="48" y="126" text-anchor="middle" font-size="8.5" fill="#c85a00" font-family="sans-serif" font-weight="bold">+ 20 gotas butanol</text>
+              <text x="48" y="140" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">gota a gota, agitando</text>
+            </g>
+          </svg>
+          <div style="display:flex; align-items:center; gap:8px; background:#fff4eb; border-radius:8px; padding:6px 12px;">
+            <span style="font-size:18px;">🔄</span>
+            <span style="font-size:12px;"><strong>Agitar após cada gota</strong> · Observar se forma 2ª camada</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ETANOL -->
+      <div>
+        <div style="background:#7a3d00; color:white; border-radius:8px 8px 0 0; padding:6px 14px; font-size:12px; font-weight:700; letter-spacing:0.5px;">ETANOL</div>
+        <div style="border:1.5px solid #7a3d00; border-top:none; border-radius:0 0 8px 8px; padding:14px;">
+          <svg viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:360px; display:block; margin:0 auto 8px;">
+            <g transform="translate(60,5)">
+              <rect x="30" y="20" width="36" height="75" rx="4" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+              <ellipse cx="48" cy="95" rx="18" ry="6" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+              <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+              <rect x="31" y="42" width="34" height="51" rx="2" fill="#c8e8f8" opacity="0.75"/>
+              <text x="48" y="10" text-anchor="middle" font-size="10" fill="#7a3d00" font-family="sans-serif" font-weight="bold">Tubo 1</text>
+              <text x="48" y="114" text-anchor="middle" font-size="8.5" fill="#1a73c0" font-family="sans-serif" font-weight="bold">1 mL água</text>
+              <text x="48" y="126" text-anchor="middle" font-size="8.5" fill="#7a3d00" font-family="sans-serif" font-weight="bold">+ 20 gotas etanol</text>
+              <text x="48" y="140" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">gota a gota, agitando</text>
+            </g>
+            <text x="180" y="65" text-anchor="middle" font-size="18" fill="#7a3d00" font-family="sans-serif">→</text>
+            <g transform="translate(200,5)">
+              <rect x="30" y="20" width="36" height="75" rx="4" fill="#fffbf0" stroke="#aaa" stroke-width="1.5"/>
+              <ellipse cx="48" cy="95" rx="18" ry="6" fill="#fffbf0" stroke="#aaa" stroke-width="1.5"/>
+              <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+              <rect x="31" y="42" width="34" height="51" rx="2" fill="#f0e8c0" opacity="0.8"/>
+              <text x="48" y="10" text-anchor="middle" font-size="10" fill="#7a3d00" font-family="sans-serif" font-weight="bold">Tubo 2</text>
+              <text x="48" y="114" text-anchor="middle" font-size="8.5" fill="#7a4400" font-family="sans-serif" font-weight="bold">1 mL hexano</text>
+              <text x="48" y="126" text-anchor="middle" font-size="8.5" fill="#7a3d00" font-family="sans-serif" font-weight="bold">+ 20 gotas etanol</text>
+              <text x="48" y="140" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">gota a gota, agitando</text>
+            </g>
+          </svg>
+          <div style="display:flex; align-items:center; gap:8px; background:#fdf3e7; border-radius:8px; padding:6px 12px;">
+            <span style="font-size:18px;">🔄</span>
+            <span style="font-size:12px;"><strong>Agitar após cada gota</strong> · Observar se forma 2ª camada</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- METANOL -->
+      <div>
+        <div style="background:#4a2800; color:white; border-radius:8px 8px 0 0; padding:6px 14px; font-size:12px; font-weight:700; letter-spacing:0.5px;">ÁLCOOL METÍLICO</div>
+        <div style="border:1.5px solid #4a2800; border-top:none; border-radius:0 0 8px 8px; padding:14px;">
+          <svg viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:360px; display:block; margin:0 auto 8px;">
+            <g transform="translate(60,5)">
+              <rect x="30" y="20" width="36" height="75" rx="4" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+              <ellipse cx="48" cy="95" rx="18" ry="6" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+              <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+              <rect x="31" y="42" width="34" height="51" rx="2" fill="#c8e8f8" opacity="0.75"/>
+              <text x="48" y="10" text-anchor="middle" font-size="10" fill="#4a2800" font-family="sans-serif" font-weight="bold">Tubo 1</text>
+              <text x="48" y="114" text-anchor="middle" font-size="8.5" fill="#1a73c0" font-family="sans-serif" font-weight="bold">1 mL água</text>
+              <text x="48" y="126" text-anchor="middle" font-size="8.5" fill="#4a2800" font-family="sans-serif" font-weight="bold">+ 20 gotas metanol</text>
+              <text x="48" y="140" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">gota a gota, agitando</text>
+            </g>
+            <text x="180" y="65" text-anchor="middle" font-size="18" fill="#4a2800" font-family="sans-serif">→</text>
+            <g transform="translate(200,5)">
+              <rect x="30" y="20" width="36" height="75" rx="4" fill="#fffbf0" stroke="#aaa" stroke-width="1.5"/>
+              <ellipse cx="48" cy="95" rx="18" ry="6" fill="#fffbf0" stroke="#aaa" stroke-width="1.5"/>
+              <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+              <rect x="31" y="42" width="34" height="51" rx="2" fill="#f0e8c0" opacity="0.8"/>
+              <text x="48" y="10" text-anchor="middle" font-size="10" fill="#4a2800" font-family="sans-serif" font-weight="bold">Tubo 2</text>
+              <text x="48" y="114" text-anchor="middle" font-size="8.5" fill="#7a4400" font-family="sans-serif" font-weight="bold">1 mL hexano</text>
+              <text x="48" y="126" text-anchor="middle" font-size="8.5" fill="#4a2800" font-family="sans-serif" font-weight="bold">+ 20 gotas metanol</text>
+              <text x="48" y="140" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">gota a gota, agitando</text>
+            </g>
+          </svg>
+          <div style="display:flex; align-items:center; gap:8px; background:#fdf0e0; border-radius:8px; padding:6px 12px;">
+            <span style="font-size:18px;">🔄</span>
+            <span style="font-size:12px;"><strong>Agitar após cada gota</strong> · Observar se forma 2ª camada</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- fim 3 linhas -->
+
+    <!-- legenda -->
+    <div style="text-align:center; margin-top:18px; font-size:22px; color:#c85a00;">↓</div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:10px;">
+      <span style="font-size:12px; background:#f0fff4; border:1px solid #6dbf8a; border-radius:6px; padding:4px 12px;">✅ Miscível — 1 camada</span>
+      <span style="font-size:12px; background:#fff8e6; border:1px solid #e8c460; border-radius:6px; padding:4px 12px;">⚠️ Parc. miscível — 2ª camada se forma</span>
+      <span style="font-size:12px; background:#fff0f0; border:1px solid #e89090; border-radius:6px; padding:4px 12px;">❌ Imiscível — 2 camadas</span>
+    </div>
+
+  </div><!-- fim card B -->
+
+  <!-- ===================== PARTE C ===================== -->
+  <div class="divider" style="break-before: page;"></div>
+  <div class="section-label">Guia Visual</div>
+  <h2>Parte C — Pares Miscíveis ou Imiscíveis</h2>
+
+  <div class="card" style="padding: 28px 24px;">
+
+    <div style="text-align:center; margin-bottom:20px;">
+      <div style="display:inline-block; background:#fff4eb; border: 2px solid #c85a00; border-radius:12px; padding:10px 28px;">
+        <span style="font-size:13px; font-weight:700; color:#c85a00; letter-spacing:1px; text-transform:uppercase;">Preparação</span>
+        <p style="font-size:13px; color:#444; margin-top:4px;">5 tubos de ensaio · adicione <strong>1 mL de cada líquido</strong> conforme tabela · agitar 20s · observar camadas</p>
+      </div>
+    </div>
+    <div style="text-align:center; font-size:22px; color:#c85a00; margin-bottom:20px;">↓</div>
+
+    <!-- 5 tubos em grid -->
+    <svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:560px; display:block; margin:0 auto 16px;">
+
+      <!-- TUBO 1: água + etanol -->
+      <g transform="translate(10,10)">
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="62" width="34" height="46" rx="2" fill="#c8e8f8" opacity="0.8"/>
+        <text x="48" y="130" text-anchor="middle" font-size="7.5" fill="#1a73c0" font-family="sans-serif" font-weight="bold">água</text>
+        <text x="48" y="140" text-anchor="middle" font-size="7.5" fill="#b07000" font-family="sans-serif">+ etanol</text>
+        <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Tubo 1</text>
+        <text x="48" y="160" text-anchor="middle" font-size="7" fill="#555" font-family="sans-serif">1 mL + 1 mL</text>
+      </g>
+
+      <!-- TUBO 2: água + éter -->
+      <g transform="translate(120,10)">
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="62" width="34" height="46" rx="2" fill="#a8d8f0" opacity="0.6"/>
+        <rect x="31" y="42" width="34" height="20" rx="2" fill="#e8f5c0" opacity="0.8"/>
+        <text x="48" y="130" text-anchor="middle" font-size="7.5" fill="#1a73c0" font-family="sans-serif" font-weight="bold">água</text>
+        <text x="48" y="140" text-anchor="middle" font-size="7.5" fill="#557700" font-family="sans-serif">+ éter</text>
+        <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Tubo 2</text>
+        <text x="48" y="160" text-anchor="middle" font-size="7" fill="#555" font-family="sans-serif">1 mL + 1 mL</text>
+      </g>
+
+      <!-- TUBO 3: água + hexano -->
+      <g transform="translate(230,10)">
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="62" width="34" height="46" rx="2" fill="#a8d8f0" opacity="0.6"/>
+        <rect x="31" y="42" width="34" height="20" rx="2" fill="#f0e8c0" opacity="0.85"/>
+        <text x="48" y="130" text-anchor="middle" font-size="7.5" fill="#1a73c0" font-family="sans-serif" font-weight="bold">água</text>
+        <text x="48" y="140" text-anchor="middle" font-size="7.5" fill="#7a4400" font-family="sans-serif">+ hexano</text>
+        <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Tubo 3</text>
+        <text x="48" y="160" text-anchor="middle" font-size="7" fill="#555" font-family="sans-serif">1 mL + 1 mL</text>
+      </g>
+
+      <!-- TUBO 4: éter + hexano -->
+      <g transform="translate(340,10)">
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#fffbf0" stroke="#aaa" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#fffbf0" stroke="#aaa" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="42" width="34" height="66" rx="2" fill="#e8f0c0" opacity="0.75"/>
+        <text x="48" y="130" text-anchor="middle" font-size="7.5" fill="#557700" font-family="sans-serif" font-weight="bold">éter</text>
+        <text x="48" y="140" text-anchor="middle" font-size="7.5" fill="#7a4400" font-family="sans-serif">+ hexano</text>
+        <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Tubo 4</text>
+        <text x="48" y="160" text-anchor="middle" font-size="7" fill="#555" font-family="sans-serif">1 mL + 1 mL</text>
+      </g>
+
+      <!-- TUBO 5: etanol + hexano -->
+      <g transform="translate(450,10)">
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#fffbf0" stroke="#aaa" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#fffbf0" stroke="#aaa" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="42" width="34" height="66" rx="2" fill="#f5e6b0" opacity="0.75"/>
+        <text x="48" y="130" text-anchor="middle" font-size="7.5" fill="#b07000" font-family="sans-serif" font-weight="bold">etanol</text>
+        <text x="48" y="140" text-anchor="middle" font-size="7.5" fill="#7a4400" font-family="sans-serif">+ hexano</text>
+        <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Tubo 5</text>
+        <text x="48" y="160" text-anchor="middle" font-size="7" fill="#555" font-family="sans-serif">1 mL + 1 mL</text>
+      </g>
+
+    </svg>
+
+    <div style="display:flex; align-items:center; gap:8px; background:#fff4eb; border-radius:8px; padding:8px 12px; margin-bottom:12px;">
+      <span style="font-size:20px;">🔄</span>
+      <span style="font-size:12px;"><strong>Agitar por 20 segundos</strong> em cada tubo · Observar se forma 1 ou 2 camadas</span>
+    </div>
+
+    <!-- legenda camadas -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div style="display:flex; align-items:center; gap:10px; background:#f0fff4; border:1px solid #6dbf8a; border-radius:8px; padding:8px 12px;">
+        <svg viewBox="0 0 30 60" width="20" height="40">
+          <rect x="5" y="5" width="20" height="50" rx="3" fill="#c8e8f8" stroke="#aaa" stroke-width="1.5"/>
+        </svg>
+        <span style="font-size:12px;"><strong>Miscível</strong> — mistura homogênea, 1 camada única</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px; background:#fff0f0; border:1px solid #e89090; border-radius:8px; padding:8px 12px;">
+        <svg viewBox="0 0 30 60" width="20" height="40">
+          <rect x="5" y="30" width="20" height="25" rx="3" fill="#a8d8f0" stroke="#aaa" stroke-width="1.5"/>
+          <rect x="5" y="5" width="20" height="25" rx="3" fill="#f0e8c0" stroke="#aaa" stroke-width="1.5"/>
+        </svg>
+        <span style="font-size:12px;"><strong>Imiscível</strong> — 2 camadas visíveis separadas</span>
+      </div>
+    </div>
+
+  </div><!-- fim card C -->
+
+  <!-- ===================== PARTE D ===================== -->
+  <div class="divider" style="break-before: page;"></div>
+  <div class="section-label">Guia Visual</div>
+  <h2>Parte D — Ácidos e Bases Orgânicos</h2>
+
+  <div class="card" style="padding: 28px 24px;">
+
+    <div style="text-align:center; margin-bottom:20px;">
+      <div style="display:inline-block; background:#fff4eb; border: 2px solid #c85a00; border-radius:12px; padding:10px 28px;">
+        <span style="font-size:13px; font-weight:700; color:#c85a00; letter-spacing:1px; text-transform:uppercase;">Preparação</span>
+        <p style="font-size:13px; color:#444; margin-top:4px;">~30 mg de cada composto · 3 tubos por composto · reagentes diferentes em cada tubo · agitar 20s</p>
+      </div>
+    </div>
+    <div style="text-align:center; font-size:22px; color:#c85a00; margin-bottom:20px;">↓</div>
+
+    <!-- ÁCIDO BENZÓICO -->
+    <div style="margin-bottom:20px;">
+      <div style="background:#c85a00; color:white; border-radius:8px 8px 0 0; padding:7px 14px; font-size:12px; font-weight:700; letter-spacing:0.5px;">ÁCIDO BENZÓICO · 30 mg</div>
+      <div style="border:1.5px solid #c85a00; border-top:none; border-radius:0 0 8px 8px; padding:14px;">
+        <svg viewBox="0 0 520 155" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:520px; display:block; margin:0 auto 10px;">
+
+          <!-- T1 água -->
+          <g transform="translate(20,5)">
+            <rect x="30" y="20" width="36" height="80" rx="4" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+            <ellipse cx="48" cy="100" rx="18" ry="6" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+            <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+            <ellipse cx="48" cy="97" rx="12" ry="4" fill="#e0e0e0" opacity="0.9"/>
+            <rect x="31" y="55" width="34" height="40" rx="2" fill="#a8d8f0" opacity="0.5"/>
+            <text x="48" y="118" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">30 mg ác. benz.</text>
+            <text x="48" y="129" text-anchor="middle" font-size="7.5" fill="#1a73c0" font-family="sans-serif" font-weight="bold">+ 1 mL H₂O</text>
+            <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Tubo 1</text>
+          </g>
+
+          <text x="140" y="60" text-anchor="middle" font-size="16" fill="#c85a00" font-family="sans-serif">→</text>
+
+          <!-- T2 NaOH + seta de acidificar -->
+          <g transform="translate(160,5)">
+            <rect x="30" y="20" width="36" height="80" rx="4" fill="#f8fff0" stroke="#aaa" stroke-width="1.5"/>
+            <ellipse cx="48" cy="100" rx="18" ry="6" fill="#f8fff0" stroke="#aaa" stroke-width="1.5"/>
+            <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+            <rect x="31" y="55" width="34" height="40" rx="2" fill="#d0f0d0" opacity="0.7"/>
+            <text x="48" y="118" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">30 mg ác. benz.</text>
+            <text x="48" y="129" text-anchor="middle" font-size="7.5" fill="#2a8a2a" font-family="sans-serif" font-weight="bold">+ 1 mL NaOH</text>
+            <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Tubo 2</text>
+          </g>
+
+          <!-- seta com HCl 6M -->
+          <text x="265" y="55" text-anchor="middle" font-size="11" fill="#c0392b" font-family="sans-serif" font-weight="bold">+ HCl</text>
+          <text x="265" y="67" text-anchor="middle" font-size="10" fill="#c0392b" font-family="sans-serif">6 mol·L⁻¹</text>
+          <text x="265" y="79" text-anchor="middle" font-size="14" fill="#c0392b" font-family="sans-serif">→</text>
+
+          <!-- T2b após acidificar -->
+          <g transform="translate(290,5)">
+            <rect x="30" y="20" width="36" height="80" rx="4" fill="#fff8f8" stroke="#c0392b" stroke-width="1.5"/>
+            <ellipse cx="48" cy="100" rx="18" ry="6" fill="#fff8f8" stroke="#c0392b" stroke-width="1.5"/>
+            <rect x="27" y="14" width="42" height="10" rx="3" fill="#f5b8b8" stroke="#c0392b" stroke-width="1"/>
+            <ellipse cx="48" cy="97" rx="12" ry="4" fill="#e0e0e0" opacity="0.9"/>
+            <rect x="31" y="55" width="34" height="40" rx="2" fill="#ffd0d0" opacity="0.5"/>
+            <text x="48" y="118" text-anchor="middle" font-size="7.5" fill="#c0392b" font-family="sans-serif">após acidificar</text>
+            <text x="48" y="129" text-anchor="middle" font-size="7.5" fill="#c0392b" font-family="sans-serif">pH ácido</text>
+            <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c0392b" font-family="sans-serif" font-weight="bold">Tubo 2*</text>
+          </g>
+
+          <text x="390" y="60" text-anchor="middle" font-size="16" fill="#c85a00" font-family="sans-serif">→</text>
+
+          <!-- T3 HCl -->
+          <g transform="translate(410,5)">
+            <rect x="30" y="20" width="36" height="80" rx="4" fill="#fff8f8" stroke="#aaa" stroke-width="1.5"/>
+            <ellipse cx="48" cy="100" rx="18" ry="6" fill="#fff8f8" stroke="#aaa" stroke-width="1.5"/>
+            <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+            <ellipse cx="48" cy="97" rx="12" ry="4" fill="#e0e0e0" opacity="0.9"/>
+            <rect x="31" y="55" width="34" height="40" rx="2" fill="#ffd0d0" opacity="0.5"/>
+            <text x="48" y="118" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">30 mg ác. benz.</text>
+            <text x="48" y="129" text-anchor="middle" font-size="7.5" fill="#c0392b" font-family="sans-serif" font-weight="bold">+ 1 mL HCl</text>
+            <text x="48" y="10" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Tubo 3</text>
+          </g>
+
+        </svg>
+        <div style="display:flex; align-items:center; gap:8px; background:#fff4eb; border-radius:8px; padding:6px 12px;">
+          <span style="font-size:18px;">🔄</span>
+          <span style="font-size:12px;"><strong>Agitar por 20 segundos</strong> · Tubo 2: após anotar, adicionar HCl 6M gota a gota até pH ácido, agitar e observar novamente</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- UREIA -->
+    <div>
+      <div style="background:#7a3d00; color:white; border-radius:8px 8px 0 0; padding:7px 14px; font-size:12px; font-weight:700; letter-spacing:0.5px;">UREIA + ACETATO DE ETILA · 30 mg</div>
+      <div style="border:1.5px solid #7a3d00; border-top:none; border-radius:0 0 8px 8px; padding:14px;">
+        <svg viewBox="0 0 520 155" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:520px; display:block; margin:0 auto 10px;">
+
+          <!-- T1 água -->
+          <g transform="translate(20,5)">
+            <rect x="30" y="20" width="36" height="80" rx="4" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+            <ellipse cx="48" cy="100" rx="18" ry="6" fill="#f0f8ff" stroke="#aaa" stroke-width="1.5"/>
+            <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+            <rect x="31" y="55" width="34" height="40" rx="2" fill="#a8d8f0" opacity="0.5"/>
+            <text x="48" y="118" text-anchor="middle" font-size="7" fill="#555" font-family="sans-serif">ureia / ac. etila</text>
+            <text x="48" y="129" text-anchor="middle" font-size="7.5" fill="#1a73c0" font-family="sans-serif" font-weight="bold">+ 1 mL H₂O</text>
+            <text x="48" y="10" text-anchor="middle" font-size="10" fill="#7a3d00" font-family="sans-serif" font-weight="bold">Tubo 1</text>
+          </g>
+
+          <text x="140" y="60" text-anchor="middle" font-size="16" fill="#7a3d00" font-family="sans-serif">→</text>
+
+          <!-- T2 NaOH -->
+          <g transform="translate(160,5)">
+            <rect x="30" y="20" width="36" height="80" rx="4" fill="#f8fff0" stroke="#aaa" stroke-width="1.5"/>
+            <ellipse cx="48" cy="100" rx="18" ry="6" fill="#f8fff0" stroke="#aaa" stroke-width="1.5"/>
+            <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+            <rect x="31" y="55" width="34" height="40" rx="2" fill="#d0f0d0" opacity="0.7"/>
+            <text x="48" y="118" text-anchor="middle" font-size="7" fill="#555" font-family="sans-serif">ureia / ac. etila</text>
+            <text x="48" y="129" text-anchor="middle" font-size="7.5" fill="#2a8a2a" font-family="sans-serif" font-weight="bold">+ 1 mL NaOH</text>
+            <text x="48" y="10" text-anchor="middle" font-size="10" fill="#7a3d00" font-family="sans-serif" font-weight="bold">Tubo 2</text>
+          </g>
+
+          <text x="265" y="60" text-anchor="middle" font-size="16" fill="#7a3d00" font-family="sans-serif">→</text>
+
+          <!-- T3 HCl + seta basicificar -->
+          <g transform="translate(290,5)">
+            <rect x="30" y="20" width="36" height="80" rx="4" fill="#fff8f8" stroke="#aaa" stroke-width="1.5"/>
+            <ellipse cx="48" cy="100" rx="18" ry="6" fill="#fff8f8" stroke="#aaa" stroke-width="1.5"/>
+            <rect x="27" y="14" width="42" height="10" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+            <rect x="31" y="55" width="34" height="40" rx="2" fill="#ffd0d0" opacity="0.5"/>
+            <text x="48" y="118" text-anchor="middle" font-size="7" fill="#555" font-family="sans-serif">ureia / ac. etila</text>
+            <text x="48" y="129" text-anchor="middle" font-size="7.5" fill="#c0392b" font-family="sans-serif" font-weight="bold">+ 1 mL HCl</text>
+            <text x="48" y="10" text-anchor="middle" font-size="10" fill="#7a3d00" font-family="sans-serif" font-weight="bold">Tubo 3</text>
+          </g>
+
+          <!-- seta NaOH 6M -->
+          <text x="393" y="52" text-anchor="middle" font-size="11" fill="#2a8a2a" font-family="sans-serif" font-weight="bold">+ NaOH</text>
+          <text x="393" y="64" text-anchor="middle" font-size="10" fill="#2a8a2a" font-family="sans-serif">6 mol·L⁻¹</text>
+          <text x="393" y="76" text-anchor="middle" font-size="14" fill="#2a8a2a" font-family="sans-serif">→</text>
+
+          <!-- T3b após basicificar -->
+          <g transform="translate(415,5)">
+            <rect x="30" y="20" width="36" height="80" rx="4" fill="#f0fff0" stroke="#2a8a2a" stroke-width="1.5"/>
+            <ellipse cx="48" cy="100" rx="18" ry="6" fill="#f0fff0" stroke="#2a8a2a" stroke-width="1.5"/>
+            <rect x="27" y="14" width="42" height="10" rx="3" fill="#a8e8a8" stroke="#2a8a2a" stroke-width="1"/>
+            <rect x="31" y="55" width="34" height="40" rx="2" fill="#c0f0c0" opacity="0.7"/>
+            <text x="48" y="118" text-anchor="middle" font-size="7.5" fill="#2a8a2a" font-family="sans-serif">após basicificar</text>
+            <text x="48" y="129" text-anchor="middle" font-size="7.5" fill="#2a8a2a" font-family="sans-serif">pH básico</text>
+            <text x="48" y="10" text-anchor="middle" font-size="10" fill="#2a8a2a" font-family="sans-serif" font-weight="bold">Tubo 3*</text>
+          </g>
+
+        </svg>
+        <div style="display:flex; align-items:center; gap:8px; background:#fdf3e7; border-radius:8px; padding:6px 12px;">
+          <span style="font-size:18px;">🔄</span>
+          <span style="font-size:12px;"><strong>Agitar por 20 segundos</strong> · Tubo 3 (acetato de etila): após anotar, adicionar NaOH 6M gota a gota até pH básico, agitar e observar</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- legenda pH -->
+    <div style="text-align:center; margin-top:18px; font-size:22px; color:#c85a00;">↓</div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px; text-align:center;">
+      <div style="background:#f0f8ff; border:1px solid #88c0e0; border-radius:8px; padding:10px 8px;">
+        <div style="font-size:20px; margin-bottom:4px;">💧</div>
+        <strong style="font-size:12px;">Água (neutro)</strong>
+        <p style="font-size:11px; color:#555; margin-top:3px;">Composto na forma neutra</p>
+      </div>
+      <div style="background:#f0fff0; border:1px solid #6dbf8a; border-radius:8px; padding:10px 8px;">
+        <div style="font-size:20px; margin-bottom:4px;">🟢</div>
+        <strong style="font-size:12px;">NaOH (básico)</strong>
+        <p style="font-size:11px; color:#555; margin-top:3px;">Ioniza ácido → sal solúvel</p>
+      </div>
+      <div style="background:#fff0f0; border:1px solid #e89090; border-radius:8px; padding:10px 8px;">
+        <div style="font-size:20px; margin-bottom:4px;">🔴</div>
+        <strong style="font-size:12px;">HCl (ácido)</strong>
+        <p style="font-size:11px; color:#555; margin-top:3px;">Protona base → sal solúvel</p>
+      </div>
+    </div>
+
+  </div><!-- fim card D -->
+
+</main>
+
+<footer>
+  Lab Química Orgânica · UFSCar &nbsp;|&nbsp; Prof. Marystela Ferreira &nbsp;|&nbsp; Aula 1 — Solubilidade
+</footer>
+
+</body>
+</html>

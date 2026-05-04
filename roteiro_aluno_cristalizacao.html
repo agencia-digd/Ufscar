@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roteiro do Aluno – Cristalização</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface2: #f7f9f8;
+    --accent: #c85a00;
+    --accent2: #e8a020;
+    --accent3: #c0392b;
+    --text: #1c1c1c;
+    --muted: #555555;
+    --border: #e8ddd5;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.7; color-scheme: light; }
+
+  /* HEADER */
+  header { background: var(--accent); color: white; padding: 40px 40px 32px; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%; background: rgba(255,255,255,0.05); top: -80px; right: -60px; }
+  .header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; color: #1c1c1c; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(26px, 4vw, 40px); font-weight: 400; margin-bottom: 8px; line-height: 1.2; }
+  header p { opacity: 0.88; font-size: 15px; max-width: 580px; }
+  .header-meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 8px; font-size: 13px; opacity: 0.9; }
+
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* LABELS / H2 */
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: white; background: var(--accent); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 8px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 24px; color: #ffffff; background: var(--accent); display: inline-block; padding: 6px 16px 8px; border-radius: 6px; margin-bottom: 16px; }
+  h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+
+  /* CARD */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 20px; }
+  .card-accent-left   { border-left: 4px solid var(--accent); }
+  .card-accent-yellow { border-left: 4px solid var(--accent2); }
+  .card-accent-red    { border-left: 4px solid var(--accent3); }
+
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  /* OBJETIVOS */
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .obj-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; }
+  .obj-num { min-width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+
+  /* CONCEITO */
+  .conceito-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 14px 0; }
+  .conceito-card { border-radius: 10px; padding: 14px 12px; text-align: center; border: 1px solid var(--border); }
+  .conceito-card.quente  { background: #fff4eb; border-color: #f5c89a; }
+  .conceito-card.esfria  { background: #e8f4ff; border-color: #b0d4f5; }
+  .conceito-card.filtra  { background: #f0fff4; border-color: #b2dfca; }
+  .conceito-icon { font-size: 26px; margin-bottom: 6px; }
+  .conceito-card h4 { font-size: 13px; margin-bottom: 3px; }
+  .conceito-card p  { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  /* PARTE HEADER */
+  .parte-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .parte-badge  { background: var(--accent); color: white; font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; white-space: nowrap; }
+  .parte-title  { font-size: 17px; font-weight: 600; color: var(--text); }
+
+  /* STEPS */
+  .step-list { display: flex; flex-direction: column; gap: 12px; }
+  .step { display: flex; gap: 14px; }
+  .step-num { min-width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 3px; }
+  .step-body h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .step-body p  { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .step-tip { margin-top: 8px; background: #fff8e6; border-left: 3px solid var(--accent2); padding: 6px 10px; border-radius: 4px; font-size: 13px; color: #7a5500; }
+  .step-warn { margin-top: 8px; background: #fdf2f2; border-left: 3px solid var(--accent3); padding: 6px 10px; border-radius: 4px; font-size: 13px; color: #7a1010; }
+
+  /* ALERTAS */
+  .alert { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; font-size: 14px; margin: 12px 0; }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-tip    { background: #f0faf4; border: 1px solid #b2dfca; }
+  .alert-info   { background: #f0f7ff; border: 1px solid #bdd8f5; }
+  .alert-danger { background: #fdf2f2; border: 1px solid #f5c6c6; }
+
+  /* TABELAS */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { background: var(--accent); color: white; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 13px; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #fdf8f4; }
+  .td-resposta  { min-height: 44px; background: #fafafa; }
+  .td-cabecalho { background: var(--surface2); font-weight: 600; font-size: 13px; }
+
+  /* SAFETY */
+  .safety-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .safety-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--muted); line-height: 1.4; }
+  .safety-icon { font-size: 18px; flex-shrink: 0; }
+
+  /* RELATÓRIO */
+  .report-items { display: flex; flex-direction: column; gap: 10px; }
+  .report-item  { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--surface2); border-radius: 8px; font-size: 14px; line-height: 1.5; }
+  .report-q     { min-width: 28px; height: 28px; background: var(--accent2); color: #1c1c1c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  /* NAV */
+  .nav-index { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px; margin: 24px 0 28px; }
+  .nav-index-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .nav-index-list  { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .nav-index-list li { display: flex; align-items: center; gap: 8px; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .nav-index-list a { color: var(--accent); font-size: 14px; text-decoration: none; font-weight: 500; }
+
+  footer { text-align: center; padding: 28px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+
+  /* ===================== PRINT ===================== */
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { margin: 15mm; size: A4 portrait; }
+    .nav-index { display: none !important; }
+    body   { font-size: 10px !important; line-height: 1.35 !important; }
+    main   { padding: 8px 0 !important; max-width: 100% !important; }
+    header { padding: 16px 20px !important; }
+    header h1 { font-size: 20px !important; margin-bottom: 3px !important; }
+    header p  { font-size: 10px !important; }
+    header h1, header p, .meta-item { color: white !important; }
+    .header-badge { font-size: 8px !important; padding: 2px 8px !important; margin-bottom: 6px !important; }
+    .header-meta  { margin-top: 8px !important; gap: 12px !important; }
+    .meta-item    { font-size: 9px !important; }
+    .section-label { font-size: 8px !important; padding: 2px 7px !important; margin-bottom: 4px !important; break-after: avoid !important; }
+    h2 { font-size: 13px !important; padding: 3px 10px 4px !important; margin-bottom: 6px !important; break-after: avoid !important; }
+    h3 { font-size: 11px !important; margin-bottom: 3px !important; break-after: avoid !important; }
+    h4 { font-size: 10px !important; break-after: avoid !important; }
+    .card  { padding: 8px 12px !important; margin-bottom: 7px !important; border: 1px solid #ccc !important; break-inside: avoid !important; }
+    .divider { margin: 4px 0 !important; }
+    .conceito-grid { grid-template-columns: repeat(3,1fr) !important; gap: 5px !important; margin: 5px 0 !important; }
+    .conceito-card { padding: 7px !important; }
+    .conceito-icon { font-size: 16px !important; margin-bottom: 2px !important; }
+    .conceito-card h4 { font-size: 9px !important; }
+    .conceito-card p  { font-size: 8px !important; }
+    .parte-header { margin-bottom: 5px !important; gap: 6px !important; }
+    .parte-badge  { font-size: 8px !important; padding: 2px 8px !important; }
+    .parte-title  { font-size: 11px !important; }
+    .step-list { gap: 5px !important; }
+    .step      { gap: 8px !important; }
+    .step-num  { min-width: 20px !important; height: 20px !important; font-size: 9px !important; }
+    .step-body p  { font-size: 9px !important; }
+    .step-body h4 { font-size: 10px !important; }
+    .step-tip, .step-warn { font-size: 8px !important; padding: 3px 7px !important; margin-top: 3px !important; }
+    .alert { padding: 4px 8px !important; font-size: 9px !important; margin: 4px 0 !important; break-inside: avoid !important; }
+    .alert-icon { font-size: 12px !important; }
+    table  { font-size: 9px !important; break-inside: avoid !important; }
+    th     { padding: 4px 8px !important; font-size: 9px !important; }
+    td     { padding: 5px 8px !important; font-size: 9px !important; }
+    .td-resposta { min-height: 24px !important; }
+    .safety-grid { grid-template-columns: repeat(2,1fr) !important; gap: 5px !important; }
+    .safety-item { font-size: 9px !important; }
+    .safety-icon { font-size: 13px !important; }
+    .report-items { gap: 4px !important; }
+    .report-item  { padding: 5px 9px !important; font-size: 9px !important; break-inside: avoid !important; }
+    .report-q     { min-width: 18px !important; height: 18px !important; font-size: 8px !important; }
+    .obj-list li  { font-size: 10px !important; gap: 6px !important; }
+    .obj-num      { min-width: 20px !important; height: 20px !important; font-size: 9px !important; }
+    footer { font-size: 8px !important; padding: 6px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Aula 2 · Marystela · Eng. Florestal</div>
+  <h1>Cristalização</h1>
+  <p>Técnica de purificação de sólidos orgânicos por dissolução a quente e recristalização controlada.</p>
+  <div class="header-meta">
+    <div class="meta-item"><span>⏱️</span> ~3 horas</div>
+    <div class="meta-item"><span>👥</span> Grupos de 4</div>
+    <div class="meta-item"><span>🧪</span> 3 Experimentos</div>
+    <div class="meta-item"><span>🔥</span> Placa de aquecimento obrigatória</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ÍNDICE -->
+  <div class="nav-index">
+    <div class="nav-index-title">Nesta aula</div>
+    <ul class="nav-index-list">
+      <li><span class="nav-dot"></span><a href="#fundamentos">Fundamentos — o que é cristalização</a></li>
+      <li><span class="nav-dot"></span><a href="#parteA">Parte A — Cristalização da sulfanilamida</a></li>
+      <li><span class="nav-dot"></span><a href="#parteB">Parte B — Seleção de solvente (ácido benzóico)</a></li>
+      <li><span class="nav-dot"></span><a href="#parteC">Parte C — Testes de solvente para naftaleno</a></li>
+      <li><span class="nav-dot"></span><a href="#visual">Guia Visual — fluxo passo a passo</a></li>
+      <li><span class="nav-dot"></span><a href="#seguranca">Segurança</a></li>
+      <li><span class="nav-dot"></span><a href="#relatorio">Relatório e Questões</a></li>
+    </ul>
+  </div>
+
+  <!-- OBJETIVOS -->
+  <div class="section-label">Objetivos</div>
+  <h2>O que você vai aprender</h2>
+  <div class="card card-accent-left">
+    <ul class="obj-list">
+      <li><div class="obj-num">1</div><span>Compreender o princípio da <strong>cristalização</strong> como técnica de purificação de sólidos orgânicos</span></li>
+      <li><div class="obj-num">2</div><span>Executar uma cristalização completa: dissolução a quente → resfriamento → filtração a vácuo</span></li>
+      <li><div class="obj-num">3</div><span>Selecionar o <strong>solvente ideal</strong> para cristalização de uma substância com base na polaridade</span></li>
+      <li><div class="obj-num">4</div><span>Calcular o <strong>rendimento percentual</strong> de recuperação e determinar o ponto de fusão</span></li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FUNDAMENTOS -->
+  <div id="fundamentos" class="section-label">Fundamentos</div>
+  <h2>O Princípio da Cristalização</h2>
+
+  <div class="card card-accent-left">
+    <p style="font-size:15px; margin-bottom:14px;">A cristalização aproveita o fato de que a maioria dos sólidos é <strong>muito mais solúvel em solvente quente do que em frio</strong>. O sólido impuro é dissolvido no mínimo de solvente quente, e ao esfriar, o composto puro cristaliza enquanto as impurezas permanecem em solução.</p>
+
+    <div class="conceito-grid">
+      <div class="conceito-card quente">
+        <div class="conceito-icon">🔥</div>
+        <h4>1. Dissolver a quente</h4>
+        <p>Solvente quente dissolve o sólido impuro completamente — use o mínimo possível</p>
+      </div>
+      <div class="conceito-card esfria">
+        <div class="conceito-icon">❄️</div>
+        <h4>2. Esfriar devagar</h4>
+        <p>Resfriamento lento forma cristais maiores e mais puros — impurezas ficam em solução</p>
+      </div>
+      <div class="conceito-card filtra">
+        <div class="conceito-icon">🔬</div>
+        <h4>3. Filtrar a vácuo</h4>
+        <p>Filtração de Buchner separa os cristais puros da solução com impurezas (filtrado)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Critérios para um bom solvente de cristalização</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+      <div style="background:#f0faf4; border-radius:8px; padding:10px 12px; font-size:13px;">✅ Dissolve bem o composto a <strong>quente</strong></div>
+      <div style="background:#fdf2f2; border-radius:8px; padding:10px 12px; font-size:13px;">✅ Dissolve <strong>pouco</strong> o composto a <strong>frio</strong></div>
+      <div style="background:#f0faf4; border-radius:8px; padding:10px 12px; font-size:13px;">✅ <strong>Não reage</strong> quimicamente com o composto</div>
+      <div style="background:#fdf2f2; border-radius:8px; padding:10px 12px; font-size:13px;">✅ Tem ponto de ebulição <strong>abaixo</strong> do ponto de fusão do composto</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE A -->
+  <div id="parteA" class="section-label">Experimento</div>
+  <h2>Parte A — Cristalização da Sulfanilamida</h2>
+
+  <div class="alert alert-danger">
+    <span class="alert-icon">🔥</span>
+    <span><strong>Álcool etílico 95% ferve a 78°C.</strong> Mantenha a temperatura da placa baixa. Use dentro da área ventilada — vapores inflamáveis.</span>
+  </div>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Etapa 1</span>
+      <span class="parte-title">Preparação</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Pesar a sulfanilamida</h4>
+          <p>Pese <strong>0,75 g de sulfanilamida impura</strong> e transfira para um Erlenmeyer de 25 mL.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Preparar o solvente</h4>
+          <p>Em um <strong>segundo</strong> Erlenmeyer, coloque ~15 mL de álcool etílico 95% e algumas pérolas de vidro. Aqueça na placa até ebulição suave.</p>
+          <div class="step-tip">⚠️ Mantenha a temperatura baixa — álcool evapora rapidamente a 78°C.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Etapa 2</span>
+      <span class="parte-title">Dissolução</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Adicionar solvente quente</h4>
+          <p>Com pipeta de Pasteur, transfira solvente quente para o frasco com sulfanilamida até cobrir os cristais. Aqueça até ebulição.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Dissolver completamente</h4>
+          <p>Adicione mais 0,5 mL de solvente e continue aquecendo com agitação até dissolução total. Se necessário, adicione mais solvente aos poucos.</p>
+          <div class="step-warn">⏱️ O tempo total da primeira adição até a dissolução completa <strong>não deve ultrapassar 15 minutos</strong>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Etapa 3</span>
+      <span class="parte-title">Cristalização</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Esfriar lentamente</h4>
+          <p>Cubra o frasco com um vidro de relógio e deixe esfriar <strong>lentamente</strong> até temperatura ambiente. Não agite.</p>
+          <div class="step-tip">❄️ Resfriamento lento = cristais maiores e mais puros.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h4>Induzir cristalização (se necessário)</h4>
+          <p>Se não houver cristalização ao atingir temperatura ambiente, raspe a parede interna do frasco com um bastão de vidro.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <h4>Banho de gelo</h4>
+          <p>Após cristalização, coloque o frasco em um recipiente com <strong>água e gelo</strong> para maximizar a recuperação dos cristais.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Etapa 4</span>
+      <span class="parte-title">Filtração e Pesagem</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">8</div>
+        <div class="step-body">
+          <h4>Filtração a vácuo</h4>
+          <p>Filtre os cristais usando o sistema de filtração a vácuo com funil de Buchner. Monte com antecedência e verifique o selo.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">9</div>
+        <div class="step-body">
+          <h4>Lavar e secar</h4>
+          <p>Lave os cristais com <strong>~4 mL de álcool etílico gelado</strong>. Transfira para um vidro de relógio e deixe secar.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">10</div>
+        <div class="step-body">
+          <h4>Pesar e calcular</h4>
+          <p>Pese os cristais secos. Calcule a <strong>percentagem de recuperação</strong>. Determine o ponto de fusão da sulfanilamida pura e impura.</p>
+          <div class="step-tip">📐 % recuperação = (massa cristais obtidos / massa inicial) × 100</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-yellow">
+    <h3 style="margin-bottom:12px;">📋 Tabela A — Resultados da Cristalização</h3>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Parâmetro</th>
+          <th>Valor</th>
+        </tr>
+        <tr><td>Massa de sulfanilamida impura (inicial)</td><td class="td-resposta"></td></tr>
+        <tr><td>Volume de solvente utilizado (mL)</td><td class="td-resposta"></td></tr>
+        <tr><td>Tempo até dissolução completa (min)</td><td class="td-resposta"></td></tr>
+        <tr><td>Massa de cristais recuperados (g)</td><td class="td-resposta"></td></tr>
+        <tr><td>% de recuperação</td><td class="td-resposta"></td></tr>
+        <tr><td>Ponto de fusão — sulfanilamida impura (°C)</td><td class="td-resposta"></td></tr>
+        <tr><td>Ponto de fusão — sulfanilamida pura (°C)</td><td class="td-resposta"></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE B -->
+  <div id="parteB" class="section-label">Experimento</div>
+  <h2>Parte B — Seleção de Solvente</h2>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Parte B</span>
+      <span class="parte-title">Ácido Benzóico — Água vs. Éter</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Preparar</h4>
+          <p>Coloque <strong>~0,5 g de ácido benzóico</strong> em um béquer de 100 mL.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Testar em água fria</h4>
+          <p>Adicione <strong>~15 mL de água fria</strong> e misture bem. Observe e anote.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Testar em água quente</h4>
+          <p>Aqueça a mesma mistura. Observe se o ácido benzóico dissolve.</p>
+          <div class="step-tip">❓ O ácido benzóico é solúvel em água fria? E em água quente? Anote as diferenças.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Testar com éter (temperatura ambiente)</h4>
+          <p>Repita o procedimento com <strong>éter dietílico</strong> no lugar da água. <strong>Fazer somente à temperatura ambiente</strong> — não aquecer.</p>
+          <div class="step-warn">🔥 Éter é extremamente inflamável. Nenhuma chama ou faísca próxima. Use apenas na área ventilada.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-yellow">
+    <h3 style="margin-bottom:12px;">📋 Tabela B — Solubilidade do Ácido Benzóico</h3>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Condição</th>
+          <th>Observação (solúvel / insolúvel / parc. solúvel)</th>
+        </tr>
+        <tr><td class="td-cabecalho">Água fria (~25°C)</td><td class="td-resposta"></td></tr>
+        <tr><td class="td-cabecalho">Água quente (ebulição)</td><td class="td-resposta"></td></tr>
+        <tr><td class="td-cabecalho">Éter dietílico (t. ambiente)</td><td class="td-resposta"></td></tr>
+        <tr><td class="td-cabecalho">Melhor solvente para cristalizar</td><td class="td-resposta"></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE C -->
+  <div id="parteC" class="section-label">Experimento</div>
+  <h2>Parte C — Solventes para Naftaleno</h2>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Parte C</span>
+      <span class="parte-title">Naftaleno em Éter, Água e Tolueno</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Preparar 3 tubos</h4>
+          <p>Pese <strong>~0,05 g de naftaleno</strong> em cada um de 3 tubos de ensaio separados.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Adicionar os solventes</h4>
+          <p>Tubo 1: <strong>0,5 mL de éter dietílico</strong> · Tubo 2: <strong>0,5 mL de água</strong> · Tubo 3: <strong>0,5 mL de tolueno</strong></p>
+          <div class="step-tip">💡 Adicione o solvente aos poucos — observe antes de adicionar mais.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Observar e determinar</h4>
+          <p>Com base na solubilidade observada, determine qual solvente é mais adequado para cristalizar o naftaleno. Justifique pela polaridade.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-yellow">
+    <h3 style="margin-bottom:12px;">📋 Tabela C — Naftaleno em Diferentes Solventes</h3>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Solvente</th>
+          <th>Polaridade</th>
+          <th>Solubilidade observada</th>
+          <th>Adequado para cristalizar?</th>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Éter dietílico</td>
+          <td>Baixa</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Água</td>
+          <td>Alta</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Tolueno</td>
+          <td>Baixa/média</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- GUIA VISUAL -->
+  <div id="visual" class="section-label" style="break-before: page;">Guia Visual</div>
+  <h2>Parte A — Fluxo Passo a Passo</h2>
+
+  <div class="card" style="padding: 24px;">
+
+    <!-- FLUXO EM 2 LINHAS DE 3 -->
+    <svg viewBox="0 0 540 310" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:540px; display:block; margin:0 auto 16px;">
+
+      <!-- ============ LINHA 1: etapas 1→2→3 ============ -->
+
+      <!-- ETAPA 1: PESAR -->
+      <g transform="translate(10,10)">
+        <text x="80" y="18" text-anchor="middle" font-size="11" fill="#c85a00" font-family="sans-serif" font-weight="bold">① Pesar</text>
+        <rect x="30" y="25" width="100" height="60" rx="8" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <rect x="67" y="35" width="26" height="4" rx="2" fill="#c85a00"/>
+        <rect x="78" y="27" width="4" height="12" rx="2" fill="#c85a00"/>
+        <rect x="48" y="39" width="24" height="12" rx="3" fill="#e8a020" opacity="0.7"/>
+        <rect x="88" y="39" width="24" height="12" rx="3" fill="#e8a020" opacity="0.4"/>
+        <text x="80" y="100" text-anchor="middle" font-size="9.5" fill="#c85a00" font-family="sans-serif" font-weight="bold">0,75 g sulfanilamida</text>
+      </g>
+
+      <!-- SETA 1→2 -->
+      <text x="157" y="60" text-anchor="middle" font-size="18" fill="#c85a00" font-family="sans-serif">→</text>
+
+      <!-- ETAPA 2: DISSOLVER -->
+      <g transform="translate(170,10)">
+        <text x="80" y="18" text-anchor="middle" font-size="11" fill="#c85a00" font-family="sans-serif" font-weight="bold">② Dissolver</text>
+        <polygon points="80,85 47,85 60,38 100,38 113,85" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <rect x="60" y="28" width="40" height="12" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <polygon points="80,80 52,80 62,55 98,55 108,80" fill="#f5d58a" opacity="0.6"/>
+        <text x="80" y="30" text-anchor="middle" font-size="12" fill="#c85a00">♨</text>
+        <rect x="37" y="86" width="86" height="8" rx="3" fill="#888"/>
+        <text x="80" y="107" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">placa · álcool 95% quente</text>
+        <text x="80" y="118" text-anchor="middle" font-size="8.5" fill="#c85a00" font-family="sans-serif">máx. 15 min</text>
+      </g>
+
+      <!-- SETA 2→3 -->
+      <text x="297" y="60" text-anchor="middle" font-size="18" fill="#c85a00" font-family="sans-serif">→</text>
+
+      <!-- ETAPA 3: ESFRIAR -->
+      <g transform="translate(310,10)">
+        <text x="80" y="18" text-anchor="middle" font-size="11" fill="#4488cc" font-family="sans-serif" font-weight="bold">③ Esfriar</text>
+        <polygon points="80,85 47,85 60,38 100,38 113,85" fill="#e8f4ff" stroke="#4488cc" stroke-width="1.5"/>
+        <rect x="60" y="28" width="40" height="12" rx="3" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <polygon points="80,80 52,80 62,55 98,55 108,80" fill="#a8d8f0" opacity="0.5"/>
+        <polygon points="80,75 74,65 86,65" fill="#ffffff" stroke="#4488cc" stroke-width="1"/>
+        <polygon points="74,79 68,70 80,70" fill="#ffffff" stroke="#4488cc" stroke-width="1"/>
+        <path d="M60,28 Q80,21 100,28" fill="none" stroke="#888" stroke-width="1.5"/>
+        <text x="80" y="107" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">cobrir com vidro de relógio</text>
+        <text x="80" y="118" text-anchor="middle" font-size="8.5" fill="#4488cc" font-family="sans-serif">resfriamento lento</text>
+      </g>
+
+      <!-- SETA 3 → linha 2 (seta curva indicada por ↓ à direita) -->
+      <text x="430" y="138" text-anchor="middle" font-size="18" fill="#4488cc" font-family="sans-serif">↓</text>
+
+      <!-- ============ LINHA 2: etapas 4→5→6 ============ -->
+
+      <!-- ETAPA 6: FILTRAR (mais à direita, começa a linha 2 da direita) -->
+      <g transform="translate(310,148)">
+        <text x="80" y="18" text-anchor="middle" font-size="11" fill="#c85a00" font-family="sans-serif" font-weight="bold">⑥ Filtrar</text>
+        <polygon points="60,38 100,38 92,68 68,68" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <rect x="58" y="32" width="44" height="8" rx="2" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <polygon points="80,62 74,53 86,53" fill="#ffffff" stroke="#c85a00" stroke-width="1"/>
+        <ellipse cx="80" cy="82" rx="18" ry="8" fill="#f0f8ff" stroke="#888" stroke-width="1.5"/>
+        <rect x="62" y="74" width="36" height="16" rx="2" fill="#f0f8ff" stroke="#888" stroke-width="1.5"/>
+        <text x="80" y="107" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">filtração a vácuo</text>
+        <text x="80" y="118" text-anchor="middle" font-size="8.5" fill="#c85a00" font-family="sans-serif">funil de Buchner</text>
+      </g>
+
+      <!-- SETA 5→6 -->
+      <text x="297" y="200" text-anchor="middle" font-size="18" fill="#c85a00" font-family="sans-serif">→</text>
+
+      <!-- ETAPA 5: BANHO GELO -->
+      <g transform="translate(170,148)">
+        <text x="80" y="18" text-anchor="middle" font-size="11" fill="#4488cc" font-family="sans-serif" font-weight="bold">⑤ Banho Gelo</text>
+        <rect x="40" y="62" width="80" height="32" rx="4" fill="#d0eeff" stroke="#4488cc" stroke-width="1.5"/>
+        <polygon points="80,82 60,82 67,62 93,62 100,82" fill="#e8f4ff" stroke="#4488cc" stroke-width="1.5"/>
+        <text x="48" y="79" font-size="9" fill="#4488cc">❄</text>
+        <text x="102" y="79" font-size="9" fill="#4488cc">❄</text>
+        <text x="80" y="107" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">recipiente com</text>
+        <text x="80" y="118" text-anchor="middle" font-size="8.5" fill="#4488cc" font-family="sans-serif">água + gelo</text>
+      </g>
+
+      <!-- SETA 4→5 -->
+      <text x="157" y="200" text-anchor="middle" font-size="18" fill="#c85a00" font-family="sans-serif">→</text>
+
+      <!-- ETAPA 4: PESAR+CALCULAR (início linha 2, esquerda) -->
+      <g transform="translate(10,148)">
+        <text x="80" y="18" text-anchor="middle" font-size="11" fill="#c85a00" font-family="sans-serif" font-weight="bold">⑦ Pesar + Calcular</text>
+        <rect x="15" y="25" width="130" height="75" rx="10" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <text x="80" y="50" text-anchor="middle" font-size="9.5" fill="#555" font-family="sans-serif">% recuperação =</text>
+        <text x="80" y="65" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">(m obtida / 0,75g)</text>
+        <text x="80" y="79" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">× 100</text>
+      </g>
+
+      <!-- ============ LINHA 3: Ponto de fusão + resultado ============ -->
+      <g transform="translate(10,272)">
+        <rect x="0" y="0" width="240" height="30" rx="8" fill="#e8f4ff" stroke="#4488cc" stroke-width="1.5"/>
+        <text x="120" y="12" text-anchor="middle" font-size="10" fill="#4488cc" font-family="sans-serif" font-weight="bold">⑧ Ponto de Fusão</text>
+        <text x="120" y="24" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">sulfanilamida pura vs. impura</text>
+      </g>
+      <g transform="translate(265,272)">
+        <rect x="0" y="0" width="265" height="30" rx="8" fill="#f0fff4" stroke="#2a8a2a" stroke-width="1.5"/>
+        <text x="132" y="12" text-anchor="middle" font-size="10" fill="#2a8a2a" font-family="sans-serif" font-weight="bold">✅ Cristais brancos · PF estreito</text>
+        <text x="132" y="24" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">próximo 165°C · 60–80% recuperação</text>
+      </g>
+
+    </svg>
+
+    <!-- legenda etapas críticas -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:4px;">
+      <div style="background:#fff8e6; border-left:3px solid #e8a020; border-radius:6px; padding:8px 12px; font-size:12px;">
+        ⏱️ <strong>Dissolução:</strong> máx. 15 min da 1ª adição até dissolver completamente
+      </div>
+      <div style="background:#e8f4ff; border-left:3px solid #4488cc; border-radius:6px; padding:8px 12px; font-size:12px;">
+        ❄️ <strong>Resfriamento:</strong> lento e sem agitação = cristais maiores e mais puros
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SEGURANÇA -->
+  <div id="seguranca" class="section-label">Segurança</div>
+  <h2>Normas do Laboratório</h2>
+
+  <div class="card">
+    <div class="safety-grid">
+      <div class="safety-item"><span class="safety-icon">🥼</span><span>Avental fechado e óculos de proteção <strong>obrigatórios</strong> durante toda a prática</span></div>
+      <div class="safety-item"><span class="safety-icon">🔥</span><span><strong>Álcool e éter são inflamáveis</strong> — sem chamas abertas. Use placa de aquecimento</span></div>
+      <div class="safety-item"><span class="safety-icon">🌬️</span><span>Trabalhe com <strong>éter e tolueno na área ventilada</strong> — vapores tóxicos/inflamáveis</span></div>
+      <div class="safety-item"><span class="safety-icon">🧤</span><span>Use luvas ao manusear éter, tolueno e naftaleno</span></div>
+      <div class="safety-item"><span class="safety-icon">🌡️</span><span>Mantenha a <strong>temperatura da placa baixa</strong> ao trabalhar com álcool (evapora a 78°C)</span></div>
+      <div class="safety-item"><span class="safety-icon">👟</span><span>Calçado fechado obrigatório — sem sandálias</span></div>
+    </div>
+    <div class="alert alert-danger" style="margin-top:14px; margin-bottom:0;">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>Éter dietílico forma peróxidos explosivos</strong> com o tempo. Nunca evapore éter até a secura. Em caso de derramamento, afaste todas as fontes de ignição imediatamente.</span>
+    </div>
+  </div>
+
+  <!-- RELATÓRIO -->
+  <div id="relatorio" class="section-label">Relatório</div>
+  <h2>Questões para o Relatório</h2>
+
+  <div class="report-items">
+    <div class="report-item">
+      <div class="report-q">1</div>
+      <span><strong>Parte A:</strong> Apresente seus resultados em tabela. Calcule a % de recuperação. Compare o ponto de fusão da sulfanilamida pura e impura — o que a diferença indica sobre pureza?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">2</div>
+      <span><strong>Parte B:</strong> Explique o que ocorreu com o ácido benzóico em água fria, água quente e éter. Qual é o melhor solvente para cristalização? Justifique.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">3</div>
+      <span><strong>Parte C:</strong> Determine e justifique qual solvente é mais adequado para cristalizar o naftaleno com base em polaridade e comportamento de solubilidade.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">4</div>
+      <span>O que provavelmente aconteceria se uma solução quente saturada fosse filtrada a vácuo com funil de Buchner imediatamente após o aquecimento?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">5</div>
+      <span>Com os dados abaixo (solubilidade de substância A em água): a) Faça o gráfico solubilidade × temperatura · b) 0,1 g de A em 1 mL de água a 80°C dissolve totalmente? · c) A que temperatura surgirão cristais ao resfriar? · d) Quantos gramas cristalizam ao chegar a 0°C?</span>
+    </div>
+    <div class="report-item" style="display:block; padding:10px 14px;">
+      <div class="table-wrap" style="margin-top:6px;">
+        <table>
+          <tr>
+            <th>Temperatura (°C)</th>
+            <th>0</th><th>20</th><th>40</th><th>60</th><th>80</th>
+          </tr>
+          <tr>
+            <td class="td-cabecalho">Solubilidade (g / 100 mL H₂O)</td>
+            <td>1,5</td><td>3,0</td><td>6,5</td><td>11,0</td><td>17,0</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="report-item">
+      <div class="report-q">6</div>
+      <span>Por que é mais indicado que a solução seja esfriada <strong>espontaneamente</strong>, depois de aquecida, e não bruscamente?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">7</div>
+      <span>Como é possível determinar o grau de pureza de uma substância cristalina?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">8</div>
+      <span>Preveja se o <strong>fenantreno</strong> (procure a estrutura) se dissolverá em água, tolueno ou álcool etílico 95%. Justifique com base em polaridade e solubilidade.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">9</div>
+      <span>Por que devemos realizar o procedimento de cristalização ao invés de simplesmente secar o sólido impuro?</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Lab Química Orgânica · UFSCar &nbsp;|&nbsp; Prof. Marystela Ferreira &nbsp;|&nbsp; Aula 2 — Cristalização
+</footer>
+
+</body>
+</html>

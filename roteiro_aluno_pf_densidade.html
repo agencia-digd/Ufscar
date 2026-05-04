@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roteiro do Aluno – Ponto de Fusão e Densidade</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --surface: #ffffff; --surface2: #f7f9f8;
+    --accent: #c85a00; --accent2: #e8a020; --accent3: #c0392b;
+    --text: #1c1c1c; --muted: #555555; --border: #e8ddd5; --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.7; color-scheme: light; }
+
+  header { background: var(--accent); color: white; padding: 40px 40px 32px; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%; background: rgba(255,255,255,0.05); top: -80px; right: -60px; }
+  .header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; color: #1c1c1c; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(22px, 4vw, 36px); font-weight: 400; margin-bottom: 8px; line-height: 1.2; }
+  header p { opacity: 0.88; font-size: 15px; max-width: 600px; }
+  .header-meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 8px; font-size: 13px; opacity: 0.9; }
+
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: white; background: var(--accent); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 8px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 22px; color: #ffffff; background: var(--accent); display: inline-block; padding: 6px 16px 8px; border-radius: 6px; margin-bottom: 16px; }
+  h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 20px; }
+  .card-accent-left   { border-left: 4px solid var(--accent); }
+  .card-accent-yellow { border-left: 4px solid var(--accent2); }
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .obj-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; }
+  .obj-num { min-width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+
+  .conceito-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .conceito-card { border-radius: 10px; padding: 14px 12px; border: 1px solid var(--border); }
+  .conceito-card.puro   { background: #f0fff4; border-color: #b2dfca; }
+  .conceito-card.impuro { background: #fdf2f2; border-color: #f5c6c6; }
+  .conceito-icon { font-size: 22px; margin-bottom: 6px; }
+  .conceito-card h4 { font-size: 13px; margin-bottom: 4px; }
+  .conceito-card p  { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  .parte-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .parte-badge  { background: var(--accent); color: white; font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; white-space: nowrap; }
+  .parte-title  { font-size: 17px; font-weight: 600; color: var(--text); }
+
+  .step-list { display: flex; flex-direction: column; gap: 12px; }
+  .step { display: flex; gap: 14px; }
+  .step-num { min-width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 3px; }
+  .step-body h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .step-body p  { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .step-tip  { margin-top: 8px; background: #fff8e6; border-left: 3px solid var(--accent2); padding: 6px 10px; border-radius: 4px; font-size: 13px; color: #7a5500; }
+  .step-warn { margin-top: 8px; background: #fdf2f2; border-left: 3px solid var(--accent3); padding: 6px 10px; border-radius: 4px; font-size: 13px; color: #7a1010; }
+
+  .alert { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; font-size: 14px; margin: 12px 0; }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-tip    { background: #f0faf4; border: 1px solid #b2dfca; }
+  .alert-info   { background: #f0f7ff; border: 1px solid #bdd8f5; }
+  .alert-danger { background: #fdf2f2; border: 1px solid #f5c6c6; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { background: var(--accent); color: white; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 13px; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #fdf8f4; }
+  .td-resposta  { background: #fafafa; min-height: 40px; }
+  .td-cabecalho { background: var(--surface2); font-weight: 600; font-size: 13px; }
+  .td-ref       { background: #f0fff4; font-size: 12px; color: #2a7a00; font-weight: 600; }
+
+  .formula-box { background: var(--surface2); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 16px 20px; margin: 14px 0; text-align: center; font-size: 18px; font-family: monospace; }
+  .formula-box .label { font-family: 'DM Sans', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; font-weight: 700; text-align: left; }
+
+  .safety-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .safety-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--muted); line-height: 1.4; }
+  .safety-icon { font-size: 18px; flex-shrink: 0; }
+
+  .report-items { display: flex; flex-direction: column; gap: 10px; }
+  .report-item  { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--surface2); border-radius: 8px; font-size: 14px; line-height: 1.5; }
+  .report-q     { min-width: 28px; height: 28px; background: var(--accent2); color: #1c1c1c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  .nav-index { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px; margin: 24px 0 28px; }
+  .nav-index-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .nav-index-list  { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .nav-index-list li { display: flex; align-items: center; gap: 8px; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .nav-index-list a { color: var(--accent); font-size: 14px; text-decoration: none; font-weight: 500; }
+
+  footer { text-align: center; padding: 28px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { margin: 15mm; size: A4 portrait; }
+    .nav-index { display: none !important; }
+    body { font-size: 10px !important; line-height: 1.35 !important; }
+    main { padding: 8px 0 !important; max-width: 100% !important; }
+    header { padding: 16px 20px !important; }
+    header h1 { font-size: 18px !important; }
+    header p { font-size: 10px !important; }
+    .header-badge { font-size: 8px !important; padding: 2px 8px !important; margin-bottom: 6px !important; }
+    .header-meta { margin-top: 8px !important; gap: 12px !important; }
+    .meta-item { font-size: 9px !important; }
+    .section-label { font-size: 8px !important; padding: 2px 7px !important; margin-bottom: 4px !important; break-after: avoid !important; }
+    h2 { font-size: 13px !important; padding: 3px 10px 4px !important; margin-bottom: 6px !important; break-after: avoid !important; }
+    h3 { font-size: 11px !important; break-after: avoid !important; }
+    h4 { font-size: 10px !important; break-after: avoid !important; }
+    .card { padding: 8px 12px !important; margin-bottom: 7px !important; break-inside: avoid !important; }
+    .divider { margin: 4px 0 !important; }
+    .conceito-grid { gap: 5px !important; margin: 5px 0 !important; }
+    .conceito-card { padding: 7px !important; }
+    .conceito-icon { font-size: 14px !important; margin-bottom: 2px !important; }
+    .conceito-card h4 { font-size: 9px !important; }
+    .conceito-card p { font-size: 8px !important; }
+    .parte-header { margin-bottom: 5px !important; }
+    .parte-badge { font-size: 8px !important; padding: 2px 8px !important; }
+    .parte-title { font-size: 11px !important; }
+    .step-list { gap: 5px !important; }
+    .step { gap: 8px !important; }
+    .step-num { min-width: 20px !important; height: 20px !important; font-size: 9px !important; }
+    .step-body p { font-size: 9px !important; }
+    .step-body h4 { font-size: 10px !important; }
+    .step-tip, .step-warn { font-size: 8px !important; padding: 3px 7px !important; margin-top: 3px !important; }
+    .alert { padding: 4px 8px !important; font-size: 9px !important; margin: 4px 0 !important; break-inside: avoid !important; }
+    table { font-size: 9px !important; break-inside: avoid !important; }
+    th, td { padding: 4px 8px !important; font-size: 9px !important; }
+    .td-resposta { min-height: 22px !important; }
+    .formula-box { padding: 8px 12px !important; font-size: 13px !important; margin: 5px 0 !important; }
+    .formula-box .label { font-size: 8px !important; }
+    .safety-grid { gap: 5px !important; }
+    .safety-item { font-size: 9px !important; }
+    .report-items { gap: 4px !important; }
+    .report-item { padding: 5px 9px !important; font-size: 9px !important; break-inside: avoid !important; }
+    .report-q { min-width: 18px !important; height: 18px !important; font-size: 8px !important; }
+    footer { font-size: 8px !important; padding: 6px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Aula 4 · Marystela · Eng. Florestal</div>
+  <h1>Ponto de Fusão e Densidade</h1>
+  <p>Determinação de constantes físicas para identificação e avaliação de pureza de compostos orgânicos.</p>
+  <div class="header-meta">
+    <div class="meta-item">⏱️ ~2 horas</div>
+    <div class="meta-item">👥 Grupos de 4</div>
+    <div class="meta-item">🌡️ Aparelho elétrico de PF</div>
+    <div class="meta-item">⚗️ Picnômetro + pipeta 100 µL</div>
+  </div>
+</header>
+
+<main>
+
+  <div class="nav-index">
+    <div class="nav-index-title">Nesta aula</div>
+    <ul class="nav-index-list">
+      <li><span class="nav-dot"></span><a href="#fundamentos">Fundamentos — PF e pureza</a></li>
+      <li><span class="nav-dot"></span><a href="#capilar">Parte A — Preparo do capilar</a></li>
+      <li><span class="nav-dot"></span><a href="#pf">Parte B — Determinação do PF (5 compostos)</a></li>
+      <li><span class="nav-dot"></span><a href="#densidade">Parte C — Densidade do líquido</a></li>
+      <li><span class="nav-dot"></span><a href="#visual">Guia Visual — fases de fusão + picnômetro</a></li>
+      <li><span class="nav-dot"></span><a href="#relatorio">Relatório e Questões</a></li>
+    </ul>
+  </div>
+
+  <!-- OBJETIVOS -->
+  <div class="section-label">Objetivos</div>
+  <h2>O que você vai aprender</h2>
+  <div class="card card-accent-left">
+    <ul class="obj-list">
+      <li><div class="obj-num">1</div><span>Entender o ponto de fusão como constante física para <strong>identificação e pureza</strong> de compostos orgânicos</span></li>
+      <li><div class="obj-num">2</div><span>Preparar tubos capilares e determinar PF no aparelho elétrico com taxa de aquecimento controlada</span></li>
+      <li><div class="obj-num">3</div><span>Comparar PF experimental com valores da literatura para <strong>5 compostos</strong> das aulas anteriores</span></li>
+      <li><div class="obj-num">4</div><span>Determinar a <strong>densidade de um líquido</strong> desconhecido pelo método do picnômetro com pipeta automática</span></li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FUNDAMENTOS -->
+  <div id="fundamentos" class="section-label">Fundamentos</div>
+  <h2>Ponto de Fusão e Pureza</h2>
+
+  <div class="card card-accent-left">
+    <p style="font-size:15px; margin-bottom:14px;">O ponto de fusão (PF) é a temperatura em que um sólido cristalino passa para o estado líquido a pressão constante. Substâncias puras possuem PF <strong>estreito e bem definido</strong>. Impurezas causam dois efeitos: <strong>abaixam</strong> a temperatura de fusão e <strong>alargam</strong> a faixa de fusão.</p>
+
+    <div class="conceito-grid">
+      <div class="conceito-card puro">
+        <div class="conceito-icon">✅</div>
+        <h4>Substância Pura</h4>
+        <p>Faixa de fusão estreita: <strong>0,5 a 1,0°C</strong><br>Ex.: Acetanilida pura → 113–114°C<br>PF próximo ao valor da literatura</p>
+      </div>
+      <div class="conceito-card impuro">
+        <div class="conceito-icon">⚠️</div>
+        <h4>Substância Impura</h4>
+        <p>Faixa de fusão larga: <strong>&gt;2°C</strong><br>PF abaixo do valor teórico<br>Início precoce, término tardio</p>
+      </div>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:4px;">
+      <span class="alert-icon">💡</span>
+      <span><strong>Taxa de aquecimento:</strong> deve ser de <strong>~1°C por minuto</strong> próximo ao PF esperado. Aquecimento rápido demais atrasa a leitura e gera valores acima do real.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE A: CAPILAR -->
+  <div id="capilar" class="section-label">Procedimento</div>
+  <h2>Parte A — Preparo do Capilar</h2>
+
+  <div class="card card-accent-left">
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Fechar o capilar</h4>
+          <p>Pegue um tubo capilar. Feche uma das extremidades girando-o em contato leve com a <strong>chama do bico de Bunsen</strong> até selar completamente.</p>
+          <div class="step-tip">💡 Gire o capilar suavemente na extremidade da chama — o vidro deve fundir e fechar sem deformar o tubo.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Carregar o capilar</h4>
+          <p>Coloque um pouco do composto num vidro de relógio. Se necessário, pulverize com espátula. Toque a extremidade <strong>aberta</strong> do capilar na amostra para introduzir o sólido.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Compactar o sólido</h4>
+          <p>Dentro de um tubo longo de vidro, deixe o capilar cair pelo tubo com a extremidade fechada para baixo — o impacto compacta o sólido. Repita até ter <strong>~2 mm de altura</strong> de amostra no fundo.</p>
+          <div class="step-tip">📏 2 mm é suficiente — excesso de amostra dificulta a observação da fusão.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Identificar o capilar</h4>
+          <p>Codifique o capilar com pincel atômico (ex.: AC-P para acetanilida pura, AC-I para impura). Prepare um capilar separado para cada composto.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE B: PF -->
+  <div id="pf" class="section-label">Procedimento</div>
+  <h2>Parte B — Determinação do Ponto de Fusão</h2>
+
+  <div class="alert alert-tip">
+    <span class="alert-icon">🌡️</span>
+    <span>Esta aula utiliza <strong>dois métodos</strong> para determinação do ponto de fusão. Siga as instruções do professor para qual usar — ou compare os resultados entre os dois.</span>
+  </div>
+
+  <!-- MÉTODO 1: APARELHO ELÉTRICO -->
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Método 1</span>
+      <span class="parte-title">Aparelho Elétrico de PF</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Inserir o capilar</h4>
+          <p>Insira o capilar no orifício do aparelho. Configure a taxa de aquecimento para <strong>~5°C/min</strong> até ~20°C abaixo do PF esperado, depois reduza para <strong>1°C/min</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h4>Registrar início e fim</h4>
+          <p>Observe pela lupa. Anote a temperatura da <strong>primeira gota de líquido</strong> (T início) e do <strong>desaparecimento do último cristal</strong> (T fim).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTODO 2: BANHO DE ÓLEO -->
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Método 2</span>
+      <span class="parte-title">Banho de Óleo com Bico de Bunsen</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Montar o sistema</h4>
+          <p>Coloque óleo mineral num béquer de 100 mL sobre tripé com tela de amianto. Prenda um termômetro na garra de modo que o <strong>bulbo fique totalmente submerso</strong> no óleo. Com uma gominha de látex, fixe o capilar ao termômetro na mesma altura do bulbo. A gominha deve ficar <strong>acima do nível do óleo</strong>.</p>
+          <div class="step-warn">🔥 O Bunsen aquece o óleo diretamente. Nunca use água como banho para PF acima de 100°C — use apenas óleo mineral ou glicerina.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h4>Aquecer gradualmente</h4>
+          <p>Acenda o Bunsen com chama baixa. Aqueça o banho com <strong>agitação constante</strong> do termômetro. Taxa: <strong>~1°C por minuto</strong> ao se aproximar do PF esperado. Observe continuamente o sólido no capilar.</p>
+          <div class="step-tip">⏱️ Inicie o aquecimento rápido até ~20°C antes do PF esperado, depois reduza a chama para controlar a taxa em 1°C/min.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <h4>Registrar início e fim</h4>
+          <p>Anote a temperatura em que aparece a <strong>primeira gota de líquido</strong> e aquela em que os <strong>últimos cristais desaparecem</strong>. Registre os dois valores como faixa de fusão.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Ambos os métodos</span>
+      <span class="parte-title">Medir os 5 compostos</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">8</div>
+        <div class="step-body">
+          <h4>Repetir para todos os compostos</h4>
+          <p>Determine o PF para: <strong>acetanilida pura</strong>, <strong>acetanilida impura</strong>, <strong>sulfanilamida</strong> (aulas 1–2), <strong>cafeína purificada</strong> (A3) e <strong>cafeína comercial</strong>.</p>
+          <div class="step-warn">⚠️ No banho de óleo: deixe o banho esfriar pelo menos 20°C abaixo do próximo PF antes de inserir novo capilar. Troque o óleo se ficar escuro.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA PF -->
+  <div class="card card-accent-yellow">
+    <h3 style="margin-bottom:12px;">📋 Tabela B — Pontos de Fusão</h3>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Composto</th>
+          <th>T início (°C)</th>
+          <th>T fim (°C)</th>
+          <th>Faixa exp. (°C)</th>
+          <th>PF literatura (°C)</th>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Acetanilida pura</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+          <td class="td-ref">113–114</td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Acetanilida impura</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+          <td class="td-ref">&lt; 113, faixa larga</td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Sulfanilamida (A1/A2)</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+          <td class="td-ref">163–166</td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Cafeína purificada (A3)</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+          <td class="td-ref">235–238</td>
+        </tr>
+        <tr>
+          <td class="td-cabecalho">Cafeína comercial</td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+          <td class="td-resposta"></td>
+          <td class="td-ref">235–238</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE C: DENSIDADE -->
+  <div id="densidade" class="section-label">Procedimento</div>
+  <h2>Parte C — Densidade do Líquido</h2>
+
+  <div class="card card-accent-left">
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">8</div>
+        <div class="step-body">
+          <h4>Pesar o picnômetro vazio</h4>
+          <p>Pese o picnômetro seco e vazio na balança analítica. Anote a massa (<strong>m₀</strong>).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">9</div>
+        <div class="step-body">
+          <h4>Adicionar o líquido</h4>
+          <p>Com pipeta automática, adicione exatamente <strong>100 µL do líquido</strong> fornecido no picnômetro. Pese e anote a massa total.</p>
+          <div class="step-tip">💧 m<sub>líquido</sub> = m<sub>total</sub> − m₀ (picnômetro vazio)</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">10</div>
+        <div class="step-body">
+          <h4>Repetir 3 vezes</h4>
+          <p>Repita o procedimento mais 2 vezes (3 medidas no total). Use a <strong>massa média</strong> para calcular a densidade.</p>
+          <div class="step-warn">⚠️ Seque o picnômetro completamente entre medidas para não contaminar a próxima amostra.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">11</div>
+        <div class="step-body">
+          <h4>Calcular a densidade</h4>
+          <p>Aplique a fórmula abaixo usando a massa média das 3 medidas e o volume de 100 µL = 0,100 mL.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="formula-box">
+      <div class="label">Fórmula da Densidade</div>
+      d (g/mL) = m<sub>líquido</sub> (g) / V (mL)
+    </div>
+    <p style="font-size:13px; color:var(--muted); margin-top:8px;">Onde V = 0,100 mL (100 µL da pipeta automática)</p>
+  </div>
+
+  <!-- TABELA DENSIDADE -->
+  <div class="card card-accent-yellow">
+    <h3 style="margin-bottom:12px;">📋 Tabela C — Determinação de Densidade</h3>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Medida</th>
+          <th>m₀ picnômetro (g)</th>
+          <th>m total (g)</th>
+          <th>m líquido (g)</th>
+          <th>Densidade (g/mL)</th>
+        </tr>
+        <tr><td class="td-cabecalho">Medida 1</td><td class="td-resposta"></td><td class="td-resposta"></td><td class="td-resposta"></td><td class="td-resposta"></td></tr>
+        <tr><td class="td-cabecalho">Medida 2</td><td class="td-resposta"></td><td class="td-resposta"></td><td class="td-resposta"></td><td class="td-resposta"></td></tr>
+        <tr><td class="td-cabecalho">Medida 3</td><td class="td-resposta"></td><td class="td-resposta"></td><td class="td-resposta"></td><td class="td-resposta"></td></tr>
+        <tr><td class="td-cabecalho" colspan="4" style="text-align:right;">Densidade média (g/mL)</td><td class="td-resposta"></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- GUIA VISUAL -->
+  <div id="visual" class="section-label" style="break-before: page;">Guia Visual</div>
+  <h2>Fases de Fusão e Picnômetro</h2>
+
+  <div class="card" style="padding:20px;">
+
+    <!-- FASES DE FUSÃO -->
+    <h3 style="margin-bottom:12px;">Transformações no Intervalo de Fusão</h3>
+    <svg viewBox="0 0 540 160" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:540px; display:block; margin:0 auto 16px;">
+
+      <!-- ESTADO 1: SÓLIDO -->
+      <g transform="translate(10,10)">
+        <rect x="28" y="20" width="36" height="90" rx="3" fill="#f8f8f8" stroke="#aaa" stroke-width="1.5"/>
+        <ellipse cx="46" cy="110" rx="18" ry="6" fill="#f8f8f8" stroke="#aaa" stroke-width="1.5"/>
+        <rect x="25" y="14" width="42" height="10" rx="2" fill="#ddd" stroke="#aaa"/>
+        <!-- cristais -->
+        <rect x="32" y="60" width="28" height="42" rx="2" fill="#e8ddd0"/>
+        <line x1="35" y1="65" x2="55" y2="85" stroke="#c8a878" stroke-width="0.8"/>
+        <line x1="55" y1="65" x2="35" y2="85" stroke="#c8a878" stroke-width="0.8"/>
+        <line x1="35" y1="75" x2="55" y2="75" stroke="#c8a878" stroke-width="0.8"/>
+        <text x="46" y="128" text-anchor="middle" font-size="9.5" fill="#555" font-family="sans-serif" font-weight="bold">1 — Sólido</text>
+      </g>
+
+      <text x="107" y="70" text-anchor="middle" font-size="14" fill="#c85a00">→</text>
+
+      <!-- ESTADO 2: DEFORMAÇÃO -->
+      <g transform="translate(118,10)">
+        <rect x="28" y="20" width="36" height="90" rx="3" fill="#f8f8f8" stroke="#aaa" stroke-width="1.5"/>
+        <ellipse cx="46" cy="110" rx="18" ry="6" fill="#f8f8f8" stroke="#aaa" stroke-width="1.5"/>
+        <rect x="25" y="14" width="42" height="10" rx="2" fill="#ddd" stroke="#aaa"/>
+        <rect x="32" y="62" width="28" height="40" rx="3" fill="#e8d4b8" opacity="0.8"/>
+        <rect x="34" y="70" width="10" height="14" rx="2" fill="#d4b890" transform="rotate(-5,39,77)"/>
+        <rect x="46" y="68" width="10" height="14" rx="2" fill="#d4b890" transform="rotate(5,51,75)"/>
+        <text x="46" y="128" text-anchor="middle" font-size="9.5" fill="#555" font-family="sans-serif" font-weight="bold">2 — Deformação</text>
+      </g>
+
+      <text x="215" y="70" text-anchor="middle" font-size="14" fill="#c85a00">→</text>
+
+      <!-- ESTADO 3: GOTA -->
+      <g transform="translate(226,10)">
+        <rect x="28" y="20" width="36" height="90" rx="3" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <ellipse cx="46" cy="110" rx="18" ry="6" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <rect x="25" y="14" width="42" height="10" rx="2" fill="#ddd" stroke="#aaa"/>
+        <rect x="32" y="75" width="28" height="27" rx="2" fill="#f5c88a" opacity="0.7"/>
+        <rect x="33" y="62" width="12" height="15" rx="2" fill="#e8d0a8" transform="rotate(-8,39,70)"/>
+        <rect x="47" y="60" width="10" height="16" rx="2" fill="#e8d0a8" transform="rotate(6,52,68)"/>
+        <text x="46" y="128" text-anchor="middle" font-size="9.5" fill="#c85a00" font-family="sans-serif" font-weight="bold">3 — 1ª gota ★</text>
+        <text x="46" y="140" text-anchor="middle" font-size="8" fill="#c85a00" font-family="sans-serif">T início</text>
+      </g>
+
+      <text x="323" y="70" text-anchor="middle" font-size="14" fill="#c85a00">→</text>
+
+      <!-- ESTADO 4: ÚLTIMOS CRISTAIS -->
+      <g transform="translate(334,10)">
+        <rect x="28" y="20" width="36" height="90" rx="3" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <ellipse cx="46" cy="110" rx="18" ry="6" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <rect x="25" y="14" width="42" height="10" rx="2" fill="#ddd" stroke="#aaa"/>
+        <rect x="32" y="65" width="28" height="37" rx="2" fill="#f5c88a" opacity="0.8"/>
+        <rect x="40" y="58" width="8" height="10" rx="1" fill="#e8d0a8"/>
+        <text x="46" y="128" text-anchor="middle" font-size="9.5" fill="#c85a00" font-family="sans-serif" font-weight="bold">4 — Últ. cristais</text>
+      </g>
+
+      <text x="431" y="70" text-anchor="middle" font-size="14" fill="#c85a00">→</text>
+
+      <!-- ESTADO 5: LÍQUIDO -->
+      <g transform="translate(442,10)">
+        <rect x="28" y="20" width="36" height="90" rx="3" fill="#fff4eb" stroke="#2a8a2a" stroke-width="2"/>
+        <ellipse cx="46" cy="110" rx="18" ry="6" fill="#fff4eb" stroke="#2a8a2a" stroke-width="2"/>
+        <rect x="25" y="14" width="42" height="10" rx="2" fill="#ddd" stroke="#aaa"/>
+        <rect x="32" y="55" width="28" height="47" rx="2" fill="#f5c88a" opacity="0.9"/>
+        <text x="46" y="128" text-anchor="middle" font-size="9.5" fill="#2a8a2a" font-family="sans-serif" font-weight="bold">5 — Líquido ★</text>
+        <text x="46" y="140" text-anchor="middle" font-size="8" fill="#2a8a2a" font-family="sans-serif">T fim</text>
+      </g>
+
+      <!-- FAIXA DE FUSÃO indicador -->
+      <rect x="226" y="148" width="252" height="10" rx="3" fill="none" stroke="#c85a00" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <text x="352" y="157" text-anchor="middle" font-size="8.5" fill="#c85a00" font-family="sans-serif">← Faixa de fusão (T início → T fim) →</text>
+
+    </svg>
+
+    <div class="divider" style="margin:8px 0 12px;"></div>
+
+    <!-- PICNÔMETRO -->
+    <h3 style="margin-bottom:12px;">Método do Picnômetro (100 µL)</h3>
+    <svg viewBox="0 0 540 120" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:540px; display:block; margin:0 auto;">
+
+      <!-- PICNÔMETRO VAZIO -->
+      <g transform="translate(20,10)">
+        <text x="55" y="14" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">① Pesar vazio</text>
+        <ellipse cx="55" cy="80" rx="35" ry="12" fill="#f8f8f8" stroke="#888" stroke-width="1.5"/>
+        <rect x="20" y="35" width="70" height="46" rx="6" fill="#f8f8f8" stroke="#888" stroke-width="1.5"/>
+        <rect x="45" y="20" width="20" height="18" rx="4" fill="#ddd" stroke="#888" stroke-width="1"/>
+        <text x="55" y="60" text-anchor="middle" font-size="11" fill="#888" font-family="sans-serif">vazio</text>
+        <text x="55" y="102" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">m₀ = ? g</text>
+      </g>
+
+      <!-- SETA -->
+      <text x="147" y="65" text-anchor="middle" font-size="16" fill="#c85a00" font-family="sans-serif">→</text>
+
+      <!-- PIPETA -->
+      <g transform="translate(155,10)">
+        <text x="55" y="14" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">② Adicionar 100 µL</text>
+        <rect x="48" y="18" width="14" height="50" rx="3" fill="#a8d8f0" stroke="#4488cc" stroke-width="1.5"/>
+        <polygon points="55,68 50,80 60,80" fill="#4488cc"/>
+        <text x="55" y="102" text-anchor="middle" font-size="9" fill="#4488cc" font-family="sans-serif">pipeta automática</text>
+      </g>
+
+      <!-- SETA -->
+      <text x="282" y="65" text-anchor="middle" font-size="16" fill="#c85a00" font-family="sans-serif">→</text>
+
+      <!-- PICNÔMETRO COM LÍQUIDO -->
+      <g transform="translate(290,10)">
+        <text x="55" y="14" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">③ Pesar cheio</text>
+        <ellipse cx="55" cy="80" rx="35" ry="12" fill="#d0f0ff" stroke="#4488cc" stroke-width="1.5"/>
+        <rect x="20" y="35" width="70" height="46" rx="6" fill="#d0f0ff" stroke="#4488cc" stroke-width="1.5"/>
+        <rect x="45" y="20" width="20" height="18" rx="4" fill="#ddd" stroke="#888" stroke-width="1"/>
+        <text x="55" y="60" text-anchor="middle" font-size="10" fill="#1a6fa0" font-family="sans-serif">100 µL</text>
+        <text x="55" y="102" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">m total = ? g</text>
+      </g>
+
+      <!-- SETA -->
+      <text x="415" y="65" text-anchor="middle" font-size="16" fill="#c85a00" font-family="sans-serif">→</text>
+
+      <!-- RESULTADO -->
+      <g transform="translate(425,20)">
+        <rect x="0" y="10" width="105" height="60" rx="8" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <text x="52" y="30" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">④ Calcular</text>
+        <text x="52" y="46" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">d = m / 0,100 mL</text>
+        <text x="52" y="60" text-anchor="middle" font-size="8.5" fill="#555" font-family="sans-serif">repetir 3× → média</text>
+      </g>
+
+    </svg>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RELATÓRIO -->
+  <div id="relatorio" class="section-label">Relatório</div>
+  <h2>Questões para o Relatório</h2>
+
+  <div class="report-items">
+    <div class="report-item">
+      <div class="report-q">1</div>
+      <span>Apresente os pontos de fusão experimentais e os valores da literatura em tabela. Discuta as diferenças observadas para cada composto.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">2</div>
+      <span>Calcule a densidade do líquido e compare com a literatura. Discuta os resultados obtidos.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">3</div>
+      <span>Por que medir o ponto de fusão de uma substância? Qual a importância dessa constante física na identificação de compostos orgânicos?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">4</div>
+      <span>Por que determinar a densidade de uma solução? Em quais situações essa constante é útil?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">5</div>
+      <span>Qual a faixa de temperatura em que a maioria dos compostos orgânicos se fundem?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">6</div>
+      <span>Uma substância apresenta ampla faixa de temperatura de fusão na mudança de sólido para líquido. O que isso indica?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">7</div>
+      <span>Explique: duas amostras puras do mesmo composto fundem à mesma temperatura. Entretanto, duas amostras desconhecidas que fundem na mesma temperatura não são necessariamente o mesmo composto. Como resolver essa ambiguidade?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">8</div>
+      <span>Discuta os valores de faixa de fusão obtidos para a acetanilida pura e impura. O que a diferença entre eles demonstra?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">9</div>
+      <span>A densidade de um líquido foi determinada com pipeta de 100 µL. O líquido apresentou massa de <strong>0,082 g</strong>. Qual a densidade em g/mL? Mostre o cálculo.</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Lab Química Orgânica · UFSCar &nbsp;|&nbsp; Prof. Marystela Ferreira &nbsp;|&nbsp; Aula 4 — Ponto de Fusão e Densidade
+</footer>
+</body>
+</html>

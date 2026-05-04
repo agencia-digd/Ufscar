@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roteiro do Aluno – pH e Tampões</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface2: #f7f9f8;
+    --accent: #1a6b4a;
+    --accent2: #e8a020;
+    --accent3: #c0392b;
+    --text: #1c1c1c;
+    --muted: #555555;
+    --border: #e0e8e4;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-text-size-adjust: 100%;
+    color-scheme: light;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--accent);
+    color: white;
+    padding: 52px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    top: -100px; right: -80px;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    bottom: -60px; left: 60px;
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--accent2);
+    color: #1c1c1c;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 46px);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  header p {
+    opacity: 0.85;
+    font-size: 15px;
+    max-width: 560px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    opacity: 0.9;
+  }
+  .meta-icon { font-size: 16px; }
+
+  /* LAYOUT */
+  main { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* SECTION TITLES */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: var(--accent);
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: #ffffff;
+    background: var(--accent);
+    display: inline-block;
+    padding: 6px 16px 8px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 28px;
+  }
+  .card-accent-left {
+    border-left: 4px solid var(--accent);
+  }
+  .card-accent-yellow {
+    border-left: 4px solid var(--accent2);
+  }
+  .card-accent-red {
+    border-left: 4px solid var(--accent3);
+  }
+
+  /* OBJECTIVES */
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .obj-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 15px;
+  }
+  .obj-num {
+    min-width: 28px; height: 28px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* CONCEPT VISUAL */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .concept-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+  }
+  .concept-icon { font-size: 36px; margin-bottom: 10px; }
+  .concept-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .concept-card p { font-size: 13px; color: var(--muted); }
+
+  /* pH SCALE */
+  .ph-scale-wrap {
+    margin: 20px 0;
+    background: var(--bg);
+    border-radius: var(--radius);
+    padding: 24px;
+    border: 1px solid var(--border);
+  }
+  .ph-scale-title { font-weight: 600; font-size: 14px; margin-bottom: 14px; }
+  .ph-bar {
+    height: 36px;
+    border-radius: 18px;
+    background: linear-gradient(to right,
+      #e74c3c 0%,    /* pH 0-2 vermelho forte */
+      #e67e22 14%,   /* pH 3-4 laranja */
+      #f1c40f 28%,   /* pH 5 amarelo */
+      #27ae60 42%,   /* pH 6-7 verde */
+      #2980b9 57%,   /* pH 8-9 azul */
+      #8e44ad 85%,   /* pH 10-12 roxo */
+      #4a235a 100%   /* pH 14 */
+    );
+    position: relative;
+    margin-bottom: 8px;
+  }
+  .ph-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .ph-pointers {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .ph-anchor {
+    display: flex;
+    gap: 16px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .ph-tag {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text);
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+
+  /* INDICATORS TABLE */
+  .ind-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .ind-card {
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    color: white;
+  }
+  .ind-card h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .ind-card p { font-size: 12px; opacity: 0.9; }
+
+  /* STEPS */
+  .step-list { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex; gap: 20px;
+    position: relative;
+  }
+  .step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 19px; top: 44px;
+    width: 2px;
+    height: calc(100% - 20px);
+    background: var(--border);
+  }
+  .step-num {
+    min-width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+    flex-shrink: 0;
+    margin-top: 4px;
+    z-index: 1;
+  }
+  .step-body { padding-bottom: 28px; }
+  .step-body h4 { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+  .step-body p { font-size: 14px; color: var(--muted); }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-top: 16px;
+  }
+  th {
+    background: var(--accent);
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  th:first-child { border-radius: 8px 0 0 0; }
+  th:last-child { border-radius: 0 8px 0 0; }
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tr:nth-child(even) td { background: #fafaf8; }
+  tr:last-child td { border-bottom: none; }
+
+  /* COLOR CIRCLES */
+  .color-dot {
+    display: inline-block;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 6px;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  /* ALERT BOX */
+  .alert {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .alert-danger { background: #fdf2f2; border: 1px solid #f5c6c6; }
+  .alert-info { background: #f0f7ff; border: 1px solid #bdd8f5; }
+  .alert-tip { background: #f0faf4; border: 1px solid #b2dfca; }
+  .alert-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+
+  /* BUFFER VISUAL */
+  .buffer-visual {
+    display: flex;
+    gap: 0;
+    margin: 20px 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .bv-col {
+    flex: 1;
+    padding: 20px 16px;
+    text-align: center;
+    font-size: 13px;
+  }
+  .bv-col h4 { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+  .bv-col p { color: var(--muted); font-size: 12px; }
+  .bv-icon { font-size: 30px; margin-bottom: 8px; }
+  .bv-acid { background: #fdf2f0; border-right: 1px solid var(--border); }
+  .bv-neutral { background: #f0faf4; border-right: 1px solid var(--border); }
+  .bv-base { background: #f0f4ff; }
+
+  /* FORMULA */
+  .formula-box {
+    background: #1c1c1c;
+    color: #e8e8e8;
+    border-radius: 10px;
+    padding: 20px 24px;
+    font-family: monospace;
+    font-size: 15px;
+    margin: 16px 0;
+    line-height: 1.9;
+  }
+  .formula-box .highlight { color: var(--accent2); font-weight: bold; }
+  .formula-box .comment { color: #888; font-size: 13px; }
+
+  /* REPORT */
+  .report-items { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+  .report-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+    font-size: 14px;
+  }
+  .report-q {
+    min-width: 28px; height: 28px;
+    background: var(--accent2);
+    color: #1c1c1c;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 28px 24px;
+    font-size: 13px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    background: white;
+  }
+
+  /* MOBILE FIRST — tela pequena */
+  @media (max-width: 640px) {
+    header { padding: 28px 18px 24px; }
+    header h1 { font-size: 26px; }
+
+    main { padding: 24px 14px 60px; }
+
+    .card { padding: 16px; margin-bottom: 18px; }
+
+    /* Concept grid: 2 colunas no mobile */
+    .concept-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .concept-icon { font-size: 28px; }
+    .concept-card p { font-size: 12px; }
+
+    /* Indicadores: 1 coluna */
+    .ind-grid { grid-template-columns: 1fr; }
+
+    /* Buffer visual: coluna */
+    .buffer-visual { flex-direction: column; }
+    .bv-col { border-right: none !important; border-bottom: 1px solid var(--border); }
+    .bv-col:last-child { border-bottom: none; }
+
+    /* Tabelas: scroll horizontal */
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { min-width: 500px; font-size: 12px; }
+    th, td { padding: 8px 10px; }
+
+    /* Steps: reduzir gap */
+    .step-body { padding-bottom: 20px; }
+    .step-body h4 { font-size: 14px; }
+    .step-body p { font-size: 13px; }
+
+    /* pH scale labels: menor */
+    .ph-labels { font-size: 10px; }
+    .ph-anchor { gap: 10px; }
+    .ph-tag { font-size: 11px; }
+
+    /* Report items */
+    .report-item { font-size: 13px; }
+
+    /* Formula box: fonte menor */
+    .formula-box { font-size: 13px; padding: 14px 16px; }
+
+    /* Section headers */
+    h2 { font-size: 22px; }
+    .divider { margin: 28px 0; }
+
+    /* Alert boxes */
+    .alert { font-size: 13px; padding: 12px 14px; }
+
+    /* Safety grid */
+    .card [style*="grid-template-columns: 1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  /* Garantir que tabelas não quebrem o layout */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* ========== PRINT / PDF ========== */
+  @media print {
+    /* Força impressão de fundos e cores */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* Esconde elementos desnecessários no PDF */
+    .back-top,
+    .progress-bar { display: none !important; }
+
+    /* Header verde com texto branco */
+    header {
+      background: #1a6b4a !important;
+      color: white !important;
+      padding: 32px 28px !important;
+    }
+    header h1, header p, .meta-item { color: white !important; }
+    .header-badge { background: #e8a020 !important; color: #1c1c1c !important; }
+
+    /* Títulos h2 brancos sobre verde */
+    h2 {
+      background: #1a6b4a !important;
+      color: white !important;
+      padding: 6px 14px 8px !important;
+      border-radius: 6px !important;
+    }
+
+    /* Section labels */
+    .section-label {
+      background: #1a6b4a !important;
+      color: white !important;
+    }
+
+    /* Índice */
+    .nav-index { border: 1px solid #e0e8e4 !important; }
+    .nav-index-list a { color: #1c1c1c !important; }
+
+    /* Cards */
+    .card { border: 1px solid #ccc !important; break-inside: avoid; }
+    .card-accent-left { border-left: 4px solid #1a6b4a !important; }
+    .card-accent-yellow { border-left: 4px solid #e8a020 !important; }
+    .card-accent-red { border-left: 4px solid #c0392b !important; }
+
+    /* Números dos objetivos e steps */
+    .obj-num, .step-num { background: #1a6b4a !important; color: white !important; }
+
+    /* Tabelas */
+    th { background: #1a6b4a !important; color: white !important; }
+    tr:nth-child(even) td { background: #f5faf7 !important; }
+
+    /* Indicadores coloridos */
+    .ind-card { color: white !important; }
+
+    /* Alertas */
+    .alert-tip { background: #f0faf4 !important; border: 1px solid #b2dfca !important; }
+    .alert-info { background: #f0f7ff !important; border: 1px solid #bdd8f5 !important; }
+    .alert-danger { background: #fdf2f2 !important; border: 1px solid #f5c6c6 !important; }
+
+    /* Fórmula */
+    .formula-box { background: #1c1c1c !important; color: #e8e8e8 !important; }
+    .formula-box .highlight { color: #e8a020 !important; }
+    .formula-box .comment { color: #aaa !important; }
+
+    /* Buffer visual */
+    .bv-acid { background: #fdf2f0 !important; }
+    .bv-neutral { background: #f0faf4 !important; }
+    .bv-base { background: #f0f4ff !important; }
+
+    /* Números do relatório */
+    .report-q { background: #e8a020 !important; color: #1c1c1c !important; }
+
+    /* Botão voltar topo: esconder */
+    .back-top { display: none !important; }
+
+    /* Quebra de página entre seções grandes */
+    .divider { break-after: avoid; }
+    #exp1, #exp2, #henderson, #seguranca, #relatorio { break-before: auto; }
+
+    /* Página */
+    @page {
+      margin: 15mm 12mm;
+      size: A4;
+    }
+
+    main { padding: 20px 0 !important; }
+    footer { color: #555 !important; border-top: 1px solid #ccc !important; }
+  }
+
+  /* NAVIGATION INDEX */
+  .nav-index {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 24px 0 32px;
+  }
+  .nav-index-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .nav-index-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    list-style: none;
+  }
+  .nav-index-list a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .nav-index-list a:hover,
+  .nav-index-list a:focus {
+    background: #f0faf4;
+    border-color: var(--border);
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* BACK TO TOP */
+  .back-top {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 44px; height: 44px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(26,107,74,0.35);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .back-top.visible { opacity: 1; }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--accent2);
+    width: 0%;
+    z-index: 1000;
+    transition: width 0.1s;
+  }
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+
+<header>
+  <div class="header-badge">Roteiro do Aluno</div>
+  <h1>Aula Prática 1<br>pH e Tampões</h1>
+  <p>Bioquímica Experimental · Prof. Vadim</p>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-icon">👥</span> Grupos de 4</div>
+    <div class="meta-item"><span class="meta-icon">🧪</span> 2 Experimentos</div>
+    <div class="meta-item"><span class="meta-icon">⏱️</span> ~3 horas</div>
+    <div class="meta-item"><span class="meta-icon">📋</span> Relatório formal obrigatório</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ÍNDICE DE NAVEGAÇÃO -->
+  <nav class="nav-index" aria-label="Índice">
+    <div class="nav-index-title">📋 Conteúdo desta aula</div>
+    <ul class="nav-index-list">
+      <li><a href="#contexto"><span class="nav-dot"></span> Por que estudar pH e Tampões?</a></li>
+      <li><a href="#objetivos"><span class="nav-dot"></span> Objetivos</a></li>
+      <li><a href="#indicadores"><span class="nav-dot"></span> Indicadores de pH</a></li>
+      <li><a href="#exp1"><span class="nav-dot"></span> Experimento I – Padrões de pH</a></li>
+      <li><a href="#exp2"><span class="nav-dot"></span> Experimento II – Efeito Tampão</a></li>
+      <li><a href="#henderson"><span class="nav-dot"></span> Equação de Henderson-Hasselbalch</a></li>
+      <li><a href="#seguranca"><span class="nav-dot"></span> Normas de Segurança</a></li>
+      <li><a href="#relatorio"><span class="nav-dot"></span> Relatório</a></li>
+    </ul>
+  </nav>
+
+  <!-- INTRODUÇÃO -->
+  <div id="contexto" class="section-label">Contexto</div>
+  <h2>Por que estudar pH e Tampões?</h2>
+
+  <div class="alert alert-info" style="margin-bottom: 16px;">
+    <span class="alert-icon">🌿</span>
+    <span>Esta prática foi desenvolvida para a turma de <strong>Engenharia Florestal</strong>. Os conceitos de pH e sistemas tampão são ferramentas diárias no manejo florestal, análise de solos, monitoramento ambiental e fisiologia vegetal.</span>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-icon">🌱</div>
+      <h4>Solo e Nutrição</h4>
+      <p>O pH do solo controla a disponibilidade de nutrientes para as plantas. O solo age como tampão natural — entender isso é essencial para correção com calcário e manejo de reflorestamento</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">💧</div>
+      <h4>Ecossistemas Aquáticos</h4>
+      <p>Rios e lagos têm tampão natural de carbonato/bicarbonato. Desmatamento e chuva ácida rompem esse equilíbrio — monitorar o pH é rotina em licenciamento ambiental</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🍃</div>
+      <h4>Fisiologia Vegetal</h4>
+      <p>Enzimas das plantas funcionam em faixas de pH específicas. Estresse hídrico, decomposição de matéria orgânica e atividade microbiana no solo dependem de controle de pH</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">♻️</div>
+      <h4>Serrapilheira e Compostagem</h4>
+      <p>A decomposição da serrapilheira florestal envolve variação de pH que afeta a velocidade de ciclagem de nutrientes e a saúde do ecossistema</p>
+    </div>
+  </div>
+
+  <div class="card card-accent-left" style="margin-top: 12px;">
+    <p style="font-size:13px; color: var(--text2); line-height: 1.6;">
+      <strong>Conectando lab e campo:</strong> quando você entender hoje <em>por que</em> o pH não muda bruscamente em uma solução tampão, vai conseguir explicar por que um solo com boa matéria orgânica resiste melhor à acidificação do que um solo degradado — e por que o desmatamento destrói essa capacidade tampão natural dos ecossistemas florestais.
+    </p>
+  </div>
+
+  <!-- ESCALA DE PH -->
+  <div class="card" style="margin-top: 8px;">
+    <div class="ph-scale-title">🌈 Escala de pH (0–14)</div>
+    <div class="ph-bar"></div>
+    <div class="ph-labels">
+      <span>0</span><span>2</span><span>4</span><span>6</span><span>7</span><span>8</span><span>10</span><span>12</span><span>14</span>
+    </div>
+    <div class="ph-anchor" style="margin-top: 14px;">
+      <div class="ph-tag"><div class="dot" style="background:#e74c3c"></div> Ácido forte (pH 0–3)</div>
+      <div class="ph-tag"><div class="dot" style="background:#e67e22"></div> Ácido fraco (pH 3–6)</div>
+      <div class="ph-tag"><div class="dot" style="background:#27ae60"></div> Neutro (pH 7)</div>
+      <div class="ph-tag"><div class="dot" style="background:#2980b9"></div> Básico fraco (pH 8–11)</div>
+      <div class="ph-tag"><div class="dot" style="background:#8e44ad"></div> Básico forte (pH 12–14)</div>
+    </div>
+    <div class="alert alert-tip" style="margin-top: 12px;">
+      <span class="alert-icon">💡</span>
+      <span>Cada unidade de pH representa uma variação de <strong>10 vezes</strong> na concentração de H⁺. pH = –log[H⁺]</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- OBJETIVOS -->
+  <div id="objetivos" class="section-label">Objetivos da Prática</div>
+  <h2>O que você vai aprender</h2>
+  <div class="card card-accent-left">
+    <ul class="obj-list">
+      <li><div class="obj-num">1</div><span>Preparar uma série de <strong>padrões de pH</strong> e identificar cores com indicadores</span></li>
+      <li><div class="obj-num">2</div><span>Preparar uma <strong>solução tampão de fosfato de sódio</strong> (pH 7,0)</span></li>
+      <li><div class="obj-num">3</div><span>Testar o <strong>efeito tampão</strong> comparando com água pura ao adicionar ácido ou base</span></li>
+      <li><div class="obj-num">4</div><span>Relacionar o efeito tampão com sistemas naturais: <strong>solo, rios e fisiologia vegetal</strong> — aplicações diretas na Engenharia Florestal</span></li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- INDICADORES -->
+  <div id="indicadores" class="section-label">Material – Indicadores</div>
+  <h2>Indicadores de pH</h2>
+  <p style="color:var(--muted); margin-bottom: 16px; font-size:15px;">Os indicadores são compostos que mudam de cor conforme o pH do meio. Nesta prática você usará <strong>azul de bromotimol</strong> nos experimentos.</p>
+
+  <div class="ind-grid">
+    <div class="ind-card" style="background: linear-gradient(135deg, #e67e22, #c0392b);">
+      <h4>Laranja de Metila</h4>
+      <p>Vermelho (pH &lt;3,1) → Laranja → Amarelo (pH &gt;4,4)</p>
+    </div>
+    <div class="ind-card" style="background: linear-gradient(135deg, #c0392b, #922b21);">
+      <h4>Vermelho de Metila</h4>
+      <p>Vermelho (pH &lt;4,4) → Laranja → Amarelo (pH &gt;6,2)</p>
+    </div>
+    <div class="ind-card" style="background: linear-gradient(135deg, #27ae60, #2471a3);">
+      <h4>Azul de Bromotimol</h4>
+      <p>Amarelo (pH &lt;6,0) → Verde (pH 7) → Azul (pH &gt;7,6)</p>
+    </div>
+    <div class="ind-card" style="background: linear-gradient(135deg, #8e44ad, #d35400);">
+      <h4>Fenolftaleína</h4>
+      <p>Incolor (pH &lt;8,3) → Rosa → Rosa intenso (pH &gt;10)</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- EXPERIMENTO I -->
+  <div id="exp1" class="section-label">Experimento I</div>
+  <h2>Padrões de pH com Indicadores</h2>
+
+  <div class="alert alert-info">
+    <span class="alert-icon">📌</span>
+    <span><strong>Princípio:</strong> Você vai preparar 9 tubos com diferentes pHs pré-definidos e adicionar indicador. A cor resultante servirá como referência visual para os experimentos seguintes.</span>
+  </div>
+
+  <!-- Passo a passo -->
+  <div class="card" style="margin-top:16px;">
+    <h4 style="font-size:15px; font-weight:600; margin-bottom:20px;">📋 Passo a Passo</h4>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Preparar 9 tubos de ensaio</h4>
+          <p>Identifique cada tubo com os pHs: 3, 4, 5, 6, 7, 8, 9, 10 e 12</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Adicionar a solução padrão de pH</h4>
+          <p>Adicione <strong>1 mL</strong> do padrão de pH correspondente a cada tubo</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Adicionar o indicador</h4>
+          <p>Coloque <strong>5 gotas</strong> de solução indicadora em cada tubo</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Completar com água</h4>
+          <p>Adicione <strong>9 mL</strong> de água destilada a cada tubo</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Misturar e observar</h4>
+          <p>Agite suavemente e anote a cor observada em cada tubo</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabela Exp I -->
+  <div class="card">
+    <h4 style="font-size:15px; font-weight:600; margin-bottom:4px;">Tabela de Registro – Experimento I</h4>
+    <p style="font-size:13px; color:var(--muted); margin-bottom:8px;">Complete a coluna "Cor Observada" durante a prática</p>
+    <div class="table-wrap"><table>
+      <thead>
+        <tr>
+          <th>Tubo</th>
+          <th>pH</th>
+          <th>Padrão pH (mL)</th>
+          <th>Indicador (gotas)</th>
+          <th>H₂O (mL)</th>
+          <th>Cor Esperada</th>
+          <th>Cor Observada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>3</td><td>1</td><td>5</td><td>9</td><td><span class="color-dot" style="background:#e74c3c"></span> Vermelho</td><td></td></tr>
+        <tr><td>2</td><td>4</td><td>1</td><td>5</td><td>9</td><td><span class="color-dot" style="background:#e67e22"></span> Laranja</td><td></td></tr>
+        <tr><td>3</td><td>5</td><td>1</td><td>5</td><td>9</td><td><span class="color-dot" style="background:#f1c40f"></span> Amarelo</td><td></td></tr>
+        <tr><td>4</td><td>6</td><td>1</td><td>5</td><td>9</td><td><span class="color-dot" style="background:#a8d08d"></span> Verde-amarelo</td><td></td></tr>
+        <tr><td>5</td><td>7</td><td>1</td><td>5</td><td>9</td><td><span class="color-dot" style="background:#27ae60"></span> Verde</td><td></td></tr>
+        <tr><td>6</td><td>8</td><td>1</td><td>5</td><td>9</td><td><span class="color-dot" style="background:#2980b9"></span> Azul-esverdeado</td><td></td></tr>
+        <tr><td>7</td><td>9</td><td>1</td><td>5</td><td>9</td><td><span class="color-dot" style="background:#2471a3"></span> Azul</td><td></td></tr>
+        <tr><td>8</td><td>10</td><td>1</td><td>5</td><td>9</td><td><span class="color-dot" style="background:#1a5276"></span> Azul escuro</td><td></td></tr>
+        <tr><td>9</td><td>12</td><td>1</td><td>5</td><td>9</td><td><span class="color-dot" style="background:#154360"></span> Azul intenso</td><td></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- EXPERIMENTO II -->
+  <div id="exp2" class="section-label">Experimento II</div>
+  <h2>Efeito Tampão</h2>
+
+  <!-- Conceito visual tampão -->
+  <div class="buffer-visual">
+    <div class="bv-col bv-acid">
+      <div class="bv-icon">🔴</div>
+      <h4>Adição de Ácido</h4>
+      <p>O tampão absorve os H⁺ extras<br>→ pH muda pouco</p>
+    </div>
+    <div class="bv-col bv-neutral">
+      <div class="bv-icon">🟢</div>
+      <h4>Tampão pH 7,0</h4>
+      <p>NaH₂PO₄ + Na₂HPO₄<br>→ pH estável</p>
+    </div>
+    <div class="bv-col bv-base">
+      <div class="bv-icon">🔵</div>
+      <h4>Adição de Base</h4>
+      <p>O tampão neutraliza o OH⁻<br>→ pH muda pouco</p>
+    </div>
+  </div>
+
+  <div class="alert alert-info">
+    <span class="alert-icon">📌</span>
+    <span><strong>Princípio:</strong> Você vai comparar como o pH da água pura e da solução tampão reagem à adição de ácido (HCl) ou base (NaOH) fortes. A solução tampão deve resistir muito mais à mudança.</span>
+  </div>
+
+  <!-- Passo a passo Exp II -->
+  <div class="card" style="margin-top:16px;">
+    <h4 style="font-size:15px; font-weight:600; margin-bottom:20px;">📋 Passo a Passo</h4>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Preparar 5 tubos (A, B, C, D, E)</h4>
+          <p>Identifique cada tubo com letras. Trabalhe em ordem para não misturar os reagentes.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Adicionar tampão ou água</h4>
+          <p>Tubos A e C → 10 mL de H₂O pura. Tubos B, D e E → 1 mL de tampão pH 7,0 + 9 mL de H₂O</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Adicionar o indicador</h4>
+          <p>5 gotas de solução indicadora em cada tubo</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Adicionar ácido ou base</h4>
+          <p>Tubos A e B → 1 gota de NaOH 0,1M | Tubos C e D → 1 gota de HCl 0,1N | Tubo E → Várias gotas de NaOH</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Misturar, observar e anotar</h4>
+          <p>Compare as cores dos tubos A/B e C/D. Qual mudou mais?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabela Exp II -->
+  <div class="card">
+    <h4 style="font-size:15px; font-weight:600; margin-bottom:4px;">Tabela de Registro – Experimento II</h4>
+    <p style="font-size:13px; color:var(--muted); margin-bottom:8px;">Complete a última coluna durante a prática</p>
+    <div class="table-wrap"><table>
+      <thead>
+        <tr>
+          <th>Tubo</th>
+          <th>Tampão pH 7 (mL)</th>
+          <th>H₂O (mL)</th>
+          <th>Indicador</th>
+          <th>Adição</th>
+          <th>Cor Observada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>A</strong></td><td>—</td><td>10</td><td>5 gotas</td><td>1 gota NaOH</td><td></td></tr>
+        <tr><td><strong>B</strong></td><td>1</td><td>9</td><td>5 gotas</td><td>1 gota NaOH</td><td></td></tr>
+        <tr><td><strong>C</strong></td><td>—</td><td>10</td><td>5 gotas</td><td>1 gota HCl</td><td></td></tr>
+        <tr><td><strong>D</strong></td><td>1</td><td>9</td><td>5 gotas</td><td>1 gota HCl</td><td></td></tr>
+        <tr><td><strong>E</strong></td><td>1 (Glicina 0,1M)</td><td>9</td><td>5 gotas</td><td>Várias gotas NaOH</td><td></td></tr>
+      </tbody>
+    </table></div>
+    <div class="alert alert-tip" style="margin-top:14px;">
+      <span class="alert-icon">🔍</span>
+      <span><strong>Observe:</strong> Compare A com B (NaOH) e C com D (HCl). O tubo sem tampão deve mudar drasticamente de cor. O tampão quase não muda!</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- EQUAÇÃO DE HENDERSON -->
+  <div id="henderson" class="section-label">Conceito Teórico</div>
+  <h2>Equação de Henderson-Hasselbalch</h2>
+
+  <div class="card card-accent-yellow">
+    <p style="font-size:14px; color:var(--muted); margin-bottom:12px;">Use esta equação para calcular o pH de uma solução tampão ou para preparar tampões com pH desejado:</p>
+    <div class="formula-box">
+      <span class="highlight">pH = pKa + log([A⁻] / [HA])</span><br>
+      <br>
+      <span class="comment">Onde:</span><br>
+      <span class="comment">  pKa = logaritmo negativo da constante de acidez</span><br>
+      <span class="comment">  [A⁻] = concentração da base conjugada (Na₂HPO₄)</span><br>
+      <span class="comment">  [HA] = concentração do ácido fraco (NaH₂PO₄)</span>
+    </div>
+    <div class="alert alert-tip">
+      <span class="alert-icon">🧮</span>
+      <span>Para o tampão fosfato pH 7,0 com pKa = 6,86: <strong>log([A⁻]/[HA]) = 7,0 – 6,86 = 0,14</strong>, portanto [A⁻]/[HA] ≈ 1,38. Use isso para resolver o problema do relatório!</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- NORMAS DE SEGURANÇA -->
+  <div id="seguranca" class="section-label">Segurança</div>
+  <h2>Normas do Laboratório</h2>
+
+  <div class="card card-accent-red">
+    <div class="alert alert-danger">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>Obrigatório:</strong> Use jaleco, óculos de proteção e luvas durante toda a prática. HCl e NaOH são corrosivos.</span>
+    </div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-top:12px;">
+      <div style="background:var(--bg); border-radius:8px; padding:14px; font-size:13px;">
+        <strong>🚫 Proibido</strong><br><br>
+        • Pipetas na boca<br>
+        • Comer ou beber<br>
+        • Manusear sem EPI<br>
+        • Descartar no lixo comum
+      </div>
+      <div style="background:var(--bg); border-radius:8px; padding:14px; font-size:13px;">
+        <strong>✅ Obrigatório</strong><br><br>
+        • Jaleco fechado<br>
+        • Óculos de proteção<br>
+        • Luvas de nitrila<br>
+        • Cabelo preso
+      </div>
+    </div>
+    <div class="alert alert-danger" style="margin-top:12px;">
+      <span class="alert-icon">🧯</span>
+      <span>Em caso de contato com ácido ou base na pele: lave com água corrente por <strong>15 minutos</strong> e avise o professor imediatamente.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RELATÓRIO -->
+  <div id="relatorio" class="section-label">Relatório</div>
+  <h2>O que entregar</h2>
+
+  <div class="card">
+    <p style="font-size:14px; color:var(--muted); margin-bottom:16px;">O relatório formal deve seguir a estrutura: <strong>Introdução → Objetivos → Materiais e Métodos → Resultados → Discussão</strong></p>
+    <div class="report-items">
+      <div class="report-item">
+        <div class="report-q">1</div>
+        <span>Qual a importância do pH e tampões em sistemas biológicos? Dê exemplos práticos.</span>
+      </div>
+      <div class="report-item">
+        <div class="report-q">2</div>
+        <span>Explique os resultados dos Experimentos I e II. Por que a água mudou de cor drasticamente e o tampão não?</span>
+      </div>
+      <div class="report-item">
+        <div class="report-q">3</div>
+        <span>Quais são os principais sistemas tampão nas células? Escreva as equações de ionização.</span>
+      </div>
+      <div class="report-item">
+        <div class="report-q">4</div>
+        <span><strong>Problema:</strong> Calcule as quantidades de NaH₂PO₄ e Na₂HPO₄ para preparar tampão fosfato 0,10 M pH 7,0. Use pKa = 6,86 e a equação de Henderson-Hasselbalch.</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Roteiro do Aluno · Aula Prática 1: pH e Tampões · Prof. Vadim · Bioquímica Experimental
+</footer>
+
+<a class="back-top" id="backTop" href="#" aria-label="Voltar ao topo">↑</a>
+
+<script>
+  // Barra de progresso + botão voltar ao topo
+  const progressBar = document.getElementById('progressBar');
+  const backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = pct + '%';
+    if (scrollTop > 300) backTop.classList.add('visible');
+    else backTop.classList.remove('visible');
+  });
+  backTop.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roteiro do Aluno – Quantificação de Glicose por DNS</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --surface: #ffffff; --surface2: #f4f8f6;
+    --accent: #1a6b4a; --accent2: #e8a020; --accent3: #c0392b;
+    --text: #1c1c1c; --muted: #555555; --border: #d8e8e0; --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.7; color-scheme: light; }
+
+  header { background: var(--accent); color: white; padding: 40px 40px 32px; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%; background: rgba(255,255,255,0.05); top: -80px; right: -60px; }
+  .header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; color: #1c1c1c; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(20px, 4vw, 34px); font-weight: 400; margin-bottom: 8px; line-height: 1.2; }
+  header p { opacity: 0.88; font-size: 15px; max-width: 600px; }
+  .header-meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 8px; font-size: 13px; opacity: 0.9; }
+
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: white; background: var(--accent); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 8px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 22px; color: #ffffff; background: var(--accent); display: inline-block; padding: 6px 16px 8px; border-radius: 6px; margin-bottom: 16px; }
+  h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 20px; }
+  .card-accent-left { border-left: 4px solid var(--accent); }
+  .card-accent-yellow { border-left: 4px solid var(--accent2); }
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .obj-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; }
+  .obj-num { min-width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+
+  .conceito-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .conceito-card { border-radius: 10px; padding: 14px 12px; border: 1px solid var(--border); }
+  .conceito-card.a { background: #f0fff4; border-color: #a8dfc0; }
+  .conceito-card.b { background: #fff8e6; border-color: #f5c89a; }
+  .conceito-icon { font-size: 22px; margin-bottom: 6px; }
+  .conceito-card h4 { font-size: 13px; margin-bottom: 3px; }
+  .conceito-card p { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  .parte-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .parte-badge { background: var(--accent); color: white; font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; white-space: nowrap; }
+  .parte-title { font-size: 17px; font-weight: 600; color: var(--text); }
+
+  .step-list { display: flex; flex-direction: column; gap: 10px; }
+  .step { display: flex; gap: 12px; }
+  .step-num { min-width: 26px; height: 26px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 3px; }
+  .step-body p { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .step-tip { margin-top: 7px; background: #f0fff4; border-left: 3px solid var(--accent); padding: 5px 10px; border-radius: 4px; font-size: 13px; color: #1a5a38; }
+  .step-warn { margin-top: 7px; background: #fdf2f2; border-left: 3px solid var(--accent3); padding: 5px 10px; border-radius: 4px; font-size: 13px; color: #7a1010; }
+
+  .alert { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; font-size: 14px; margin: 12px 0; }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-tip    { background: #f0faf4; border: 1px solid #b2dfca; }
+  .alert-info   { background: #f0f7ff; border: 1px solid #bdd8f5; }
+  .alert-danger { background: #fdf2f2; border: 1px solid #f5c6c6; }
+
+  /* TABELAS EXPERIMENTO */
+  .exp-table-wrap { overflow-x: auto; margin: 14px 0; }
+  .exp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .exp-table th { background: var(--accent); color: white; padding: 8px 8px; text-align: center; font-size: 11px; font-weight: 600; }
+  .exp-table td { padding: 7px 8px; border: 1px solid var(--border); text-align: center; vertical-align: middle; }
+  .exp-table .row-label { background: var(--surface2); font-weight: 600; text-align: left; font-size: 11px; white-space: nowrap; }
+  .exp-table .vol { color: var(--accent); font-weight: 700; font-family: monospace; font-size: 12px; }
+  .exp-table .empty { color: #ccc; font-size: 11px; }
+  .exp-table .proc { background: #fff4eb; color: #c85a00; font-size: 10px; font-weight: 600; }
+  .exp-table .obs { background: #fafafa; min-width: 70px; }
+  .exp-table .calc { background: #f0fff4; min-width: 70px; }
+
+  .formula-box { background: var(--surface2); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 12px 0; text-align: center; }
+  .formula-box .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; font-weight: 700; text-align: left; }
+  .formula-box .eq { font-size: 16px; font-family: monospace; color: var(--accent); }
+
+  .graph-box { border: 2px dashed var(--border); border-radius: 10px; padding: 20px; text-align: center; margin: 14px 0; background: var(--surface2); }
+  .graph-box p { font-size: 13px; color: var(--muted); }
+
+  .report-items { display: flex; flex-direction: column; gap: 10px; }
+  .report-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--surface2); border-radius: 8px; font-size: 14px; line-height: 1.5; }
+  .report-q { min-width: 28px; height: 28px; background: var(--accent2); color: #1c1c1c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  .nav-index { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px; margin: 24px 0 28px; }
+  .nav-index-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .nav-index-list  { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .nav-index-list li { display: flex; align-items: center; gap: 8px; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .nav-index-list a { color: var(--accent); font-size: 14px; text-decoration: none; font-weight: 500; }
+
+  footer { text-align: center; padding: 28px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { margin: 15mm; size: A4 portrait; }
+    .nav-index { display: none !important; }
+    body { font-size: 10px !important; line-height: 1.35 !important; }
+    main { padding: 8px 0 !important; max-width: 100% !important; }
+    header { padding: 14px 20px !important; }
+    header h1 { font-size: 16px !important; }
+    header p { font-size: 9px !important; }
+    .header-badge { font-size: 8px !important; padding: 2px 8px !important; margin-bottom: 5px !important; }
+    .header-meta { margin-top: 6px !important; gap: 10px !important; }
+    .meta-item { font-size: 8px !important; }
+    .section-label { font-size: 8px !important; padding: 2px 7px !important; break-after: avoid !important; }
+    h2 { font-size: 12px !important; padding: 3px 10px 4px !important; margin-bottom: 6px !important; break-after: avoid !important; }
+    h3 { font-size: 11px !important; break-after: avoid !important; }
+    h4 { font-size: 10px !important; break-after: avoid !important; }
+    .card { padding: 7px 10px !important; margin-bottom: 6px !important; break-inside: avoid !important; }
+    .divider { margin: 6px 0 !important; }
+    .conceito-grid { gap: 4px !important; margin: 4px 0 !important; }
+    .conceito-card { padding: 6px !important; }
+    .conceito-icon { font-size: 13px !important; }
+    .conceito-card h4 { font-size: 9px !important; }
+    .conceito-card p { font-size: 8px !important; }
+    .parte-header { margin-bottom: 5px !important; }
+    .parte-badge { font-size: 8px !important; padding: 2px 8px !important; }
+    .parte-title { font-size: 11px !important; }
+    .step-list { gap: 4px !important; }
+    .step { gap: 7px !important; }
+    .step-num { min-width: 18px !important; height: 18px !important; font-size: 8px !important; }
+    .step-body p { font-size: 8px !important; }
+    .step-tip, .step-warn { font-size: 8px !important; padding: 3px 7px !important; }
+    .alert { padding: 4px 8px !important; font-size: 8px !important; margin: 3px 0 !important; break-inside: avoid !important; }
+    .exp-table th, .exp-table td { padding: 4px 5px !important; font-size: 8px !important; }
+    .exp-table .vol { font-size: 9px !important; }
+    .formula-box { padding: 8px 12px !important; margin: 6px 0 !important; }
+    .formula-box .label { font-size: 8px !important; }
+    .formula-box .eq { font-size: 12px !important; }
+    .graph-box { padding: 12px !important; }
+    .graph-box p { font-size: 8px !important; }
+    .report-items { gap: 4px !important; }
+    .report-item { padding: 5px 9px !important; font-size: 8px !important; break-inside: avoid !important; }
+    .report-q { min-width: 18px !important; height: 18px !important; font-size: 8px !important; }
+    footer { font-size: 8px !important; padding: 6px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Aula 3 · Vadim · Eng. Florestal</div>
+  <h1>Quantificação de Açúcares Redutores</h1>
+  <p>Construção de curva padrão de glicose e quantificação espectrofotométrica pela reação com o reagente DNS.</p>
+  <div class="header-meta">
+    <div class="meta-item">⏱️ ~3 horas</div>
+    <div class="meta-item">👥 Grupos de 4</div>
+    <div class="meta-item">Espectrofotômetro 540 nm</div>
+    <div class="meta-item">Banho-maria 95°C · 10 min</div>
+  </div>
+</header>
+
+<main>
+
+  <div class="nav-index">
+    <div class="nav-index-title">Nesta aula</div>
+    <ul class="nav-index-list">
+      <li><span class="nav-dot"></span><a href="#fundamentos">Fundamentos — técnica DNS e espectrofotometria</a></li>
+      <li><span class="nav-dot"></span><a href="#exp1">Experimento I — Curva padrão de glicose</a></li>
+      <li><span class="nav-dot"></span><a href="#visual">Guia Visual — fluxo da curva padrão</a></li>
+      <li><span class="nav-dot"></span><a href="#calculo">Cálculo do fator e quantificação</a></li>
+      <li><span class="nav-dot"></span><a href="#relatorio">Relatório</a></li>
+    </ul>
+  </div>
+
+  <!-- OBJETIVOS -->
+  <div class="section-label">Objetivos</div>
+  <h2>O que você vai aprender</h2>
+  <div class="card card-accent-left">
+    <ul class="obj-list">
+      <li><div class="obj-num">1</div><span>Construir uma <strong>curva padrão de concentração de glicose</strong> × absorbância (A₅₄₀)</span></li>
+      <li><div class="obj-num">2</div><span>Quantificar a glicose de uma amostra desconhecida usando a reação colorimétrica com o <strong>reagente DNS</strong></span></li>
+      <li><div class="obj-num">3</div><span>Compreender o princípio da <strong>espectrofotometria</strong> e da lei de Beer-Lambert aplicada à quantificação bioquímica</span></li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FUNDAMENTOS -->
+  <div id="fundamentos" class="section-label">Fundamentos</div>
+  <h2>Técnica DNS e Espectrofotometria</h2>
+
+  <div class="card card-accent-left">
+    <p style="font-size:15px; margin-bottom:14px;">O reagente <strong>DNS (ácido 3,5-dinitrosalicílico)</strong> é reduzido por açúcares redutores em meio alcalino e aquecimento, formando o <strong>ácido 3-amino-5-nitrosalicílico</strong>, de coloração vermelho-alaranjada. A intensidade da cor é proporcional à quantidade de açúcar redutor presente — o que permite a quantificação espectrofotométrica a 540 nm.</p>
+
+    <div class="conceito-grid">
+      <div class="conceito-card a">
+        <div class="conceito-icon">📊</div>
+        <h4>Curva Padrão</h4>
+        <p>Série de tubos com concentrações conhecidas de glicose → leitura de absorbância → gráfico A₅₄₀ × [glicose] → reta de calibração</p>
+      </div>
+      <div class="conceito-card b">
+        <div class="conceito-icon">🔬</div>
+        <h4>Amostra Desconhecida</h4>
+        <p>Mesma reação com a amostra problema → absorbância lida → concentração calculada pela equação da reta ou fator de calibração</p>
+      </div>
+    </div>
+
+    <div class="alert alert-danger">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>Reagente DNS é cáustico e possivelmente cancerígeno.</strong> Use luvas durante toda a manipulação. Evite contato direto com a pele.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- EXPERIMENTO I -->
+  <div id="exp1" class="section-label">Procedimento</div>
+  <h2>Experimento I — Curva Padrão de Glicose</h2>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Passos</span>
+      <span class="parte-title">Preparar 7 tubos (Br + 5 padrões + amostra)</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><p>Numerar 7 tubos de ensaio e adicionar os reagentes conforme a <strong>Tabela I</strong> abaixo.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <p>Adicionar <strong>1,0 mL de reagente DNS</strong> em todos os tubos. Agitar.</p>
+          <div class="step-warn">Luvas obrigatórias ao manipular o DNS.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <p>Colocar todos os tubos em <strong>banho-maria fervente (95°C) por 10 minutos</strong>.</p>
+          <div class="step-tip">A reação desenvolve coloração vermelho-alaranjada. Intensidade proporcional à [glicose].</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body"><p>Esfriar em <strong>água corrente</strong> até temperatura ambiente.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body"><p>Adicionar <strong>8 mL de água destilada</strong> em cada tubo. Homogeneizar bem.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <p>Ler as <strong>absorbâncias a 540 nm</strong> contra o branco no espectrofotômetro. Registrar na tabela.</p>
+          <div class="step-tip">Zerar o aparelho com o tubo Branco antes de ler as amostras.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-body"><p>Construir o gráfico <strong>A₅₄₀ × [Glicose]</strong> e calcular o fator de concentração.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA I -->
+  <div class="card">
+    <h3 style="margin-bottom:12px;">Tabela I — Curva Padrão de Glicose</h3>
+    <div class="exp-table-wrap">
+      <table class="exp-table">
+        <tr>
+          <th>Tubo</th>
+          <th>Glicose 6 mM (mL)</th>
+          <th>Tampão (mL)</th>
+          <th>DNS (mL)</th>
+          <th>BM 95°C · 10 min</th>
+          <th>H₂O dest. (mL)</th>
+          <th>A₅₄₀ (nm)</th>
+          <th>Glicose (µmol)</th>
+        </tr>
+        <tr>
+          <td class="row-label">Branco</td>
+          <td class="empty">—</td>
+          <td class="vol">2,0</td>
+          <td class="vol">1,0</td>
+          <td class="proc">sim</td>
+          <td class="vol">8</td>
+          <td class="obs"></td>
+          <td class="empty">—</td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 1</td>
+          <td class="vol">0,1</td>
+          <td class="vol">0,9</td>
+          <td class="vol">1,0</td>
+          <td class="proc">sim</td>
+          <td class="vol">8</td>
+          <td class="obs"></td>
+          <td class="calc"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 2</td>
+          <td class="vol">0,2</td>
+          <td class="vol">0,8</td>
+          <td class="vol">1,0</td>
+          <td class="proc">sim</td>
+          <td class="vol">8</td>
+          <td class="obs"></td>
+          <td class="calc"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 3</td>
+          <td class="vol">0,3</td>
+          <td class="vol">0,7</td>
+          <td class="vol">1,0</td>
+          <td class="proc">sim</td>
+          <td class="vol">8</td>
+          <td class="obs"></td>
+          <td class="calc"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 4</td>
+          <td class="vol">0,4</td>
+          <td class="vol">0,6</td>
+          <td class="vol">1,0</td>
+          <td class="proc">sim</td>
+          <td class="vol">8</td>
+          <td class="obs"></td>
+          <td class="calc"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 5</td>
+          <td class="vol">0,5</td>
+          <td class="vol">0,5</td>
+          <td class="vol">1,0</td>
+          <td class="proc">sim</td>
+          <td class="vol">8</td>
+          <td class="obs"></td>
+          <td class="calc"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Amostra</td>
+          <td class="vol">0,5*</td>
+          <td class="vol">0,5</td>
+          <td class="vol">1,0</td>
+          <td class="proc">sim</td>
+          <td class="vol">8</td>
+          <td class="obs"></td>
+          <td class="calc"></td>
+        </tr>
+      </table>
+    </div>
+    <p style="font-size:12px; color:var(--muted); margin-top:8px;">* Solução padrão: glicose 6 mM diluída em <strong>tampão acetato de sódio 20 mM pH 4,8</strong>. Tampão: acetato de sódio 20 mM pH 4,8. (*) amostra desconhecida fornecida pelo professor.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- GUIA VISUAL -->
+  <div id="visual" class="section-label">Guia Visual</div>
+  <h2>Fluxo da Curva Padrão</h2>
+
+  <div class="card" style="padding:20px;">
+    <svg viewBox="0 0 540 185" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:540px; display:block; margin:0 auto 12px;">
+
+      <!-- BRANCO -->
+      <g transform="translate(5,10)">
+        <text x="38" y="13" text-anchor="middle" font-size="9.5" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Branco</text>
+        <rect x="20" y="18" width="36" height="85" rx="4" fill="#f0f8ff" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="38" cy="103" rx="18" ry="5.5" fill="#f0f8ff" stroke="#888" stroke-width="1.5"/>
+        <rect x="17" y="12" width="42" height="8" rx="2" fill="#ddd" stroke="#aaa"/>
+        <rect x="21" y="62" width="34" height="38" rx="2" fill="#c8ddf0" opacity="0.4"/>
+        <text x="38" y="118" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">1mL tampão</text>
+        <text x="38" y="128" text-anchor="middle" font-size="7.5" fill="#1a6b4a" font-family="sans-serif">+ 1mL DNS</text>
+      </g>
+
+      <!-- TUBO 1 -->
+      <g transform="translate(83,10)">
+        <text x="38" y="13" text-anchor="middle" font-size="9.5" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 1</text>
+        <rect x="20" y="18" width="36" height="85" rx="4" fill="#fffaf0" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="38" cy="103" rx="18" ry="5.5" fill="#fffaf0" stroke="#888" stroke-width="1.5"/>
+        <rect x="17" y="12" width="42" height="8" rx="2" fill="#ddd" stroke="#aaa"/>
+        <rect x="21" y="62" width="34" height="38" rx="2" fill="#c8ddf0" opacity="0.4"/>
+        <text x="38" y="118" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">0,1 glicose</text>
+        <text x="38" y="128" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">0,9 tampão</text>
+      </g>
+
+      <!-- TUBO 2 -->
+      <g transform="translate(161,10)">
+        <text x="38" y="13" text-anchor="middle" font-size="9.5" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 2</text>
+        <rect x="20" y="18" width="36" height="85" rx="4" fill="#fffaf0" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="38" cy="103" rx="18" ry="5.5" fill="#fffaf0" stroke="#888" stroke-width="1.5"/>
+        <rect x="17" y="12" width="42" height="8" rx="2" fill="#ddd" stroke="#aaa"/>
+        <rect x="21" y="62" width="34" height="38" rx="2" fill="#c8ddf0" opacity="0.4"/>
+        <text x="38" y="118" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">0,2 glicose</text>
+        <text x="38" y="128" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">0,8 tampão</text>
+      </g>
+
+      <!-- TUBO 3 -->
+      <g transform="translate(239,10)">
+        <text x="38" y="13" text-anchor="middle" font-size="9.5" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 3</text>
+        <rect x="20" y="18" width="36" height="85" rx="4" fill="#fffaf0" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="38" cy="103" rx="18" ry="5.5" fill="#fffaf0" stroke="#888" stroke-width="1.5"/>
+        <rect x="17" y="12" width="42" height="8" rx="2" fill="#ddd" stroke="#aaa"/>
+        <rect x="21" y="62" width="34" height="38" rx="2" fill="#c8ddf0" opacity="0.4"/>
+        <text x="38" y="118" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">0,3 glicose</text>
+        <text x="38" y="128" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">0,7 tampão</text>
+      </g>
+
+      <!-- TUBO 4 -->
+      <g transform="translate(317,10)">
+        <text x="38" y="13" text-anchor="middle" font-size="9.5" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 4</text>
+        <rect x="20" y="18" width="36" height="85" rx="4" fill="#fffaf0" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="38" cy="103" rx="18" ry="5.5" fill="#fffaf0" stroke="#888" stroke-width="1.5"/>
+        <rect x="17" y="12" width="42" height="8" rx="2" fill="#ddd" stroke="#aaa"/>
+        <rect x="21" y="62" width="34" height="38" rx="2" fill="#c8ddf0" opacity="0.4"/>
+        <text x="38" y="118" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">0,4 glicose</text>
+        <text x="38" y="128" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">0,6 tampão</text>
+      </g>
+
+      <!-- TUBO 5 -->
+      <g transform="translate(395,10)">
+        <text x="38" y="13" text-anchor="middle" font-size="9.5" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 5</text>
+        <rect x="20" y="18" width="36" height="85" rx="4" fill="#fffaf0" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="38" cy="103" rx="18" ry="5.5" fill="#fffaf0" stroke="#888" stroke-width="1.5"/>
+        <rect x="17" y="12" width="42" height="8" rx="2" fill="#ddd" stroke="#aaa"/>
+        <rect x="21" y="62" width="34" height="38" rx="2" fill="#c8ddf0" opacity="0.4"/>
+        <text x="38" y="118" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">0,5 glicose</text>
+        <text x="38" y="128" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">0,5 tampão</text>
+      </g>
+
+      <!-- AMOSTRA -->
+      <g transform="translate(473,10)">
+        <text x="38" y="13" text-anchor="middle" font-size="9.5" fill="#c0392b" font-family="sans-serif" font-weight="bold">Amostra</text>
+        <rect x="20" y="18" width="36" height="85" rx="4" fill="#fff4f4" stroke="#c0392b" stroke-width="1.5"/>
+        <ellipse cx="38" cy="103" rx="18" ry="5.5" fill="#fff4f4" stroke="#c0392b" stroke-width="1.5"/>
+        <rect x="17" y="12" width="42" height="8" rx="2" fill="#f5c6c6" stroke="#c0392b"/>
+        <rect x="21" y="62" width="34" height="38" rx="2" fill="#e8a0a0" opacity="0.4"/>
+        <text x="38" y="118" text-anchor="middle" font-size="7.5" fill="#c0392b" font-family="sans-serif">1,0 amostra</text>
+        <text x="38" y="128" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">0,5 tampão</text>
+      </g>
+
+      <!-- FLUXO BM + AGUA -->
+      <rect x="5" y="143" width="530" height="13" rx="5" fill="#fff4eb" stroke="#c85a00" stroke-width="1.2"/>
+      <text x="270" y="153" text-anchor="middle" font-size="8.5" fill="#c85a00" font-family="sans-serif" font-weight="bold">+ 1 mL DNS em todos → BM 95°C 10 min → esfriar → + 8 mL H₂O → A540</text>
+
+      <!-- GRADIENTE DE COR APÓS BM -->
+      <text x="270" y="172" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">Resultado esperado: incolor (branco) → laranja fraco → laranja → vermelho-alaranjado (maior [glicose])</text>
+
+    </svg>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CÁLCULO -->
+  <div id="calculo" class="section-label">Cálculo</div>
+  <h2>Concentração e Fator</h2>
+
+  <div class="card card-accent-left">
+
+    <h3 style="margin-bottom:10px;">Concentração de glicose em cada tubo (mM)</h3>
+    <p style="font-size:14px; color:var(--muted); margin-bottom:12px;">Use a fórmula de diluição para calcular a concentração de glicose em cada tubo da curva padrão:</p>
+
+    <div class="formula-box">
+      <div class="label">Fórmula de diluição</div>
+      <div class="eq">C₁ (mM) × V₁ (mL) = C₂ (mM) × V₂ (mL)</div>
+    </div>
+
+    <div style="background:#f4f8f6; border-radius:8px; padding:14px 16px; margin:10px 0; font-size:14px;">
+      <strong>Exemplo — Tubo 1:</strong><br>
+      <span style="font-family:monospace; font-size:13px; color:var(--accent);">C₁ (6 mM) × V₁ (0,1 mL) = C₂ (?) × V₂ (1 mL)</span><br>
+      <span style="font-family:monospace; font-size:13px; color:var(--accent);">C₂ = (6 × 0,1) / 1 = <strong>0,6 mM</strong></span>
+    </div>
+
+    <p style="font-size:13px; color:var(--muted); margin-bottom:4px;">Calcule o C₂ de cada tubo e preencha a coluna da tabela:</p>
+    <div style="overflow-x:auto; margin:10px 0;">
+      <table style="width:100%; border-collapse:collapse; font-size:13px;">
+        <tr>
+          <th style="background:var(--accent); color:white; padding:7px 10px; text-align:center;">Tubo</th>
+          <th style="background:var(--accent); color:white; padding:7px 10px; text-align:center;">V₁ glicose (mL)</th>
+          <th style="background:var(--accent); color:white; padding:7px 10px; text-align:center;">V₂ total (mL)</th>
+          <th style="background:var(--accent); color:white; padding:7px 10px; text-align:center;">C₂ = (6 × V₁) / 1 (mM)</th>
+        </tr>
+        <tr><td style="padding:6px 10px; border:1px solid var(--border); text-align:center; background:var(--surface2); font-weight:600;">1</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center;">0,1</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center;">1</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center; font-family:monospace; color:var(--accent);">0,6</td></tr>
+        <tr><td style="padding:6px 10px; border:1px solid var(--border); text-align:center; background:var(--surface2); font-weight:600;">2</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center;">0,2</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center;">1</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center; font-family:monospace; color:var(--accent);">1,2</td></tr>
+        <tr><td style="padding:6px 10px; border:1px solid var(--border); text-align:center; background:var(--surface2); font-weight:600;">3</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center;">0,3</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center;">1</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center; font-family:monospace; color:var(--accent);">1,8</td></tr>
+        <tr><td style="padding:6px 10px; border:1px solid var(--border); text-align:center; background:var(--surface2); font-weight:600;">4</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center;">0,4</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center;">1</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center; font-family:monospace; color:var(--accent);">2,4</td></tr>
+        <tr><td style="padding:6px 10px; border:1px solid var(--border); text-align:center; background:var(--surface2); font-weight:600;">5</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center;">0,5</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center;">1</td><td style="padding:6px 10px; border:1px solid var(--border); text-align:center; font-family:monospace; color:var(--accent);">3,0</td></tr>
+      </table>
+    </div>
+
+    <div class="divider" style="margin:14px 0;"></div>
+
+    <h3 style="margin-bottom:10px;">Fator (slope da reta)</h3>
+    <div class="formula-box">
+      <div class="label">Fator F</div>
+      <div class="eq">F = [Glicose] (mM) / A₅₄₀</div>
+    </div>
+    <p style="font-size:13px; color:var(--muted); margin-top:6px;">A absorbância é adimensional — o fator F tem unidade de <strong>mM</strong>. Calcule F para cada tubo e use a média (ou o slope da reta do gráfico).</p>
+
+    <div class="divider" style="margin:14px 0;"></div>
+
+    <h3 style="margin-bottom:10px;">Concentração da amostra desconhecida</h3>
+    <div class="formula-box">
+      <div class="label">Amostra</div>
+      <div class="eq">[Glicose]<sub>amostra</sub> (mM) = A₅₄₀<sub>amostra</sub> × F</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:10px;">Espaço para o gráfico</h3>
+    <div class="graph-box" style="height:160px;">
+      <p>Construa aqui o gráfico A₅₄₀ × [Glicose] (mM)</p>
+      <p style="margin-top:6px;">Eixo X = [Glicose] (mM) &nbsp;|&nbsp; Eixo Y = Absorbância a 540 nm</p>
+      <p style="margin-top:6px;">Trace a reta de melhor ajuste — o slope é o Fator F</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RELATÓRIO -->
+  <div id="relatorio" class="section-label">Relatório</div>
+  <h2>Esboço de Relatório</h2>
+
+  <div class="report-items">
+    <div class="report-item">
+      <div class="report-q">1</div>
+      <span><strong>Introdução:</strong> Explique a técnica utilizada para quantificar a glicose. O que é o reagente DNS? Qual é o princípio da espectrofotometria e da lei de Beer-Lambert?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">2</div>
+      <span><strong>Resultados:</strong> Construa o gráfico A₅₄₀ × [Glicose] (µmol). Calcule o fator de concentração (F). Determine a concentração de glicose da amostra desconhecida.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">3</div>
+      <span><strong>Discussão:</strong> Para quais finalidades você utilizaria esta técnica na prática de Engenharia Florestal? Cite pelo menos dois exemplos concretos (ex.: análise de biomassa, fermentação, produção de biocombustíveis).</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Lab Bioquímica · UFSCar &nbsp;|&nbsp; Prof. Dr. Vadim Viviani &nbsp;|&nbsp; Aula 3 — Quantificação de Glicose por DNS
+</footer>
+</body>
+</html>

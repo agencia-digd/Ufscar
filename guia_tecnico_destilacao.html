@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia do Técnico — Fermentação e Destilação do Etanol</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --surface2: #21262d; --border: #30363d;
+  --accent: #e06820; --accent-dim: rgba(224,104,32,0.15); --accent-border: rgba(224,104,32,0.35);
+  --accent2: #e6a817; --danger: #da3633; --info: #388bfd;
+  --text: #e6edf3; --muted: #8b949e; --green: #3fb950; --orange: #f0883e; --red: #ff7b72;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 15px; line-height: 1.6; padding: 0 0 60px; color-scheme: light; }
+#progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; z-index: 999; }
+
+.header { background: linear-gradient(135deg, #0d1117 0%, #1c1510 50%, #0d1117 100%); border-bottom: 2px solid var(--accent); padding: 32px 24px 28px; position: relative; overflow: hidden; }
+.header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(224,104,32,0.12) 0%, transparent 70%); border-radius: 50%; }
+.header-badge { display: inline-flex; gap: 6px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 600; color: var(--orange); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+.header h1 { font-size: clamp(18px, 4vw, 28px); font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.header h1 span { color: var(--orange); }
+.header-sub { color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; }
+
+.nav-index { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin: 20px 16px; padding: 16px; }
+.nav-index h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; }
+.nav-index ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.nav-index a { color: var(--info); text-decoration: none; font-size: 13px; display: flex; gap: 6px; padding: 4px 6px; border-radius: 6px; }
+
+.section { margin: 20px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.section-header { background: var(--surface2); border-bottom: 1px solid var(--border); padding: 14px 18px; display: flex; align-items: center; gap: 10px; }
+.section-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.section-icon.orange { background: rgba(240,136,62,0.2); }
+.section-icon.green  { background: rgba(63,185,80,0.2); }
+.section-icon.yellow { background: rgba(230,168,23,0.2); }
+.section-icon.red    { background: rgba(218,54,51,0.2); }
+.section-icon.blue   { background: rgba(56,139,253,0.2); }
+.section-header h2 { font-size: 16px; font-weight: 700; color: var(--text); }
+.section-header .badge { margin-left: auto; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: rgba(56,139,253,0.15); color: var(--info); border: 1px solid rgba(56,139,253,0.3); }
+.section-body { padding: 18px; }
+
+.kit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kit-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+.kit-item .qty { background: rgba(56,139,253,0.15); border: 1px solid rgba(56,139,253,0.3); color: var(--info); font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 6px; flex-shrink: 0; white-space: nowrap; }
+
+.recipe { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+.recipe:last-child { margin-bottom: 0; }
+.recipe-header { background: var(--accent-dim); border-bottom: 1px solid var(--accent-border); padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+.recipe-label { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: white; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.recipe-header h3 { font-size: 14px; font-weight: 700; color: var(--text); }
+.recipe-body { padding: 14px; }
+
+.steps { list-style: none; }
+.steps li { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
+.steps li:last-child { margin-bottom: 0; }
+.step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+
+.calc-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+.calc-table th { background: var(--surface2); padding: 8px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--border); }
+.calc-table td { padding: 8px 12px; border-bottom: 1px solid rgba(48,54,61,0.5); font-size: 13px; }
+.calc-table tr:last-child td { border-bottom: none; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.alert { border-radius: 8px; padding: 12px 14px; margin: 10px 0; display: flex; gap: 10px; font-size: 13px; line-height: 1.5; }
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert.danger  { background: rgba(218,54,51,0.1);  border: 1px solid rgba(218,54,51,0.35); color: #ff8080; }
+.alert.warning { background: rgba(230,168,23,0.1); border: 1px solid rgba(230,168,23,0.35); color: var(--accent2); }
+.alert.info    { background: rgba(56,139,253,0.1); border: 1px solid rgba(56,139,253,0.35); color: var(--info); }
+.alert.success { background: rgba(63,185,80,0.1);  border: 1px solid rgba(63,185,80,0.35); color: var(--green); }
+.alert.orange  { background: var(--accent-dim);    border: 1px solid var(--accent-border);  color: var(--orange); }
+
+.checklist { list-style: none; }
+.checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(48,54,61,0.4); font-size: 13px; }
+.checklist li:last-child { border-bottom: none; }
+.check-box { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+
+.timeline { display: flex; flex-direction: column; }
+.tl-item { display: flex; gap: 14px; position: relative; }
+.tl-item:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 34px; width: 2px; height: calc(100% - 12px); background: var(--border); }
+.tl-dot { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; z-index: 1; }
+.tl-dot.orange { border-color: var(--accent); background: var(--accent-dim); }
+.tl-dot.yellow { border-color: var(--accent2); background: rgba(230,168,23,0.15); }
+.tl-dot.green  { border-color: var(--green); background: rgba(63,185,80,0.15); }
+.tl-dot.blue   { border-color: var(--info); background: rgba(56,139,253,0.15); }
+.tl-dot.red    { border-color: var(--danger); background: rgba(218,54,51,0.15); }
+.tl-body { padding-bottom: 20px; flex: 1; }
+.tl-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.tl-title { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+.tl-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+.parte-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--orange); background: var(--accent-dim); border: 1px solid var(--accent-border); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 10px; }
+
+.safety-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.safety-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; gap: 8px; font-size: 13px; color: var(--muted); }
+
+footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  #progress-bar { display: none !important; }
+  @page { margin: 15mm 12mm; size: A4; }
+  body { font-size: 10px !important; line-height: 1.35 !important; }
+  .header { padding: 14px 18px !important; }
+  .header h1 { font-size: 16px !important; }
+  .header-sub { font-size: 9px !important; gap: 10px !important; }
+  .header-badge { font-size: 8px !important; padding: 2px 8px !important; }
+  .nav-index { display: none !important; }
+  .section { margin: 10px 0 !important; break-inside: avoid; }
+  .section-header { padding: 8px 12px !important; break-after: avoid !important; }
+  .section-header h2 { font-size: 12px !important; }
+  .section-icon { width: 24px !important; height: 24px !important; font-size: 12px !important; }
+  .section-body { padding: 10px 12px !important; break-before: avoid !important; }
+  .kit-grid { gap: 5px !important; }
+  .kit-item { padding: 6px 8px !important; font-size: 9px !important; }
+  .kit-item .qty { font-size: 9px !important; }
+  .recipe { margin-bottom: 8px !important; break-inside: avoid !important; }
+  .recipe-header { padding: 6px 10px !important; }
+  .recipe-header h3 { font-size: 10px !important; }
+  .recipe-body { padding: 8px 10px !important; }
+  .steps li { font-size: 9px !important; margin-bottom: 5px !important; }
+  .step-num { width: 16px !important; height: 16px !important; font-size: 8px !important; }
+  .calc-table th, .calc-table td { padding: 4px 8px !important; font-size: 9px !important; }
+  .alert { padding: 6px 10px !important; font-size: 9px !important; margin: 5px 0 !important; break-inside: avoid !important; }
+  .checklist li { padding: 4px 0 !important; font-size: 9px !important; }
+  .check-box { width: 14px !important; height: 14px !important; }
+  .tl-dot { width: 24px !important; height: 24px !important; font-size: 10px !important; }
+  .tl-body { padding-bottom: 12px !important; }
+  .tl-time { font-size: 8px !important; }
+  .tl-title { font-size: 11px !important; }
+  .tl-desc { font-size: 9px !important; }
+  .safety-grid { gap: 5px !important; }
+  .safety-item { padding: 6px 8px !important; font-size: 9px !important; }
+  .parte-label { font-size: 8px !important; padding: 2px 7px !important; margin-bottom: 6px !important; }
+  footer { font-size: 8px !important; padding: 8px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<div class="header">
+  <div class="header-badge">⚙️ Guia do Técnico</div>
+  <h1><span>Fermentação e Destilação do Etanol</span></h1>
+  <div class="header-sub">
+    <span>🔬 Prof. Marystela Ferreira</span>
+    <span>👥 6–10 grupos · Eng. Florestal</span>
+    <span>📅 Fermentação: 5–7 dias antes</span>
+    <span>⏱️ Destilação: ~3 horas</span>
+  </div>
+</div>
+
+<div class="nav-index">
+  <h3>Seções</h3>
+  <ul>
+    <li><a href="#fermentacao">🍬 Fermentação (5–7 dias antes)</a></li>
+    <li><a href="#kits">📦 Kit por grupo (dia da aula)</a></li>
+    <li><a href="#bancada">🧪 Bancada Central</a></li>
+    <li><a href="#quantidades">🔢 Quantidades Totais</a></li>
+    <li><a href="#timeline">⏱️ Cronograma</a></li>
+    <li><a href="#resultados">✅ Resultados Esperados</a></li>
+    <li><a href="#seguranca">🚨 Segurança</a></li>
+    <li><a href="#checklist">☑️ Checklist</a></li>
+  </ul>
+</div>
+
+<!-- FERMENTAÇÃO -->
+<div class="section" id="fermentacao">
+  <div class="section-header">
+    <div class="section-icon yellow">🍬</div>
+    <h2>Parte I — Fermentação</h2>
+    <span class="badge">5–7 dias antes</span>
+  </div>
+  <div class="section-body">
+
+    <div class="alert warning">
+      <span class="alert-icon">📅</span>
+      <span>Esta etapa deve ser iniciada pelo técnico <strong>5 a 7 dias antes da aula de destilação</strong>. Prepare um Erlenmeyer por grupo + 1–2 extras como reserva.</span>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">1</div>
+        <h3>Preparo do mosto fermentativo — por grupo</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Medir <strong>150 mL de caldo de cana</strong> (~200 g/L de sacarose) em proveta e transferir para Erlenmeyer de 250 mL</span></li>
+          <li><div class="step-num">2</div><span>Pesar <strong>5 g de fermento de pão seco</strong> (ou 10–15 g de fermento fresco) em vidro de relógio</span></li>
+          <li><div class="step-num">3</div><span>Dissolver o fermento em ~20 mL de caldo morno (35–37°C) antes de adicionar ao Erlenmeyer — ativa as leveduras mais rapidamente</span></li>
+          <li><div class="step-num">4</div><span>Misturar bem com bagueta. Identificar o Erlenmeyer com <strong>nome do grupo + data de início</strong></span></li>
+          <li><div class="step-num">5</div><span>Vedar com papel laminado ou filme PVC, fazendo <strong>3–5 orifícios pequenos</strong> com ponta de lapiseira para saída de CO₂</span></li>
+          <li><div class="step-num">6</div><span>Incubar em local protegido (temperatura ambiente, 25–30°C ideal) por <strong>5 a 7 dias</strong></span></li>
+        </ul>
+        <div class="alert info" style="margin-top:10px;">
+          <span class="alert-icon">💡</span>
+          <span><strong>Se não houver caldo de cana fresco:</strong> preparar solução de sacarose: dissolva 30 g de açúcar cristal em 150 mL de água morna. Resultado equivalente. Adicionar 2–3 mL de suco de limão (pH ~4) para inibir contaminantes.</span>
+        </div>
+        <div class="alert success" style="margin-top:0;">
+          <span class="alert-icon">✅</span>
+          <span><strong>Sinais de fermentação bem-sucedida:</strong> bolhas de CO₂ visíveis nas primeiras 12–24h, odor alcoólico crescente, turbidez aumentando, depósito de levedura no fundo ao final.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert warning" style="margin-top:4px;">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>Sinais de contaminação</strong> (descartar e refazer): odor de vinagre forte (bactérias acéticas), mofo visível na superfície, coloração anormal. Se acontecer em menos de 3 grupos, use os extras preparados como reserva.</span>
+    </div>
+  </div>
+</div>
+
+<!-- KIT POR GRUPO -->
+<div class="section" id="kits">
+  <div class="section-header">
+    <div class="section-icon orange">📦</div>
+    <h2>Kit por Grupo — Dia da Destilação</h2>
+    <span class="badge">por bandeja</span>
+  </div>
+  <div class="section-body">
+    <p class="parte-label">Vidraria e equipamentos</p>
+    <div class="kit-grid" style="margin-bottom:14px;">
+      <div class="kit-item"><span class="qty">1×</span><span>Balão de fundo redondo 250 mL + rolha de borracha</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Cabeça de destilação</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Condensador reto (Liebig)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Alonga (adaptador de saída)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Béquer 100 mL ou Erlenmeyer 100 mL (coletor)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Manta aquecedora + regulador</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Suporte universal + 2 garras</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Termômetro (0–150°C)</span></div>
+      <div class="kit-item"><span class="qty">2×</span><span>Mangueiras de látex (condensador)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Béquer 250 mL (transferência do fermentado)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Pipeta Pasteur + pêra</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Cadinho de porcelana (teste de chama)</span></div>
+    </div>
+    <p class="parte-label">Reagentes</p>
+    <div class="kit-grid">
+      <div class="kit-item"><span class="qty">1×</span><span>Erlenmeyer com fermentado (da Parte I)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Alcoômetro de Gay-Lussac (compartilhado)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BANCADA CENTRAL -->
+<div class="section" id="bancada">
+  <div class="section-header">
+    <div class="section-icon orange">🧪</div>
+    <h2>Bancada Central</h2>
+  </div>
+  <div class="section-body">
+    <div class="kit-grid">
+      <div class="kit-item"><span style="font-size:18px;">📐</span><span><strong>Alcoômetro de Gay-Lussac</strong><br>Compartilhado entre grupos · verificar calibração</span></div>
+      <div class="kit-item"><span style="font-size:18px;">💧</span><span><strong>Água corrente (condensador)</strong><br>Verificar pressão suficiente para todos os grupos simultâneos</span></div>
+      <div class="kit-item"><span style="font-size:18px;">🔥</span><span><strong>Isqueiro / fósforos</strong><br>Somente para teste de chama — centralizados sob supervisão</span></div>
+      <div class="kit-item"><span style="font-size:18px;">⚖️</span><span><strong>Proveta 250 mL</strong><br>Para medir volume de fermentado e destilado</span></div>
+    </div>
+    <div class="alert danger" style="margin-top:12px;">
+      <span class="alert-icon">🔥</span>
+      <span><strong>Isqueiros e fósforos centralizados.</strong> O teste de chama deve ser realizado LONGE dos sistemas de destilação em operação — vapores de etanol são inflamáveis. Apenas após desligar a manta e afastar o material.</span>
+    </div>
+  </div>
+</div>
+
+<!-- QUANTIDADES -->
+<div class="section" id="quantidades">
+  <div class="section-header">
+    <div class="section-icon blue">🔢</div>
+    <h2>Quantidades Totais</h2>
+    <span class="badge">para 10 grupos</span>
+  </div>
+  <div class="section-body">
+    <table class="calc-table">
+      <tr><th>Material</th><th>Por grupo</th><th>10 grupos</th><th>Observação</th></tr>
+      <tr><td>Caldo de cana</td><td class="mono">150 mL</td><td class="mono">~1,8 L</td><td>+20% para reservas e perdas</td></tr>
+      <tr><td>Fermento de pão seco</td><td class="mono">5 g</td><td class="mono">~60 g</td><td>+20% margem</td></tr>
+      <tr><td>Erlenmeyers 250 mL (fermentação)</td><td class="mono">1</td><td class="mono">12</td><td>2 extras como reserva</td></tr>
+      <tr><td>Balões fundo redondo 250 mL</td><td class="mono">1</td><td class="mono">10</td><td>Verificar rolhas de borracha</td></tr>
+      <tr><td>Sistemas de destilação completos</td><td class="mono">1</td><td class="mono">10</td><td>Condensadores + mantas + suportes</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- CRONOGRAMA -->
+<div class="section" id="timeline">
+  <div class="section-header">
+    <div class="section-icon orange">⏱️</div>
+    <h2>Cronograma — Dia da Destilação</h2>
+    <span class="badge">~3 horas</span>
+  </div>
+  <div class="section-body">
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot orange">📋</div>
+        <div class="tl-body">
+          <div class="tl-time">00:00 – 00:20 (20 min)</div>
+          <div class="tl-title">Introdução + distribuição + montagem</div>
+          <div class="tl-desc">Professora apresenta a teoria. Técnico distribui kits. Grupos montam o sistema de destilação com auxílio do técnico. Verificar conexões das mangueiras antes de ligar a água.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot yellow">🍶</div>
+        <div class="tl-body">
+          <div class="tl-time">00:20 – 00:35 (15 min)</div>
+          <div class="tl-title">Transferência e aquecimento inicial</div>
+          <div class="tl-desc">Transferir fermentado para o balão. Ligar água do condensador. Ligar manta aquecedora. Aguardar temperatura subir até ~80°C.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot orange">🌡️</div>
+        <div class="tl-body">
+          <div class="tl-time">00:35 – 01:30 (55 min)</div>
+          <div class="tl-title">Destilação e coleta (88–90°C)</div>
+          <div class="tl-desc">Coletar destilado enquanto temperatura mantém 88–90°C. Monitorar termômetro continuamente. Técnico circula pelos grupos verificando temperaturas e possíveis vazamentos.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red">⛔</div>
+        <div class="tl-body">
+          <div class="tl-time">01:30 (momento crítico)</div>
+          <div class="tl-title">Desligar ao atingir 92°C</div>
+          <div class="tl-desc">Desligar a manta quando termômetro atingir 92°C. Manter água do condensador ligada por mais 5 min. Anotar volume coletado com proveta.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot blue">📐</div>
+        <div class="tl-body">
+          <div class="tl-time">01:35 – 01:55 (20 min)</div>
+          <div class="tl-title">Medição + teste de chama</div>
+          <div class="tl-desc">Grupos medem teor alcoólico com alcoômetro (bancada central). APÓS desligar todos os sistemas: teste de chama supervisionado em cadinho de porcelana — longe das mantas.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green">📊</div>
+        <div class="tl-body">
+          <div class="tl-time">01:55 – 02:30 (35 min)</div>
+          <div class="tl-title">Discussão dos resultados</div>
+          <div class="tl-desc">Comparar teores alcoólicos entre grupos. Professora discute azeótropo, destilação simples vs fracionada. Registrar resultados coletivamente.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red">🗑️</div>
+        <div class="tl-body">
+          <div class="tl-time">02:30 – 03:00 (30 min)</div>
+          <div class="tl-title">Desmontagem e limpeza</div>
+          <div class="tl-desc">Desmontar sistemas com cuidado. Descarte do vinhoto (líquido residual do balão). Lavar vidraria. Guardar equipamentos.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTADOS ESPERADOS -->
+<div class="section" id="resultados">
+  <div class="section-header">
+    <div class="section-icon green">✅</div>
+    <h2>Resultados Esperados</h2>
+  </div>
+  <div class="section-body">
+    <table class="calc-table" style="margin-bottom:14px;">
+      <tr><th>Parâmetro</th><th>Esperado</th></tr>
+      <tr><td>Volume de destilado coletado</td><td class="mono">~20–40 mL (de 150 mL de fermentado)</td></tr>
+      <tr><td>Teor alcoólico do destilado</td><td class="mono">40–55% (v/v) — similar à cachaça</td></tr>
+      <tr><td>Temperatura de coleta</td><td class="mono">88–90°C estável</td></tr>
+      <tr><td>Teste de chama</td><td>Chama azulada quase incolor · queima completa</td></tr>
+      <tr><td>Odor do destilado</td><td>Característico de álcool etílico / cachaça</td></tr>
+      <tr><td>Teor alcoólico do fermentado bruto</td><td class="mono">~8–12% (fermentação típica)</td></tr>
+    </table>
+
+    <div class="alert info">
+      <span class="alert-icon">💡</span>
+      <span><strong>Se o teor alcoólico for baixo (&lt;30%):</strong> provável fermentação incompleta (menos de 5 dias, temperatura baixa, levedura inativa) ou destilação encerrada cedo demais. Se for muito alto (&gt;60%): destilação muito eficiente ou fermentado mais concentrado que o esperado.</span>
+    </div>
+  </div>
+</div>
+
+<!-- SEGURANÇA -->
+<div class="section" id="seguranca">
+  <div class="section-header">
+    <div class="section-icon red">🚨</div>
+    <h2>Segurança e Resíduos</h2>
+  </div>
+  <div class="section-body">
+    <div class="alert danger">
+      <span class="alert-icon">🔥</span>
+      <span><strong>Etanol é inflamável (PE 78°C, ponto de fulgor 13°C).</strong> Proibido chamas abertas durante a destilação. Manta aquecedora com regulador — nunca superaquecer. Verificar vedação das conexões antes de ligar.</span>
+    </div>
+    <div class="alert warning">
+      <span class="alert-icon">💧</span>
+      <span>Abrir a água do condensador ANTES da manta. Se a água for interrompida durante a destilação, desligar a manta imediatamente — vapores quentes sem condensação = risco de incêndio.</span>
+    </div>
+
+    <p class="parte-label" style="margin-top:12px;">Descarte de Resíduos</p>
+    <div class="safety-grid">
+      <div class="safety-item"><span style="font-size:18px;">🟡</span><span><strong>Destilado residual (etanol diluído)</strong><br>Frasco de orgânicos não-halogenados</span></div>
+      <div class="safety-item"><span style="font-size:18px;">💧</span><span><strong>Vinhoto (resíduo do balão)</strong><br>Líquido orgânico fermentado — descarte na pia com água corrente abundante</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="section-header">
+    <div class="section-icon green">☑️</div>
+    <h2>Checklist</h2>
+  </div>
+  <div class="section-body">
+
+    <p class="parte-label">5–7 dias antes da aula</p>
+    <ul class="checklist" style="margin-bottom:16px;">
+      <li><div class="check-box"></div><span>Preparar 10+2 Erlenmeyers com caldo de cana + fermento</span></li>
+      <li><div class="check-box"></div><span>Identificar cada Erlenmeyer com nome do grupo e data de início</span></li>
+      <li><div class="check-box"></div><span>Vedar com papel laminado perfurado e incubar em local adequado</span></li>
+      <li><div class="check-box"></div><span>Verificar fermentação após 48h — bolhas e odor devem estar presentes</span></li>
+    </ul>
+
+    <p class="parte-label">Véspera da aula</p>
+    <ul class="checklist" style="margin-bottom:16px;">
+      <li><div class="check-box"></div><span>Verificar estado dos fermentados — odor, turbidez, ausência de mofo</span></li>
+      <li><div class="check-box"></div><span>Conferir todos os componentes dos sistemas de destilação (condensadores, mantas, rolhas)</span></li>
+      <li><div class="check-box"></div><span>Testar mangueiras de látex — sem rachaduras ou entupimentos</span></li>
+      <li><div class="check-box"></div><span>Verificar calibração do alcoômetro de Gay-Lussac</span></li>
+      <li><div class="check-box"></div><span>Separar cadinhos de porcelana para teste de chama</span></li>
+    </ul>
+
+    <p class="parte-label">No dia — antes dos alunos chegarem</p>
+    <ul class="checklist" style="margin-bottom:16px;">
+      <li><div class="check-box"></div><span>Distribuir sistemas de destilação por bancada (não montar — alunos montam)</span></li>
+      <li><div class="check-box"></div><span>Verificar pressão da água nas torneiras das bancadas</span></li>
+      <li><div class="check-box"></div><span>Posicionar Erlenmeyers identificados por grupo</span></li>
+      <li><div class="check-box"></div><span>Centralizar alcoômetro, isqueiro/fósforos na bancada do técnico</span></li>
+    </ul>
+
+    <p class="parte-label">Ao final da aula</p>
+    <ul class="checklist">
+      <li><div class="check-box"></div><span>Desmontar e lavar todos os sistemas de destilação (condensadores com atenção especial)</span></li>
+      <li><div class="check-box"></div><span>Descartar vinhoto na pia com água abundante</span></li>
+      <li><div class="check-box"></div><span>Guardar mantas aquecedoras em local seco</span></li>
+      <li><div class="check-box"></div><span>Registrar teores alcoólicos obtidos pelos grupos no livro do laboratório</span></li>
+    </ul>
+
+  </div>
+</div>
+
+<footer>
+  Lab Química Orgânica · UFSCar &nbsp;|&nbsp; Prof. Marystela Ferreira &nbsp;|&nbsp; Guia do Técnico — Aula 6 Destilação do Etanol
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const pct = (document.documentElement.scrollTop / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  });
+</script>
+</body>
+</html>

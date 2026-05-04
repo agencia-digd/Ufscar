@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia do Técnico — Síntese da Aspirina</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --surface2: #21262d; --border: #30363d;
+  --accent: #e06820; --accent-dim: rgba(224,104,32,0.15); --accent-border: rgba(224,104,32,0.35);
+  --accent2: #e6a817; --danger: #da3633; --info: #388bfd;
+  --text: #e6edf3; --muted: #8b949e; --green: #3fb950; --orange: #f0883e; --red: #ff7b72;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 15px; line-height: 1.6; padding: 0 0 60px; color-scheme: light; }
+#progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; z-index: 999; }
+
+.header { background: linear-gradient(135deg, #0d1117 0%, #1c1510 50%, #0d1117 100%); border-bottom: 2px solid var(--accent); padding: 32px 24px 28px; position: relative; overflow: hidden; }
+.header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(224,104,32,0.12) 0%, transparent 70%); border-radius: 50%; }
+.header-badge { display: inline-flex; gap: 6px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 600; color: var(--orange); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+.header h1 { font-size: clamp(20px, 5vw, 30px); font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.header h1 span { color: var(--orange); }
+.header-sub { color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; }
+
+.nav-index { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin: 20px 16px; padding: 16px; }
+.nav-index h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; }
+.nav-index ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.nav-index a { color: var(--info); text-decoration: none; font-size: 13px; display: flex; gap: 6px; padding: 4px 6px; border-radius: 6px; }
+
+.section { margin: 20px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.section-header { background: var(--surface2); border-bottom: 1px solid var(--border); padding: 14px 18px; display: flex; align-items: center; gap: 10px; }
+.section-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.section-icon.orange { background: rgba(240,136,62,0.2); }
+.section-icon.green  { background: rgba(63,185,80,0.2); }
+.section-icon.yellow { background: rgba(230,168,23,0.2); }
+.section-icon.red    { background: rgba(218,54,51,0.2); }
+.section-icon.blue   { background: rgba(56,139,253,0.2); }
+.section-header h2 { font-size: 16px; font-weight: 700; color: var(--text); }
+.section-header .badge { margin-left: auto; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: rgba(56,139,253,0.15); color: var(--info); border: 1px solid rgba(56,139,253,0.3); }
+.section-body { padding: 18px; }
+
+.kit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kit-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+.kit-item .qty { background: rgba(56,139,253,0.15); border: 1px solid rgba(56,139,253,0.3); color: var(--info); font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 6px; flex-shrink: 0; white-space: nowrap; }
+
+.recipe { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+.recipe:last-child { margin-bottom: 0; }
+.recipe-header { background: var(--accent-dim); border-bottom: 1px solid var(--accent-border); padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+.recipe-label { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: white; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.recipe-header h3 { font-size: 14px; font-weight: 700; color: var(--text); }
+.recipe-body { padding: 14px; }
+
+.steps { list-style: none; }
+.steps li { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
+.steps li:last-child { margin-bottom: 0; }
+.step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+
+.calc-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+.calc-table th { background: var(--surface2); padding: 8px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--border); }
+.calc-table td { padding: 8px 12px; border-bottom: 1px solid rgba(48,54,61,0.5); font-size: 13px; }
+.calc-table tr:last-child td { border-bottom: none; }
+.calc-table .total-row td { background: var(--accent-dim); color: var(--orange); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.alert { border-radius: 8px; padding: 12px 14px; margin: 10px 0; display: flex; gap: 10px; font-size: 13px; line-height: 1.5; }
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert.danger  { background: rgba(218,54,51,0.1);  border: 1px solid rgba(218,54,51,0.35); color: #ff8080; }
+.alert.warning { background: rgba(230,168,23,0.1); border: 1px solid rgba(230,168,23,0.35); color: var(--accent2); }
+.alert.info    { background: rgba(56,139,253,0.1); border: 1px solid rgba(56,139,253,0.35); color: var(--info); }
+.alert.success { background: rgba(63,185,80,0.1);  border: 1px solid rgba(63,185,80,0.35); color: var(--green); }
+.alert.orange  { background: var(--accent-dim);    border: 1px solid var(--accent-border);  color: var(--orange); }
+
+.checklist { list-style: none; }
+.checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(48,54,61,0.4); font-size: 13px; }
+.checklist li:last-child { border-bottom: none; }
+.check-box { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+
+.timeline { display: flex; flex-direction: column; }
+.tl-item { display: flex; gap: 14px; position: relative; }
+.tl-item:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 34px; width: 2px; height: calc(100% - 12px); background: var(--border); }
+.tl-dot { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; z-index: 1; }
+.tl-dot.orange { border-color: var(--accent); background: var(--accent-dim); }
+.tl-dot.yellow { border-color: var(--accent2); background: rgba(230,168,23,0.15); }
+.tl-dot.green  { border-color: var(--green); background: rgba(63,185,80,0.15); }
+.tl-dot.blue   { border-color: var(--info); background: rgba(56,139,253,0.15); }
+.tl-dot.red    { border-color: var(--danger); background: rgba(218,54,51,0.15); }
+.tl-body { padding-bottom: 20px; flex: 1; }
+.tl-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.tl-title { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+.tl-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+.parte-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--orange); background: var(--accent-dim); border: 1px solid var(--accent-border); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 10px; }
+
+.safety-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.safety-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; gap: 8px; font-size: 13px; color: var(--muted); }
+
+footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  #progress-bar { display: none !important; }
+  @page { margin: 15mm 12mm; size: A4; }
+  body { font-size: 10px !important; line-height: 1.35 !important; }
+  .header { padding: 14px 18px !important; }
+  .header h1 { font-size: 18px !important; }
+  .header-sub { font-size: 9px !important; gap: 10px !important; }
+  .header-badge { font-size: 8px !important; padding: 2px 8px !important; }
+  .nav-index { display: none !important; }
+  .section { margin: 10px 0 !important; break-inside: avoid; }
+  .section-header { padding: 8px 12px !important; break-after: avoid !important; }
+  .section-header h2 { font-size: 12px !important; }
+  .section-icon { width: 24px !important; height: 24px !important; font-size: 12px !important; }
+  .section-body { padding: 10px 12px !important; break-before: avoid !important; }
+  .kit-grid { gap: 5px !important; }
+  .kit-item { padding: 6px 8px !important; font-size: 9px !important; }
+  .kit-item .qty { font-size: 9px !important; }
+  .recipe { margin-bottom: 8px !important; break-inside: avoid !important; }
+  .recipe-header { padding: 6px 10px !important; }
+  .recipe-header h3 { font-size: 10px !important; }
+  .recipe-body { padding: 8px 10px !important; }
+  .steps li { font-size: 9px !important; margin-bottom: 5px !important; }
+  .step-num { width: 16px !important; height: 16px !important; font-size: 8px !important; }
+  .calc-table th, .calc-table td { padding: 4px 8px !important; font-size: 9px !important; }
+  .alert { padding: 6px 10px !important; font-size: 9px !important; margin: 5px 0 !important; break-inside: avoid !important; }
+  .checklist li { padding: 4px 0 !important; font-size: 9px !important; }
+  .check-box { width: 14px !important; height: 14px !important; }
+  .tl-dot { width: 24px !important; height: 24px !important; font-size: 10px !important; }
+  .tl-body { padding-bottom: 12px !important; }
+  .tl-time { font-size: 8px !important; }
+  .tl-title { font-size: 11px !important; }
+  .tl-desc { font-size: 9px !important; }
+  .safety-grid { gap: 5px !important; }
+  .safety-item { padding: 6px 8px !important; font-size: 9px !important; }
+  .parte-label { font-size: 8px !important; padding: 2px 7px !important; margin-bottom: 6px !important; }
+  footer { font-size: 8px !important; padding: 8px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<div class="header">
+  <div class="header-badge">⚙️ Guia do Técnico</div>
+  <h1><span>Síntese da Aspirina</span> — Preparação da Aula</h1>
+  <div class="header-sub">
+    <span>🔬 Prof. Marystela Ferreira</span>
+    <span>👥 6–10 grupos · Eng. Florestal</span>
+    <span>⏱️ ~3 horas</span>
+    <span>☣️ H₂SO₄ conc. + Anidrido acético</span>
+  </div>
+</div>
+
+<div class="nav-index">
+  <h3>Seções</h3>
+  <ul>
+    <li><a href="#kits">📦 Kit por grupo</a></li>
+    <li><a href="#bancada">🧪 Bancada Central</a></li>
+    <li><a href="#quantidades">🔢 Quantidades Totais</a></li>
+    <li><a href="#fecl3">🧫 Preparo do FeCl₃ 1%</a></li>
+    <li><a href="#timeline">⏱️ Cronograma</a></li>
+    <li><a href="#resultados">✅ Resultados Esperados</a></li>
+    <li><a href="#seguranca">🚨 Segurança e Resíduos</a></li>
+    <li><a href="#checklist">☑️ Checklist</a></li>
+  </ul>
+</div>
+
+<!-- KIT POR GRUPO -->
+<div class="section" id="kits">
+  <div class="section-header">
+    <div class="section-icon orange">📦</div>
+    <h2>Kit por Grupo</h2>
+    <span class="badge">por bandeja</span>
+  </div>
+  <div class="section-body">
+    <div class="alert info" style="margin-bottom:14px;">
+      <span class="alert-icon">ℹ️</span>
+      <span>H₂SO₄ concentrado e anidrido acético ficam na <strong>bancada central</strong>. Não distribuir por grupo. Anidrido acético em frasco fechado até o momento do uso.</span>
+    </div>
+
+    <p class="parte-label">Vidraria</p>
+    <div class="kit-grid" style="margin-bottom:14px;">
+      <div class="kit-item"><span class="qty">1×</span><span>Béquer 100 mL (síntese)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Béquer 250 mL (banho-maria)</span></div>
+      <div class="kit-item"><span class="qty">2×</span><span>Béquer 100 mL (purificação)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Erlenmeyer 125 mL</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Kitassato 250 mL + funil de Buchner</span></div>
+      <div class="kit-item"><span class="qty">3×</span><span>Tubos de ensaio pequenos (teste FeCl₃)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Bastão de vidro</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Pipeta Pasteur + pêra</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Proveta 25 mL + proveta 10 mL</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Placa de Petri ou vidro de relógio</span></div>
+      <div class="kit-item"><span class="qty">2×</span><span>Papel de filtro (pré-pesado + normal)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Espátula</span></div>
+    </div>
+
+    <p class="parte-label">Reagentes (por grupo)</p>
+    <div class="kit-grid">
+      <div class="kit-item"><span class="qty">~2,5 g</span><span>Ácido salicílico (com margem)</span></div>
+      <div class="kit-item"><span class="qty">~2 mL</span><span>FeCl₃ 1% (frasco pequeno)</span></div>
+      <div class="kit-item"><span class="qty">~15 mL</span><span>Álcool etílico 95% (purificação)</span></div>
+      <div class="kit-item"><span class="qty">~50 mL</span><span>Água destilada (várias etapas)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BANCADA CENTRAL -->
+<div class="section" id="bancada">
+  <div class="section-header">
+    <div class="section-icon orange">🧪</div>
+    <h2>Bancada Central</h2>
+    <span class="badge">acesso de todos</span>
+  </div>
+  <div class="section-body">
+    <div class="alert danger" style="margin-bottom:12px;">
+      <span class="alert-icon">☣️</span>
+      <span><strong>H₂SO₄ concentrado e anidrido acético NUNCA distribuir por grupo.</strong> Dispensar na bancada central com pipeta Pasteur sob supervisão. Sinalizar claramente.</span>
+    </div>
+    <div class="kit-grid">
+      <div class="kit-item"><span style="font-size:18px;">☣️</span><span><strong>H₂SO₄ concentrado</strong><br>Frasco com pipeta Pasteur + pêra · CORROSIVO · acesso supervisionado</span></div>
+      <div class="kit-item"><span style="font-size:18px;">⚗️</span><span><strong>Anidrido acético</strong><br>Frasco âmbar fechado · dispensar com seringa ou proveta na área ventilada</span></div>
+      <div class="kit-item"><span style="font-size:18px;">🔥</span><span><strong>Banho-maria</strong><br>Béquer 250 mL com água a 50–60°C na placa · termômetro de controle</span></div>
+      <div class="kit-item"><span style="font-size:18px;">❄️</span><span><strong>Banho de gelo</strong><br>Para cristalização acelerada e lavagem com água gelada</span></div>
+      <div class="kit-item"><span style="font-size:18px;">⚖️</span><span><strong>Balança analítica</strong><br>Pesar ác. salicílico (2,0 g) e produto final</span></div>
+      <div class="kit-item"><span style="font-size:18px;">🌡️</span><span><strong>Aparelho de PF</strong><br>Para determinação do PF da aspirina purificada</span></div>
+      <div class="kit-item"><span style="font-size:18px;">🗑️</span><span><strong>Descarte orgânico</strong><br>Frasco para resíduos ácidos/orgânicos</span></div>
+      <div class="kit-item"><span style="font-size:18px;">🚿</span><span><strong>Frasco lava-olhos</strong><br>Essencial — H₂SO₄ e anidrido acético são corrosivos</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- QUANTIDADES TOTAIS -->
+<div class="section" id="quantidades">
+  <div class="section-header">
+    <div class="section-icon blue">🔢</div>
+    <h2>Quantidades Totais</h2>
+    <span class="badge">para 10 grupos</span>
+  </div>
+  <div class="section-body">
+    <table class="calc-table">
+      <tr><th>Reagente</th><th>Por grupo</th><th>10 grupos</th><th>+20% margem</th></tr>
+      <tr><td>Ácido salicílico</td><td class="mono">2,0 g</td><td class="mono">20 g</td><td class="mono">~25 g</td></tr>
+      <tr><td>Anidrido acético</td><td class="mono">5,0 mL</td><td class="mono">50 mL</td><td class="mono">~60 mL</td></tr>
+      <tr><td>H₂SO₄ concentrado</td><td class="mono">5 gotas (~0,3 mL)</td><td class="mono">3 mL</td><td class="mono">~5 mL</td></tr>
+      <tr><td>Álcool etílico 95%</td><td class="mono">~15 mL</td><td class="mono">150 mL</td><td class="mono">~180 mL</td></tr>
+      <tr><td>FeCl₃ 1% (solução)</td><td class="mono">~2 mL</td><td class="mono">20 mL</td><td class="mono">~25 mL</td></tr>
+      <tr><td>Água destilada</td><td class="mono">~60 mL</td><td class="mono">600 mL</td><td class="mono">~750 mL</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- PREPARO FeCl3 -->
+<div class="section" id="fecl3">
+  <div class="section-header">
+    <div class="section-icon yellow">🧫</div>
+    <h2>Preparo do FeCl₃ 1%</h2>
+    <span class="badge">véspera</span>
+  </div>
+  <div class="section-body">
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">1</div>
+        <h3>FeCl₃ 1% (m/v) — 25 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Pesar <strong>0,25 g de FeCl₃·6H₂O</strong> (cloreto férrico hexahidratado) em béquer de 50 mL</span></li>
+          <li><div class="step-num">2</div><span>Dissolver em ~20 mL de água destilada com agitação</span></li>
+          <li><div class="step-num">3</div><span>Transferir para balão volumétrico de 25 mL e completar o volume</span></li>
+          <li><div class="step-num">4</div><span>Guardar em frasco âmbar ou coberto com papel alumínio — sensível à luz</span></li>
+        </ul>
+        <div class="alert warning" style="margin-top:10px;">
+          <span class="alert-icon">📌</span>
+          <span>Se usar FeCl₃ anidro (MM = 162,2 g/mol), usar apenas <strong>0,162 g</strong> para 25 mL de solução 1%. A solução é amarelo-alaranjada — cor normal.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CRONOGRAMA -->
+<div class="section" id="timeline">
+  <div class="section-header">
+    <div class="section-icon orange">⏱️</div>
+    <h2>Cronograma da Aula</h2>
+    <span class="badge">~3 horas</span>
+  </div>
+  <div class="section-body">
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot orange">📋</div>
+        <div class="tl-body">
+          <div class="tl-time">00:00 – 00:15 (15 min)</div>
+          <div class="tl-title">Introdução e distribuição</div>
+          <div class="tl-desc">Professora apresenta a reação. Técnico distribui kits. Banho-maria já aquecendo a 50–60°C na bancada central.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot orange">⚗️</div>
+        <div class="tl-body">
+          <div class="tl-time">00:15 – 00:45 (30 min)</div>
+          <div class="tl-title">Síntese — mistura + banho-maria</div>
+          <div class="tl-desc">Pesagem do ác. salicílico. Adição de anidrido acético (na área ventilada). Adição de H₂SO₄ (bancada central, supervisionado). Banho-maria 50–60°C por 10 min.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot blue">❄️</div>
+        <div class="tl-body">
+          <div class="tl-time">00:45 – 01:10 (25 min)</div>
+          <div class="tl-title">Cristalização + filtração da aspirina bruta</div>
+          <div class="tl-desc">Resfriamento ao ar → banho de gelo se necessário. Adição de 30 mL água. Filtração Buchner. Lavagem 2× 5 mL água gelada.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot yellow">🧫</div>
+        <div class="tl-body">
+          <div class="tl-time">01:10 – 01:25 (15 min)</div>
+          <div class="tl-title">Teste de pureza — FeCl₃ (produto bruto)</div>
+          <div class="tl-desc">3 tubos: controle positivo (ác. salicílico), produto bruto, branco. Registrar cores antes da purificação.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green">🧪</div>
+        <div class="tl-body">
+          <div class="tl-time">01:25 – 02:15 (50 min)</div>
+          <div class="tl-title">Purificação por recristalização</div>
+          <div class="tl-desc">Dissolução em etanol quente + 22 mL água quente. Geladeira para cristalização. Filtração, lavagem, secagem. Pesar produto purificado.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot blue">🌡️</div>
+        <div class="tl-body">
+          <div class="tl-time">02:15 – 02:45 (30 min)</div>
+          <div class="tl-title">PF + teste FeCl₃ (produto purificado) + rendimento</div>
+          <div class="tl-desc">PF no aparelho elétrico. Repetir teste FeCl₃ com produto purificado. Calcular rendimento. Comparar antes/depois da purificação.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red">🗑️</div>
+        <div class="tl-body">
+          <div class="tl-time">02:45 – 03:00 (15 min)</div>
+          <div class="tl-title">Descarte e limpeza</div>
+          <div class="tl-desc">Resíduos ácidos no frasco específico. Vidraria lavada. Desligar placas e aparelho de PF.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTADOS ESPERADOS -->
+<div class="section" id="resultados">
+  <div class="section-header">
+    <div class="section-icon green">✅</div>
+    <h2>Resultados Esperados</h2>
+    <span class="badge">referência</span>
+  </div>
+  <div class="section-body">
+    <table class="calc-table" style="margin-bottom:14px;">
+      <tr><th>Parâmetro</th><th>Esperado</th></tr>
+      <tr><td>Massa de aspirina bruta</td><td class="mono">1,8–2,3 g (rendimento 70–90%)</td></tr>
+      <tr><td>Massa de aspirina purificada</td><td class="mono">1,2–1,8 g (rendimento total 46–70%)</td></tr>
+      <tr><td>Aspecto bruto</td><td>Pó cristalino branco-amarelado</td></tr>
+      <tr><td>Aspecto purificado</td><td>Agulhas brancas finas</td></tr>
+      <tr><td>PF teórico</td><td class="mono">135–136 °C</td></tr>
+      <tr><td>Teste FeCl₃ — produto bruto</td><td>Leve coloração violeta (ác. salicílico residual)</td></tr>
+      <tr><td>Teste FeCl₃ — purificado</td><td>Amarelo-pálido (sem fenol livre = puro)</td></tr>
+    </table>
+
+    <div class="alert success">
+      <span class="alert-icon">💡</span>
+      <span><strong>Se o produto purificado ainda der cor violeta com FeCl₃:</strong> a recristalização foi insuficiente. Repetir com menos solvente ou resfriar mais lentamente. Isso é normal para alguns grupos e é ótimo material de discussão.</span>
+    </div>
+  </div>
+</div>
+
+<!-- SEGURANÇA -->
+<div class="section" id="seguranca">
+  <div class="section-header">
+    <div class="section-icon red">🚨</div>
+    <h2>Segurança e Resíduos</h2>
+  </div>
+  <div class="section-body">
+    <div class="alert danger">
+      <span class="alert-icon">☣️</span>
+      <span><strong>H₂SO₄ concentrado:</strong> reage violentamente com água (exotérmico), corrói pele, olhos e tecidos. Nunca adicionar água ao ácido — sempre ácido sobre água. Acesso exclusivo na bancada central com pipeta Pasteur.</span>
+    </div>
+    <div class="alert danger">
+      <span class="alert-icon">⚗️</span>
+      <span><strong>Anidrido acético:</strong> causa queimaduras graves. Vapores irritantes (liberação de ácido acético). Manusear na área ventilada. Reage com água gerando calor — não misturar diretamente com água.</span>
+    </div>
+    <div class="alert warning">
+      <span class="alert-icon">🔥</span>
+      <span><strong>Álcool etílico:</strong> inflamável. Sem chamas abertas na bancada. Usar placa de aquecimento.</span>
+    </div>
+
+    <p class="parte-label" style="margin-top:12px;">Descarte de Resíduos</p>
+    <div class="safety-grid">
+      <div class="safety-item"><span style="font-size:18px;">🔴</span><span><strong>Resíduos ácidos</strong><br>H₂SO₄ diluído, filtrados ácidos → neutralizar (pH 6–8), depois pia</span></div>
+      <div class="safety-item"><span style="font-size:18px;">🟡</span><span><strong>Álcool etílico</strong><br>Frasco de orgânicos não-halogenados</span></div>
+      <div class="safety-item"><span style="font-size:18px;">🟠</span><span><strong>Anidrido acético residual</strong><br>Frasco de resíduos orgânicos — nunca na pia</span></div>
+      <div class="safety-item"><span style="font-size:18px;">⚗️</span><span><strong>Solução FeCl₃ usada</strong><br>Frasco de resíduos inorgânicos (ferro)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="section-header">
+    <div class="section-icon green">☑️</div>
+    <h2>Checklist — Véspera e Dia da Aula</h2>
+  </div>
+  <div class="section-body">
+
+    <p class="parte-label">Na véspera</p>
+    <ul class="checklist" style="margin-bottom:16px;">
+      <li><div class="check-box"></div><span>Preparar FeCl₃ 1% — 25 mL (guardar em frasco âmbar)</span></li>
+      <li><div class="check-box"></div><span>Verificar estoque de ácido salicílico (~25 g), anidrido acético (~60 mL), H₂SO₄ conc. (~5 mL)</span></li>
+      <li><div class="check-box"></div><span>Verificar álcool etílico 95% (~180 mL) e água destilada suficiente</span></li>
+      <li><div class="check-box"></div><span>Pré-pesar papel de filtro para Buchner (pesar antes da filtração do produto purificado)</span></li>
+      <li><div class="check-box"></div><span>Verificar sistema de vácuo (trompa/bomba) + kitassatos</span></li>
+      <li><div class="check-box"></div><span>Separar vidraria: béqueres, erlenmeyers, tubos de ensaio, bastões</span></li>
+    </ul>
+
+    <p class="parte-label">No dia — antes dos alunos chegarem</p>
+    <ul class="checklist" style="margin-bottom:16px;">
+      <li><div class="check-box"></div><span>Montar bandejas com kits por grupo</span></li>
+      <li><div class="check-box"></div><span>Ligar placa de aquecimento do banho-maria central — manter 50–60°C</span></li>
+      <li><div class="check-box"></div><span>Ligar aparelho de ponto de fusão com 15 min de antecedência</span></li>
+      <li><div class="check-box"></div><span>Preparar banho de gelo na bancada central</span></li>
+      <li><div class="check-box"></div><span>Posicionar H₂SO₄ e anidrido acético na bancada central com sinalização CORROSIVO/IRRITANTE</span></li>
+      <li><div class="check-box"></div><span>Distribuir FeCl₃ 1% em frascos pequenos por grupo (2 mL cada)</span></li>
+      <li><div class="check-box"></div><span>Checar frasco lava-olhos (cheio) e luvas nitrílicas extras</span></li>
+      <li><div class="check-box"></div><span>Ligar exaustão da área ventilada (anidrido acético)</span></li>
+    </ul>
+
+    <p class="parte-label">Ao final da aula</p>
+    <ul class="checklist">
+      <li><div class="check-box"></div><span>Recolher e armazenar resíduos ácidos e orgânicos corretamente</span></li>
+      <li><div class="check-box"></div><span>Desligar banho-maria, aparelho de PF e placas de aquecimento</span></li>
+      <li><div class="check-box"></div><span>Lavar vidraria — atenção especial aos béqueres com resíduo de H₂SO₄</span></li>
+      <li><div class="check-box"></div><span>Guardar anidrido acético em armário fechado, longe de água</span></li>
+      <li><div class="check-box"></div><span>Registrar rendimentos dos grupos e intercorrências no livro do laboratório</span></li>
+    </ul>
+
+  </div>
+</div>
+
+<footer>
+  Lab Química Orgânica · UFSCar &nbsp;|&nbsp; Prof. Marystela Ferreira &nbsp;|&nbsp; Guia do Técnico — Aula 5 Síntese da Aspirina
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const pct = (document.documentElement.scrollTop / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia do Técnico — Quantificação de Glicose por DNS</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --surface2: #21262d; --border: #30363d;
+  --accent: #238636; --accent-dim: rgba(35,134,54,0.15); --accent-border: rgba(35,134,54,0.35);
+  --accent2: #e6a817; --danger: #da3633; --info: #388bfd;
+  --text: #e6edf3; --muted: #8b949e; --green: #3fb950; --orange: #f0883e; --red: #ff7b72;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 15px; line-height: 1.6; padding: 0 0 60px; color-scheme: light; }
+#progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; z-index: 999; }
+.header { background: linear-gradient(135deg, #0d1117 0%, #0d1f12 50%, #0d1117 100%); border-bottom: 2px solid var(--accent); padding: 32px 24px 28px; position: relative; overflow: hidden; }
+.header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(35,134,54,0.12) 0%, transparent 70%); border-radius: 50%; }
+.header-badge { display: inline-flex; gap: 6px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+.header h1 { font-size: clamp(16px, 4vw, 26px); font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.header h1 span { color: var(--green); }
+.header-sub { color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; }
+.nav-index { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin: 20px 16px; padding: 16px; }
+.nav-index h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; }
+.nav-index ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.nav-index a { color: var(--info); text-decoration: none; font-size: 13px; display: flex; gap: 6px; padding: 4px 6px; border-radius: 6px; }
+.section { margin: 20px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.section-header { background: var(--surface2); border-bottom: 1px solid var(--border); padding: 14px 18px; display: flex; align-items: center; gap: 10px; }
+.section-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.section-icon.green  { background: rgba(63,185,80,0.2); }
+.section-icon.yellow { background: rgba(230,168,23,0.2); }
+.section-icon.red    { background: rgba(218,54,51,0.2); }
+.section-icon.blue   { background: rgba(56,139,253,0.2); }
+.section-header h2 { font-size: 16px; font-weight: 700; color: var(--text); }
+.section-header .badge { margin-left: auto; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: rgba(56,139,253,0.15); color: var(--info); border: 1px solid rgba(56,139,253,0.3); }
+.section-body { padding: 18px; }
+.kit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kit-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+.kit-item .qty { background: rgba(56,139,253,0.15); border: 1px solid rgba(56,139,253,0.3); color: var(--info); font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 6px; flex-shrink: 0; white-space: nowrap; }
+.recipe { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+.recipe:last-child { margin-bottom: 0; }
+.recipe-header { background: var(--accent-dim); border-bottom: 1px solid var(--accent-border); padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+.recipe-label { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: white; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.recipe-header h3 { font-size: 14px; font-weight: 700; color: var(--text); }
+.recipe-body { padding: 14px; }
+.steps { list-style: none; }
+.steps li { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
+.steps li:last-child { margin-bottom: 0; }
+.step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+.calc-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+.calc-table th { background: var(--surface2); padding: 8px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--border); }
+.calc-table td { padding: 8px 12px; border-bottom: 1px solid rgba(48,54,61,0.5); font-size: 13px; }
+.calc-table tr:last-child td { border-bottom: none; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+.alert { border-radius: 8px; padding: 12px 14px; margin: 10px 0; display: flex; gap: 10px; font-size: 13px; line-height: 1.5; }
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert.danger  { background: rgba(218,54,51,0.1);  border: 1px solid rgba(218,54,51,0.35); color: #ff8080; }
+.alert.warning { background: rgba(230,168,23,0.1); border: 1px solid rgba(230,168,23,0.35); color: var(--accent2); }
+.alert.info    { background: rgba(56,139,253,0.1); border: 1px solid rgba(56,139,253,0.35); color: var(--info); }
+.alert.success { background: rgba(63,185,80,0.1);  border: 1px solid rgba(63,185,80,0.35); color: var(--green); }
+.alert.green   { background: var(--accent-dim);    border: 1px solid var(--accent-border);  color: var(--green); }
+.checklist { list-style: none; }
+.checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(48,54,61,0.4); font-size: 13px; }
+.checklist li:last-child { border-bottom: none; }
+.check-box { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+.timeline { display: flex; flex-direction: column; }
+.tl-item { display: flex; gap: 14px; position: relative; }
+.tl-item:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 34px; width: 2px; height: calc(100% - 12px); background: var(--border); }
+.tl-dot { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; z-index: 1; }
+.tl-dot.green  { border-color: var(--accent); background: var(--accent-dim); }
+.tl-dot.yellow { border-color: var(--accent2); background: rgba(230,168,23,0.15); }
+.tl-dot.blue   { border-color: var(--info); background: rgba(56,139,253,0.15); }
+.tl-dot.red    { border-color: var(--danger); background: rgba(218,54,51,0.15); }
+.tl-body { padding-bottom: 20px; flex: 1; }
+.tl-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.tl-title { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+.tl-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.parte-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green); background: var(--accent-dim); border: 1px solid var(--accent-border); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 10px; }
+footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  #progress-bar { display: none !important; }
+  @page { margin: 15mm 12mm; size: A4; }
+  body { font-size: 10px !important; line-height: 1.35 !important; }
+  .header { padding: 14px 18px !important; }
+  .header h1 { font-size: 15px !important; }
+  .header-sub { font-size: 9px !important; gap: 10px !important; }
+  .header-badge { font-size: 8px !important; padding: 2px 8px !important; }
+  .nav-index { display: none !important; }
+  .section { margin: 10px 0 !important; break-inside: avoid; }
+  .section-header { padding: 8px 12px !important; break-after: avoid !important; }
+  .section-header h2 { font-size: 12px !important; }
+  .section-icon { width: 24px !important; height: 24px !important; font-size: 12px !important; }
+  .section-body { padding: 10px 12px !important; break-before: avoid !important; }
+  .kit-grid { gap: 5px !important; }
+  .kit-item { padding: 6px 8px !important; font-size: 9px !important; }
+  .kit-item .qty { font-size: 9px !important; }
+  .recipe { margin-bottom: 8px !important; break-inside: avoid !important; }
+  .recipe-header { padding: 6px 10px !important; }
+  .recipe-header h3 { font-size: 10px !important; }
+  .recipe-body { padding: 8px 10px !important; }
+  .steps li { font-size: 9px !important; margin-bottom: 5px !important; }
+  .step-num { width: 16px !important; height: 16px !important; font-size: 8px !important; }
+  .calc-table th, .calc-table td { padding: 4px 8px !important; font-size: 9px !important; }
+  .alert { padding: 6px 10px !important; font-size: 9px !important; margin: 5px 0 !important; break-inside: avoid !important; }
+  .checklist li { padding: 4px 0 !important; font-size: 9px !important; }
+  .check-box { width: 14px !important; height: 14px !important; }
+  .tl-dot { width: 24px !important; height: 24px !important; font-size: 10px !important; }
+  .tl-body { padding-bottom: 12px !important; }
+  .tl-time { font-size: 8px !important; }
+  .tl-title { font-size: 11px !important; }
+  .tl-desc { font-size: 9px !important; }
+  .parte-label { font-size: 8px !important; padding: 2px 7px !important; margin-bottom: 6px !important; }
+  footer { font-size: 8px !important; padding: 8px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+<div class="header">
+  <div class="header-badge">Guia do Técnico</div>
+  <h1><span>Quantificação de Glicose por DNS</span> — Aula 3</h1>
+  <div class="header-sub">
+    <span>Prof. Dr. Vadim Viviani</span>
+    <span>6–10 grupos</span>
+    <span>BM 95°C · Espectrofotômetro 540 nm</span>
+  </div>
+</div>
+<div class="nav-index">
+  <h3>Seções</h3>
+  <ul>
+    <li><a href="#kits">📦 Kit por grupo</a></li>
+    <li><a href="#bancada">🧪 Bancada Central</a></li>
+    <li><a href="#preparo">⚗️ Preparo de Soluções</a></li>
+    <li><a href="#quantidades">🔢 Quantidades Totais</a></li>
+    <li><a href="#teste">🧪 Teste de Aula</a></li>
+    <li><a href="#timeline">⏱️ Cronograma</a></li>
+    <li><a href="#checklist">☑️ Checklist</a></li>
+  </ul>
+</div>
+
+<!-- KIT POR GRUPO -->
+<div class="section" id="kits">
+  <div class="section-header">
+    <div class="section-icon green">📦</div>
+    <h2>Kit por Grupo</h2>
+    <span class="badge">por bancada</span>
+  </div>
+  <div class="section-body">
+    <div class="kit-grid">
+      <div class="kit-item"><span class="qty">1×</span><span>Estante para tubos de ensaio</span></div>
+      <div class="kit-item"><span class="qty">7×</span><span>Tubos de ensaio</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Proveta de 25 mL (para medir os 8 mL de H₂O após banho-maria)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Kit de cubetas (para leitura no espectrofotômetro)</span></div>
+      <div class="kit-item"><span class="qty">1 par</span><span>Luvas nitrílicas (obrigatório para o DNS)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Papel filme (para vedar os tubos durante o banho-maria)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BANCADA CENTRAL -->
+<div class="section" id="bancada">
+  <div class="section-header">
+    <div class="section-icon green">🧪</div>
+    <h2>Bancada Central — Reagentes com Pipetas Etiquetadas</h2>
+  </div>
+  <div class="section-body">
+    <div class="alert green" style="margin-bottom:12px;">
+      <span class="alert-icon">📌</span>
+      <span>Mesma lógica da Aula 2: todos os reagentes na bancada central com <strong>pipetas volumétricas etiquetadas por reagente</strong> e pêras de sucção exclusivas.</span>
+    </div>
+    <div class="kit-grid">
+      <div class="kit-item"><span class="qty">pipeta 1mL</span><span>Glicose 6 mM — etiquetada "GLICOSE 6mM"</span></div>
+      <div class="kit-item"><span class="qty">pipeta 2mL</span><span>Tampão acetato 20 mM pH 4,8 — etiquetada</span></div>
+      <div class="kit-item"><span class="qty">pipeta 2mL</span><span>Reagente DNS — etiquetada "DNS" · luvas obrigatórias</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Glicose concentração desconhecida — frasco com "?" · pipeta 1mL etiquetada</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Água destilada (112 mL por grupo via proveta de 25 mL)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Bandeja perto da pia com água para esfriar os tubos após banho-maria</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Descarte para DNS ao lado do espectrofotômetro</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Descarte para DNS perto da pia</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Espectrofotômetro 540 nm · cubetas + pisseta d'água + papel para secar</span></div>
+    </div>
+    <div class="alert danger" style="margin-top:10px;">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>DNS é cáustico e possivelmente cancerígeno.</strong> Disponibilizar luvas nitrílicas ao lado do frasco de DNS. Orientar os alunos a usar luvas ao pipetar.</span>
+    </div>
+  </div>
+</div>
+
+<!-- PREPARO DE SOLUÇÕES -->
+<div class="section" id="preparo">
+  <div class="section-header">
+    <div class="section-icon yellow">⚗️</div>
+    <h2>Preparo de Soluções</h2>
+    <span class="badge">véspera</span>
+  </div>
+  <div class="section-body">
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">1</div>
+        <h3>Glicose 6 mM — 100 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Pesar <strong>0,54 g de glicose anidra</strong> (MM = 180,16 g/mol · 0,006 M × 0,5 L × 180,16 = 0,54 g)</span></li>
+          <li><div class="step-num">2</div><span>Dissolver em <strong>tampão acetato de sódio 20 mM pH 4,8</strong> e completar para 500 mL. Refrigerar</span></li>
+          <li><div class="step-num">3</div><span><strong>Não usar água destilada</strong> — a solução padrão deve ser preparada em tampão acetato</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">2</div>
+        <h3>Tampão Acetato de Sódio 20 mM pH 4,8 — 500 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Pesar <strong>1,3608 g de acetato de sódio anidro</strong> (MM = 82,03 g/mol · 0,02 mol/L × 0,5 L × 82,03 = 0,82 g — verificar MM do reagente disponível)</span></li>
+          <li><div class="step-num">2</div><span>Dissolver em ~450 mL de água destilada</span></li>
+          <li><div class="step-num">3</div><span>Ajustar pH para <strong>4,8</strong> adicionando ácido acético glacial gota a gota com agitação e monitorando com pHmetro</span></li>
+          <li><div class="step-num">4</div><span>Completar para 500 mL. Rotular com pH e data</span></li>
+        </ul>
+        <div class="alert warning" style="margin-top:8px;">
+          <span class="alert-icon">📌</span>
+          <span>Verificar se o acetato de sódio disponível é anidro (MM = 82,03) ou tri-hidratado (MM = 136,08). A massa a pesar muda. Para 500 mL de 20 mM com tri-hidratado: <strong>1,3608 g</strong>.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">3</div>
+        <h3>Reagente DNS — 1 litro</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Misturar <strong>10 g de DNS (ácido 3,5-dinitrosalicílico)</strong> + <strong>300 g de tartarato de sódio e potássio (sal de Rochelle)</strong> em <strong>200 mL de NaOH 2M</strong></span></li>
+          <li><div class="step-num">2</div><span>Completar com água destilada até ~900 mL e <strong>dissolver em banho-maria fervente</strong>, fervendo de vez em quando — demora bastante para dissolver</span></li>
+          <li><div class="step-num">3</div><span>Após esfriar, colocar em proveta de 1 L e <strong>completar para 1 litro</strong> com água destilada</span></li>
+          <li><div class="step-num">4</div><span>A solução atinge cor de ferrugem bem viva durante o preparo — ao esfriar volta à cor amarelo-clara característica. Guardar em frasco âmbar</span></li>
+        </ul>
+        <div class="alert warning" style="margin-top:8px;">
+          <span class="alert-icon">⏱️</span>
+          <span>A dissolução demora — preparar com bastante antecedência. Não apressar aquecendo demais: a cor escura intensa durante o preparo é normal.</span>
+        </div>
+        <div class="alert danger" style="margin-top:4px;">
+          <span class="alert-icon">⚠️</span>
+          <span>DNS é cáustico e possivelmente cancerígeno. Preparar com luvas e na área ventilada.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">4</div>
+        <h3>Amostra Desconhecida (Glicose 3 mM) — 50 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Misturar <strong>25 mL da solução padrão de glicose 6 mM</strong> + <strong>25 mL de tampão acetato 20 mM pH 4,8</strong> → concentração final: <strong>3 mM</strong></span></li>
+          <li><div class="step-num">2</div><span>Disponibilizar no frasco rotulado com <strong>"?"</strong> (ponto de interrogação) — os alunos não devem saber a concentração</span></li>
+        </ul>
+        <div class="alert danger" style="margin-top:8px;">
+          <span class="alert-icon">🚫</span>
+          <span><strong>Diluir sempre em tampão acetato</strong>, nunca em água destilada — diluição em água deu resultados errados em testes anteriores.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUANTIDADES -->
+<div class="section" id="quantidades">
+  <div class="section-header">
+    <div class="section-icon blue">🔢</div>
+    <h2>Quantidades Totais</h2>
+    <span class="badge">para 10 grupos</span>
+  </div>
+  <div class="section-body">
+    <table class="calc-table">
+      <tr><th>Solução</th><th>Por grupo</th><th>10 grupos</th><th>Preparar</th></tr>
+      <tr><td>Glicose 6 mM</td><td class="mono">3 mL</td><td class="mono">30 mL</td><td class="mono">500 mL</td></tr>
+      <tr><td>Tampão acetato 20 mM pH 4,8</td><td class="mono">9 mL</td><td class="mono">90 mL</td><td class="mono">500 mL</td></tr>
+      <tr><td>Reagente DNS</td><td class="mono">7 mL (7 tubos × 1)</td><td class="mono">70 mL</td><td class="mono">1 litro (preparar tudo)</td></tr>
+      <tr><td>Água destilada (diluição final)</td><td class="mono">56 mL (7 × 8)</td><td class="mono">560 mL</td><td class="mono">~700 mL</td></tr>
+      <tr><td>Amostra desconhecida (3 mM)</td><td class="mono">0,5 mL</td><td class="mono">5 mL</td><td class="mono">50 mL</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- TESTE DE AULA -->
+<div class="section" id="teste">
+  <div class="section-header">
+    <div class="section-icon red">🧪</div>
+    <h2>Teste de Aula</h2>
+    <span class="badge">fazer antes</span>
+  </div>
+  <div class="section-body">
+    <div class="alert warning">
+      <span class="alert-icon">⚠️</span>
+      <span>Fazer apenas os tubos <strong>Br, 1, 5 e 6</strong> antes da aula. Os resultados do tubo 1 ao 5 devem ser <strong>crescentes</strong>. O tubo 6 (amostra desconhecida) deve dar valor <strong>intermediário entre os tubos 1 e 5</strong>.</span>
+    </div>
+    <table class="calc-table" style="margin-top:12px;">
+      <tr><th>Tubo</th><th>Glicose 6 mM (mL)</th><th>Tampão (mL)</th><th>DNS (mL)</th><th>A540 referência</th></tr>
+      <tr><td>Branco</td><td class="mono">—</td><td class="mono">2,0</td><td class="mono">2,0</td><td class="mono">0</td></tr>
+      <tr><td>1</td><td class="mono">0,2</td><td class="mono">1,8</td><td class="mono">2,0</td><td class="mono">~0,053</td></tr>
+      <tr><td>2</td><td class="mono">0,4</td><td class="mono">1,6</td><td class="mono">2,0</td><td class="mono">~0,128</td></tr>
+      <tr><td>3</td><td class="mono">0,6</td><td class="mono">1,4</td><td class="mono">2,0</td><td class="mono">~0,183</td></tr>
+      <tr><td>4</td><td class="mono">0,8</td><td class="mono">1,2</td><td class="mono">2,0</td><td class="mono">~0,256</td></tr>
+      <tr><td>5</td><td class="mono">1,0</td><td class="mono">1,0</td><td class="mono">2,0</td><td class="mono">~0,396</td></tr>
+      <tr><td>6 (amostra)</td><td class="mono">1,0 amostra</td><td class="mono">1,0</td><td class="mono">2,0</td><td class="mono">~0,100 (entre T1 e T5)</td></tr>
+    </table>
+    <div class="alert info" style="margin-top:10px;">
+      <span class="alert-icon">💡</span>
+      <span>Obs.: os volumes do teste de referência são os originais (2 mL DNS). Na aula com os alunos usar 1 mL DNS e 8 mL H₂O (metade). As absorbâncias serão similares pois a proporção glicose/DNS é mantida.</span>
+    </div>
+  </div>
+</div>
+
+<!-- CRONOGRAMA -->
+<div class="section" id="timeline">
+  <div class="section-header">
+    <div class="section-icon green">⏱️</div>
+    <h2>Cronograma</h2>
+    <span class="badge">~3 horas</span>
+  </div>
+  <div class="section-body">
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot green">📋</div>
+        <div class="tl-body">
+          <div class="tl-time">00:00 – 00:15</div>
+          <div class="tl-title">Introdução + distribuição</div>
+          <div class="tl-desc">Prof. Vadim explica espectrofotometria e curva padrão. Banho-maria já a 95°C (ligar 1h antes).</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot yellow">🧪</div>
+        <div class="tl-body">
+          <div class="tl-time">00:15 – 00:50</div>
+          <div class="tl-title">Pipetagem + DNS + BM</div>
+          <div class="tl-desc">Grupos pipetam 7 tubos segundo a tabela. Adicionam DNS (luvas). Banho-maria 95°C por 10 min. Esfriar em água corrente.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot blue">💧</div>
+        <div class="tl-body">
+          <div class="tl-time">00:50 – 01:10</div>
+          <div class="tl-title">Diluição e leitura</div>
+          <div class="tl-desc">Adicionar 8 mL H₂O em cada tubo. Homogeneizar. Ler A540 no espectrofotômetro contra o branco. Grupos se revezam no aparelho.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green">📊</div>
+        <div class="tl-body">
+          <div class="tl-time">01:10 – 03:00</div>
+          <div class="tl-title">Construção da curva + relatório</div>
+          <div class="tl-desc">Gráfico A540 × [glicose], cálculo do fator, quantificação da amostra. Prof. Vadim discute aplicações em Eng. Florestal.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="section-header">
+    <div class="section-icon green">☑️</div>
+    <h2>Checklist</h2>
+  </div>
+  <div class="section-body">
+    <p class="parte-label">Véspera</p>
+    <ul class="checklist" style="margin-bottom:14px;">
+      <li><div class="check-box"></div><span>Preparar glicose 6 mM (500 mL) e refrigerar — serão usados 3 mL por grupo</span></li>
+      <li><div class="check-box"></div><span>Preparar tampão acetato 20 mM pH 4,8 (500 mL) — ajustar pH com ácido acético</span></li>
+      <li><div class="check-box"></div><span>Preparar reagente DNS (1 litro) com BM fervente — demora, fazer com antecedência</span></li>
+      <li><div class="check-box"></div><span>Preparar amostra desconhecida: 25 mL glicose 6 mM + 25 mL tampão = 50 mL a 3 mM · rotular com "?"</span></li>
+      <li><div class="check-box"></div><span>Realizar teste de aula (tubos Br, 1, 5 e 6) — verificar absorbâncias crescentes e tubo 6 intermediário</span></li>
+      <li><div class="check-box"></div><span>Verificar cubetas do espectrofotômetro (limpas, sem riscos)</span></li>
+    </ul>
+    <p class="parte-label">No dia</p>
+    <ul class="checklist" style="margin-bottom:14px;">
+      <li><div class="check-box"></div><span><strong>Ligar banho-maria 1h antes</strong> — atingir 95°C leva tempo</span></li>
+      <li><div class="check-box"></div><span>Montar bancada central com pipetas etiquetadas por reagente</span></li>
+      <li><div class="check-box"></div><span>Posicionar frasco da amostra desconhecida com "?" e pipeta 1 mL etiquetada</span></li>
+      <li><div class="check-box"></div><span>Montar <strong>bandeja com água perto da pia</strong> para esfriar os tubos após banho-maria</span></li>
+      <li><div class="check-box"></div><span>Colocar <strong>dois frascos de descarte DNS</strong> — um ao lado do espectro e outro perto da pia</span></li>
+      <li><div class="check-box"></div><span>Deixar luvas nitrílicas ao lado do frasco de DNS</span></li>
+      <li><div class="check-box"></div><span>Ligar espectrofotômetro e selecionar 540 nm com 15 min de antecedência</span></li>
+      <li><div class="check-box"></div><span>Distribuir por grupo: estante + 7 tubos + proveta de 25 mL</span></li>
+    </ul>
+    <p class="parte-label">Ao final</p>
+    <ul class="checklist">
+      <li><div class="check-box"></div><span>Guardar DNS em frasco âmbar fechado (4°C)</span></li>
+      <li><div class="check-box"></div><span>Lavar cubetas com água destilada + secar com papel</span></li>
+      <li><div class="check-box"></div><span>Desligar banho-maria e espectrofotômetro</span></li>
+    </ul>
+  </div>
+</div>
+
+<footer>Lab Bioquímica · UFSCar &nbsp;|&nbsp; Prof. Dr. Vadim Viviani &nbsp;|&nbsp; Guia Técnico — Aula 3 DNS</footer>
+<script>
+  window.addEventListener('scroll', () => {
+    const pct = (document.documentElement.scrollTop / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  });
+</script>
+</body>
+</html>

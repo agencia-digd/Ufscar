@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roteiro do Aluno – Extração da Cafeína</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface2: #f7f9f8;
+    --accent: #c85a00;
+    --accent2: #e8a020;
+    --accent3: #c0392b;
+    --text: #1c1c1c;
+    --muted: #555555;
+    --border: #e8ddd5;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.7; color-scheme: light; }
+
+  header { background: var(--accent); color: white; padding: 40px 40px 32px; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%; background: rgba(255,255,255,0.05); top: -80px; right: -60px; }
+  .header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; color: #1c1c1c; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 4vw, 38px); font-weight: 400; margin-bottom: 8px; line-height: 1.2; }
+  header p { opacity: 0.88; font-size: 15px; max-width: 600px; }
+  .header-meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 8px; font-size: 13px; opacity: 0.9; }
+
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: white; background: var(--accent); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 8px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 22px; color: #ffffff; background: var(--accent); display: inline-block; padding: 6px 16px 8px; border-radius: 6px; margin-bottom: 16px; }
+  h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 20px; }
+  .card-accent-left   { border-left: 4px solid var(--accent); }
+  .card-accent-yellow { border-left: 4px solid var(--accent2); }
+  .card-accent-red    { border-left: 4px solid var(--accent3); }
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .obj-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; }
+  .obj-num { min-width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+
+  .conceito-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 14px 0; }
+  .conceito-card { border-radius: 10px; padding: 14px 12px; text-align: center; border: 1px solid var(--border); }
+  .conceito-card.ext  { background: #fff4eb; border-color: #f5c89a; }
+  .conceito-card.sep  { background: #e8f4ff; border-color: #b0d4f5; }
+  .conceito-card.pur  { background: #f0fff4; border-color: #b2dfca; }
+  .conceito-icon { font-size: 26px; margin-bottom: 6px; }
+  .conceito-card h4 { font-size: 13px; margin-bottom: 3px; }
+  .conceito-card p  { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  .parte-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .parte-badge  { background: var(--accent); color: white; font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; white-space: nowrap; }
+  .parte-title  { font-size: 17px; font-weight: 600; color: var(--text); }
+
+  .step-list { display: flex; flex-direction: column; gap: 12px; }
+  .step { display: flex; gap: 14px; }
+  .step-num { min-width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 3px; }
+  .step-body h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .step-body p  { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .step-tip  { margin-top: 8px; background: #fff8e6; border-left: 3px solid var(--accent2); padding: 6px 10px; border-radius: 4px; font-size: 13px; color: #7a5500; }
+  .step-warn { margin-top: 8px; background: #fdf2f2; border-left: 3px solid var(--accent3); padding: 6px 10px; border-radius: 4px; font-size: 13px; color: #7a1010; }
+
+  .alert { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; font-size: 14px; margin: 12px 0; }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-tip    { background: #f0faf4; border: 1px solid #b2dfca; }
+  .alert-info   { background: #f0f7ff; border: 1px solid #bdd8f5; }
+  .alert-danger { background: #fdf2f2; border: 1px solid #f5c6c6; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { background: var(--accent); color: white; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 13px; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #fdf8f4; }
+  .td-resposta  { background: #fafafa; min-height: 40px; }
+  .td-cabecalho { background: var(--surface2); font-weight: 600; font-size: 13px; }
+
+  .safety-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .safety-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--muted); line-height: 1.4; }
+  .safety-icon { font-size: 18px; flex-shrink: 0; }
+
+  .report-items { display: flex; flex-direction: column; gap: 10px; }
+  .report-item  { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--surface2); border-radius: 8px; font-size: 14px; line-height: 1.5; }
+  .report-q     { min-width: 28px; height: 28px; background: var(--accent2); color: #1c1c1c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  .nav-index { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px; margin: 24px 0 28px; }
+  .nav-index-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .nav-index-list  { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .nav-index-list li { display: flex; align-items: center; gap: 8px; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .nav-index-list a { color: var(--accent); font-size: 14px; text-decoration: none; font-weight: 500; }
+
+  /* Funil separação */
+  .funil-wrap { display: flex; justify-content: center; margin: 16px 0; }
+
+  footer { text-align: center; padding: 28px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { margin: 15mm; size: A4 portrait; }
+    .nav-index { display: none !important; }
+    body   { font-size: 10px !important; line-height: 1.35 !important; }
+    main   { padding: 8px 0 !important; max-width: 100% !important; }
+    header { padding: 16px 20px !important; }
+    header h1 { font-size: 19px !important; }
+    header p  { font-size: 10px !important; }
+    .header-badge { font-size: 8px !important; padding: 2px 8px !important; margin-bottom: 6px !important; }
+    .header-meta  { margin-top: 8px !important; gap: 12px !important; }
+    .meta-item    { font-size: 9px !important; }
+    .section-label { font-size: 8px !important; padding: 2px 7px !important; margin-bottom: 4px !important; break-after: avoid !important; }
+    h2 { font-size: 13px !important; padding: 3px 10px 4px !important; margin-bottom: 6px !important; break-after: avoid !important; }
+    h3 { font-size: 11px !important; margin-bottom: 3px !important; break-after: avoid !important; }
+    h4 { font-size: 10px !important; break-after: avoid !important; }
+    .card  { padding: 8px 12px !important; margin-bottom: 7px !important; break-inside: avoid !important; }
+    .divider { margin: 4px 0 !important; }
+    .conceito-grid { gap: 5px !important; margin: 5px 0 !important; }
+    .conceito-card { padding: 7px !important; }
+    .conceito-icon { font-size: 16px !important; margin-bottom: 2px !important; }
+    .conceito-card h4 { font-size: 9px !important; }
+    .conceito-card p  { font-size: 8px !important; }
+    .parte-header { margin-bottom: 5px !important; }
+    .parte-badge  { font-size: 8px !important; padding: 2px 8px !important; }
+    .parte-title  { font-size: 11px !important; }
+    .step-list { gap: 5px !important; }
+    .step      { gap: 8px !important; }
+    .step-num  { min-width: 20px !important; height: 20px !important; font-size: 9px !important; }
+    .step-body p  { font-size: 9px !important; }
+    .step-body h4 { font-size: 10px !important; }
+    .step-tip, .step-warn { font-size: 8px !important; padding: 3px 7px !important; margin-top: 3px !important; }
+    .alert { padding: 4px 8px !important; font-size: 9px !important; margin: 4px 0 !important; break-inside: avoid !important; }
+    table  { font-size: 9px !important; break-inside: avoid !important; }
+    th, td { padding: 4px 8px !important; font-size: 9px !important; }
+    .td-resposta { min-height: 22px !important; }
+    .safety-grid { gap: 5px !important; }
+    .safety-item { font-size: 9px !important; }
+    .report-items { gap: 4px !important; }
+    .report-item  { padding: 5px 9px !important; font-size: 9px !important; break-inside: avoid !important; }
+    .report-q     { min-width: 18px !important; height: 18px !important; font-size: 8px !important; }
+    .obj-list li  { font-size: 10px !important; gap: 6px !important; }
+    .obj-num      { min-width: 20px !important; height: 20px !important; font-size: 9px !important; }
+    footer { font-size: 8px !important; padding: 6px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Aula 3 · Marystela · Eng. Florestal</div>
+  <h1>Extração da Cafeína do Chá Preto</h1>
+  <p>Isolamento de um produto natural por extração líquido-líquido com clorofórmio, seguida de purificação por recristalização.</p>
+  <div class="header-meta">
+    <div class="meta-item">⏱️ ~3 horas</div>
+    <div class="meta-item">👥 Grupos de 4</div>
+    <div class="meta-item">⚗️ Funil de separação</div>
+    <div class="meta-item">🚫 Proibido chamas abertas</div>
+  </div>
+</header>
+
+<main>
+
+  <div class="nav-index">
+    <div class="nav-index-title">Nesta aula</div>
+    <ul class="nav-index-list">
+      <li><span class="nav-dot"></span><a href="#intro">Introdução — cafeína e extração por solventes</a></li>
+      <li><span class="nav-dot"></span><a href="#procedimento">Procedimento experimental — 11 passos</a></li>
+      <li><span class="nav-dot"></span><a href="#visual">Guia Visual — funil de separação e fases</a></li>
+      <li><span class="nav-dot"></span><a href="#rendimento">Cálculo de rendimento</a></li>
+      <li><span class="nav-dot"></span><a href="#seguranca">Segurança</a></li>
+      <li><span class="nav-dot"></span><a href="#relatorio">Relatório e Questões</a></li>
+    </ul>
+  </div>
+
+  <!-- OBJETIVOS -->
+  <div class="section-label">Objetivos</div>
+  <h2>O que você vai aprender</h2>
+  <div class="card card-accent-left">
+    <ul class="obj-list">
+      <li><div class="obj-num">1</div><span>Compreender o princípio da <strong>extração líquido-líquido</strong> com funil de separação</span></li>
+      <li><div class="obj-num">2</div><span>Isolar a <strong>cafeína</strong> de um produto natural (chá preto) usando clorofórmio como solvente extrator</span></li>
+      <li><div class="obj-num">3</div><span>Usar NaOH para converter taninos em sais <strong>insolúveis no solvente orgânico</strong>, limpando o extrato</span></li>
+      <li><div class="obj-num">4</div><span>Purificar a cafeína bruta por <strong>recristalização</strong> com 2-propanol/hexano e calcular o rendimento</span></li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- INTRODUÇÃO -->
+  <div id="intro" class="section-label">Introdução</div>
+  <h2>Cafeína e Extração por Solventes</h2>
+
+  <div class="card card-accent-left">
+    <p style="font-size:15px; margin-bottom:14px;">A <strong>cafeína</strong> (1,3,7-trimetilxantina, C₈H₁₀N₄O₂) é o alcaloide mais consumido no mundo. O chá preto contém 2–4% de cafeína em massa seca, mas também taninos, clorofilas e outros pigmentos que precisam ser removidos durante o isolamento.</p>
+
+    <div class="conceito-grid">
+      <div class="conceito-card ext">
+        <div class="conceito-icon">🫙</div>
+        <h4>Extração</h4>
+        <p>Cafeína passa da fase aquosa (chá) para a fase orgânica (CHCl₃) por diferença de solubilidade</p>
+      </div>
+      <div class="conceito-card sep">
+        <div class="conceito-icon">⚗️</div>
+        <h4>Separação de fases</h4>
+        <p>CHCl₃ (d = 1,48 g/mL) é mais denso que água → fica embaixo no funil de separação</p>
+      </div>
+      <div class="conceito-card pur">
+        <div class="conceito-icon">🧊</div>
+        <h4>Purificação</h4>
+        <p>Recristalização com 2-propanol/hexano remove impurezas residuais e clorofila</p>
+      </div>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:10px;">
+      <span class="alert-icon">🧪</span>
+      <span><strong>Por que NaOH?</strong> Os taninos são ácidos (grupos fenólicos). O NaOH 6M converte os taninos em seus sais de sódio, que são insolúveis em clorofórmio — assim apenas a cafeína (base neutra) migra para a fase orgânica.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PROCEDIMENTO -->
+  <div id="procedimento" class="section-label">Procedimento</div>
+  <h2>Extração da Cafeína — 11 Passos</h2>
+
+  <div class="alert alert-danger">
+    <span class="alert-icon">🚫</span>
+    <span><strong>Proibido uso de chamas abertas (bico de Bunsen) durante toda a prática.</strong> Clorofórmio e 2-propanol são inflamáveis. Use exclusivamente placa de aquecimento e trabalhe na capela.</span>
+  </div>
+
+  <!-- ETAPA 1: EXTRAÇÃO DO CHÁ -->
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Etapa 1</span>
+      <span class="parte-title">Preparo do Extrato de Chá</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Infusão do chá</h4>
+          <p>Em um béquer de 250 mL, adicione <strong>100 mL de água destilada quente (97–98°C)</strong>. Mergulhe <strong>3 saquinhos de chá preto</strong> por exatamente <strong>1 minuto</strong>.</p>
+          <div class="step-warn">⏱️ O tempo de 1 minuto deve ser rigorosamente respeitado — extrações mais longas aumentam a contaminação por taninos.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Remover os saquinhos</h4>
+          <p>Retire os saquinhos e prense-os entre <strong>2 vidros de relógio</strong> para recuperar o máximo de líquido. Descarte os saquinhos. Adicione o excesso de chá à solução.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Resfriar em banho de gelo</h4>
+          <p>Resfrie a solução de chá em banho de gelo até atingir <strong>temperatura ambiente</strong> antes de transferir ao funil.</p>
+          <div class="step-tip">❄️ Não transfira a solução quente para o funil de separação — o vapor de clorofórmio pode causar pressão excessiva.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ETAPA 2: EXTRAÇÃO COM CHCl3 -->
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Etapa 2</span>
+      <span class="parte-title">Extração com Clorofórmio (3×)</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Extrair com clorofórmio</h4>
+          <p>Transfira a solução de chá para o funil de separação. Extraia com <strong>3 porções de 20 mL de clorofórmio</strong>, uma de cada vez. A cada porção: adicione, agite cuidadosamente, deixe separar as fases, colete a fase inferior (CHCl₃, mais densa) em béquer separado.</p>
+          <div class="step-tip">💡 Agite suavemente no início para evitar emulsão. Após cada extração, colete a fase de CHCl₃ <strong>pela torneira inferior</strong>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Quebrar emulsões (se necessário)</h4>
+          <p>Se formar emulsão, agite a interface com um bastão de vidro ou adicione alguns mL de <strong>solução saturada de NaCl</strong> e aguarde 4–5 minutos em repouso.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ETAPA 3: LAVAGEM COM NaOH -->
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Etapa 3</span>
+      <span class="parte-title">Lavagem do Extrato Orgânico</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h4>Combinar e lavar com NaOH</h4>
+          <p>Combine os 3 extratos orgânicos no funil de separação. Lave <strong>2 vezes com 20 mL de NaOH 6 mol·L⁻¹</strong>. Descarte a fase aquosa básica (superior). Esta etapa remove taninos e pigmentos ácidos.</p>
+          <div class="step-warn">⚠️ NaOH 6M é fortemente corrosivo. Use luvas. Ao agitar o funil com base, abra a torneira periodicamente para aliviar pressão.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <h4>Lavar com água destilada</h4>
+          <p>Após as lavagens com NaOH, lave o extrato orgânico com <strong>20 mL de água destilada fria</strong>. Descarte a fase aquosa.</p>
+          <div class="step-tip">💧 Esta lavagem remove traços de NaOH que poderiam interferir na secagem.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ETAPA 4: SECAGEM E EVAPORAÇÃO -->
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Etapa 4</span>
+      <span class="parte-title">Secagem e Evaporação do Solvente</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">8</div>
+        <div class="step-body">
+          <h4>Secar com Na₂SO₄ anidro</h4>
+          <p>Transfira a camada de clorofórmio para um béquer. Adicione <strong>Na₂SO₄ anidro</strong> (agente secante) em porções, com agitação, até que o pó pare de agregar. Decante o líquido para outro béquer, deixando o Na₂SO₄ para trás.</p>
+          <div class="step-tip">🧂 O Na₂SO₄ anidro absorve água residual da fase orgânica. Adicione até que fique solto no fundo — sinal de que toda a água foi absorvida.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">9</div>
+        <div class="step-body">
+          <h4>Evaporar o clorofórmio (na capela)</h4>
+          <p>Na <strong>capela com exaustão ligada</strong>, evapore o clorofórmio em placa de aquecimento até restar <strong>~3 mL</strong> de solução concentrada.</p>
+          <div class="step-warn">☣️ Clorofórmio é tóxico. Evapore exclusivamente na capela. Nunca ao ar livre da bancada.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ETAPA 5: PURIFICAÇÃO -->
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Etapa 5</span>
+      <span class="parte-title">Transferência e Purificação</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">10</div>
+        <div class="step-body">
+          <h4>Transferir para vidro pequeno</h4>
+          <p>Usando o mínimo de clorofórmio e um <strong>conta-gotas</strong>, transfira a cafeína bruta concentrada para um frasco pequeno. Evapore completamente na chapa de aquecimento (na capela) até a formação de cristais.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">11</div>
+        <div class="step-body">
+          <h4>Purificar por recristalização</h4>
+          <p>Dissolva os cristais brutos em <strong>2-propanol quente</strong> (mínimo necessário). Adicione <strong>hexano</strong> para acelerar a precipitação dos cristais puros. Filtre, seque e pese. <strong>O ponto de fusão será determinado na próxima aula.</strong></p>
+          <div class="step-tip">🧊 O hexano é antisolvatante: reduz a solubilidade da cafeína no 2-propanol, forçando a cristalização.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA DE REGISTRO -->
+  <div class="card card-accent-yellow">
+    <h3 style="margin-bottom:12px;">📋 Tabela de Resultados</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Parâmetro</th><th>Valor</th></tr>
+        <tr><td>Massa total de chá seco utilizado (g)</td><td class="td-resposta"></td></tr>
+        <tr><td>Volume total de CHCl₃ usado nas extrações (mL)</td><td class="td-resposta"></td></tr>
+        <tr><td>Aspecto do extrato orgânico após lavagem</td><td class="td-resposta"></td></tr>
+        <tr><td>Massa de cafeína bruta obtida (g)</td><td class="td-resposta"></td></tr>
+        <tr><td>Massa de cafeína purificada (g)</td><td class="td-resposta"></td></tr>
+        <tr><td>% de rendimento da extração</td><td class="td-resposta"></td></tr>
+        <tr><td>Aspecto dos cristais finais</td><td class="td-resposta"></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- GUIA VISUAL -->
+  <div id="visual" class="section-label" style="break-before: page;">Guia Visual</div>
+  <h2>Funil de Separação — Fases e Extração</h2>
+
+  <div class="card" style="padding:24px;">
+
+    <svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:560px; display:block; margin:0 auto 14px;">
+
+      <!-- ===== FUNIL 1: CHLOFORM + CHÁ ===== -->
+      <g transform="translate(10,10)">
+        <text x="65" y="14" text-anchor="middle" font-size="11" fill="#c85a00" font-family="sans-serif" font-weight="bold">① Adicionar CHCl₃</text>
+        <!-- corpo funil -->
+        <polygon points="65,170 20,170 35,50 95,50 110,170" fill="none" stroke="#888" stroke-width="1.5"/>
+        <!-- tampa -->
+        <rect x="35" y="38" width="60" height="14" rx="4" fill="#ddd" stroke="#888" stroke-width="1"/>
+        <!-- torneira -->
+        <rect x="55" y="170" width="20" height="10" rx="3" fill="#888"/>
+        <rect x="62" y="180" width="6" height="12" rx="2" fill="#aaa"/>
+        <!-- fase aquosa (chá - castanho) superior -->
+        <polygon points="65,130 25,130 35,50 95,50 105,130" fill="#c8960a" opacity="0.35"/>
+        <!-- fase CHCl3 (incolor) inferior -->
+        <polygon points="65,165 22,165 25,130 105,130 108,165" fill="#a8e4f0" opacity="0.55"/>
+        <!-- seta separação -->
+        <line x1="115" y1="115" x2="130" y2="115" stroke="#888" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="118" y="110" font-size="8" fill="#555" font-family="sans-serif">fase aquosa</text>
+        <line x1="115" y1="148" x2="130" y2="148" stroke="#888" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="118" y="160" font-size="8" fill="#1a6fa0" font-family="sans-serif">CHCl₃</text>
+        <text x="118" y="170" font-size="8" fill="#1a6fa0" font-family="sans-serif">(cafeína)</text>
+        <!-- label fases -->
+        <text x="65" y="105" text-anchor="middle" font-size="8" fill="#7a5500" font-family="sans-serif">chá + taninos</text>
+        <text x="65" y="155" text-anchor="middle" font-size="8" fill="#1a6fa0" font-family="sans-serif">CHCl₃ + cafeína</text>
+        <text x="65" y="200" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">CHCl₃ fica embaixo</text>
+        <text x="65" y="212" text-anchor="middle" font-size="8.5" fill="#c85a00" font-family="sans-serif">d = 1,48 g/mL</text>
+      </g>
+
+      <!-- SETA -->
+      <text x="183" y="120" text-anchor="middle" font-size="18" fill="#c85a00" font-family="sans-serif">→</text>
+
+      <!-- ===== FUNIL 2: LAVAGEM COM NaOH ===== -->
+      <g transform="translate(195,10)">
+        <text x="65" y="14" text-anchor="middle" font-size="11" fill="#c85a00" font-family="sans-serif" font-weight="bold">② Lavar com NaOH</text>
+        <polygon points="65,170 20,170 35,50 95,50 110,170" fill="none" stroke="#888" stroke-width="1.5"/>
+        <rect x="35" y="38" width="60" height="14" rx="4" fill="#ddd" stroke="#888" stroke-width="1"/>
+        <rect x="55" y="170" width="20" height="10" rx="3" fill="#888"/>
+        <rect x="62" y="180" width="6" height="12" rx="2" fill="#aaa"/>
+        <!-- NaOH aquoso (superior - verde limão) -->
+        <polygon points="65,125 25,125 35,50 95,50 105,125" fill="#d0f0b0" opacity="0.6"/>
+        <!-- CHCl3 com cafeína (inferior - mais claro agora) -->
+        <polygon points="65,165 22,165 25,125 105,125 108,165" fill="#d0f0ff" opacity="0.65"/>
+        <text x="65" y="100" text-anchor="middle" font-size="8" fill="#2a7a00" font-family="sans-serif">NaOH + taninos</text>
+        <text x="65" y="112" text-anchor="middle" font-size="7.5" fill="#2a7a00" font-family="sans-serif">(descartar)</text>
+        <text x="65" y="150" text-anchor="middle" font-size="8" fill="#1a6fa0" font-family="sans-serif">CHCl₃ + cafeína</text>
+        <text x="65" y="162" text-anchor="middle" font-size="7.5" fill="#1a6fa0" font-family="sans-serif">(guardar)</text>
+        <text x="65" y="200" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">2× NaOH 6M</text>
+        <text x="65" y="212" text-anchor="middle" font-size="8.5" fill="#2a7a00" font-family="sans-serif">remove taninos</text>
+      </g>
+
+      <!-- SETA -->
+      <text x="368" y="120" text-anchor="middle" font-size="18" fill="#c85a00" font-family="sans-serif">→</text>
+
+      <!-- ===== BÉQUER: EVAPORAÇÃO + CRISTAIS ===== -->
+      <g transform="translate(378,30)">
+        <text x="80" y="14" text-anchor="middle" font-size="11" fill="#c85a00" font-family="sans-serif" font-weight="bold">③ Secar → Evaporar</text>
+        <!-- béquer -->
+        <rect x="30" y="28" width="100" height="80" rx="6" fill="#f8f8f8" stroke="#888" stroke-width="1.5"/>
+        <!-- líquido residual -->
+        <rect x="31" y="78" width="98" height="28" rx="4" fill="#d0f0ff" opacity="0.6"/>
+        <!-- cristais no fundo -->
+        <polygon points="70,100 64,92 76,92" fill="#ffffff" stroke="#c85a00" stroke-width="1"/>
+        <polygon points="80,103 74,95 86,95" fill="#ffffff" stroke="#c85a00" stroke-width="1"/>
+        <polygon points="90,100 84,92 96,92" fill="#ffffff" stroke="#c85a00" stroke-width="1"/>
+        <!-- Na2SO4 -->
+        <ellipse cx="80" cy="105" rx="35" ry="5" fill="#e8e8e8" opacity="0.8"/>
+        <text x="80" y="128" text-anchor="middle" font-size="8.5" fill="#555" font-family="sans-serif">Na₂SO₄ anidro (secar)</text>
+        <text x="80" y="140" text-anchor="middle" font-size="8.5" fill="#c85a00" font-family="sans-serif">evaporar CHCl₃ na capela</text>
+        <!-- placa -->
+        <rect x="20" y="108" width="120" height="8" rx="3" fill="#888"/>
+
+        <!-- cristais finais -->
+        <text x="80" y="165" text-anchor="middle" font-size="10" fill="#2a8a2a" font-family="sans-serif" font-weight="bold">→ Cristais de cafeína</text>
+        <text x="80" y="178" text-anchor="middle" font-size="8.5" fill="#555" font-family="sans-serif">branca · PF ~235°C</text>
+        <text x="80" y="190" text-anchor="middle" font-size="8.5" fill="#555" font-family="sans-serif">purificar: 2-propanol + hexano</text>
+      </g>
+
+      <!-- FÓRMULA RENDIMENTO (linha inferior) -->
+      <g transform="translate(10,238)">
+        <rect x="0" y="0" width="540" height="48" rx="10" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <text x="270" y="18" text-anchor="middle" font-size="11" fill="#c85a00" font-family="sans-serif" font-weight="bold">Cálculo do Rendimento</text>
+        <text x="270" y="35" text-anchor="middle" font-size="11" fill="#555" font-family="sans-serif">% (m) = [m(cafeína extraída) / m(chá seco)] × 100%</text>
+      </g>
+
+    </svg>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:4px;">
+      <div style="background:#fdf2f2; border-left:3px solid #c0392b; border-radius:6px; padding:8px 10px; font-size:12px;">
+        🚫 <strong>Sem chamas.</strong> CHCl₃ e 2-propanol inflamáveis
+      </div>
+      <div style="background:#fff8e6; border-left:3px solid #e8a020; border-radius:6px; padding:8px 10px; font-size:12px;">
+        ⏱️ <strong>1 minuto exato</strong> de infusão do chá
+      </div>
+      <div style="background:#e8f4ff; border-left:3px solid #4488cc; border-radius:6px; padding:8px 10px; font-size:12px;">
+        ⬇️ <strong>CHCl₃ fica embaixo</strong> — d = 1,48 g/mL
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RENDIMENTO -->
+  <div id="rendimento" class="section-label">Cálculo</div>
+  <h2>Rendimento da Extração</h2>
+
+  <div class="card card-accent-left">
+    <h3 style="margin-bottom:10px;">Fórmula</h3>
+    <div style="background:#f7f9f8; border-radius:10px; padding:16px 20px; text-align:center; font-size:18px; font-family:monospace; margin-bottom:14px; border:1px solid var(--border);">
+      % (m) = [m<sub>cafeína extraída</sub> / m<sub>chá seco</sub>] × 100%
+    </div>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Parâmetro</th><th>Valor típico de referência</th>
+        </tr>
+        <tr><td>% cafeína no chá preto</td><td>2–4% em massa seca</td></tr>
+        <tr><td>Massa de chá por saquinho (~)</td><td>2–3 g → 3 saquinhos ≈ 6–9 g</td></tr>
+        <tr><td>Rendimento esperado</td><td>30–60 mg de cafeína purificada</td></tr>
+        <tr><td>Ponto de fusão teórico</td><td>235–238 °C</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SEGURANÇA -->
+  <div id="seguranca" class="section-label">Segurança</div>
+  <h2>Normas do Laboratório</h2>
+
+  <div class="card">
+    <div class="safety-grid">
+      <div class="safety-item"><span class="safety-icon">🚫</span><span><strong>Proibido chamas abertas</strong> durante toda a prática — clorofórmio e 2-propanol são inflamáveis</span></div>
+      <div class="safety-item"><span class="safety-icon">☣️</span><span><strong>Clorofórmio é tóxico e suspeito carcinogênico</strong> — use apenas na capela, com luvas e óculos</span></div>
+      <div class="safety-item"><span class="safety-icon">🧤</span><span>Luvas nitrílicas obrigatórias ao manusear CHCl₃, NaOH e solventes orgânicos</span></div>
+      <div class="safety-item"><span class="safety-icon">⚗️</span><span>Ao agitar funil com base, <strong>abra a torneira periodicamente</strong> para aliviar pressão interna</span></div>
+      <div class="safety-item"><span class="safety-icon">🌬️</span><span>Evaporação do clorofórmio: <strong>obrigatoriamente na capela</strong> com exaustão ligada</span></div>
+      <div class="safety-item"><span class="safety-icon">👟</span><span>Calçado fechado e avental obrigatórios em toda a aula</span></div>
+    </div>
+    <div class="alert alert-danger" style="margin-top:14px; margin-bottom:0;">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>NaOH 6 mol·L⁻¹ é fortemente corrosivo.</strong> Em caso de contato com pele ou olhos: lavar imediatamente com água corrente por 15 minutos. Use o frasco lava-olhos se necessário.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RELATÓRIO -->
+  <div id="relatorio" class="section-label">Relatório</div>
+  <h2>Questões para o Relatório</h2>
+
+  <div class="report-items">
+    <div class="report-item">
+      <div class="report-q">1</div>
+      <span>Se houver duas fases no funil de separação (uma aquosa, uma orgânica) e você não souber a densidade da fase orgânica, como identificar qual é a aquosa? Explique o procedimento.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">2</div>
+      <span>Qual a função do Na₂SO₄ anidro neste experimento? Por que é necessário secar a fase orgânica antes da evaporação?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">3</div>
+      <span>Descreva os princípios e conceitos básicos da extração por solventes. O que determina a distribuição de um soluto entre duas fases imiscíveis?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">4</div>
+      <span>Qual a densidade do clorofórmio? Por que ele foi escolhido para extrair a cafeína? No funil de separação, a cafeína estará na fase superior ou inferior? Justifique.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">5</div>
+      <span>Qual o ponto de fusão teórico da cafeína? Compare com o valor obtido na próxima aula e discuta o que a diferença (se houver) indica sobre a pureza do produto.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">6</div>
+      <span>Por que o tempo de 1 minuto de infusão do chá deve ser rigorosamente respeitado? O que ocorre se o tempo for maior?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">7</div>
+      <span>Calcule o rendimento da extração usando: % (m) = [m(cafeína extraída) / m(chá)] × 100%. Apresente os dados em tabela e discuta os resultados.</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Lab Química Orgânica · UFSCar &nbsp;|&nbsp; Prof. Marystela Ferreira &nbsp;|&nbsp; Aula 3 — Extração da Cafeína
+</footer>
+
+</body>
+</html>

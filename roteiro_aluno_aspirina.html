@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roteiro do Aluno – Síntese da Aspirina</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --surface: #ffffff; --surface2: #f7f9f8;
+    --accent: #c85a00; --accent2: #e8a020; --accent3: #c0392b;
+    --text: #1c1c1c; --muted: #555555; --border: #e8ddd5; --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.7; color-scheme: light; }
+
+  header { background: var(--accent); color: white; padding: 40px 40px 32px; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%; background: rgba(255,255,255,0.05); top: -80px; right: -60px; }
+  .header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; color: #1c1c1c; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(22px, 4vw, 36px); font-weight: 400; margin-bottom: 8px; line-height: 1.2; }
+  header p { opacity: 0.88; font-size: 15px; max-width: 600px; }
+  .header-meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 8px; font-size: 13px; opacity: 0.9; }
+
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: white; background: var(--accent); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 8px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 22px; color: #ffffff; background: var(--accent); display: inline-block; padding: 6px 16px 8px; border-radius: 6px; margin-bottom: 16px; }
+  h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 20px; }
+  .card-accent-left   { border-left: 4px solid var(--accent); }
+  .card-accent-yellow { border-left: 4px solid var(--accent2); }
+  .card-accent-red    { border-left: 4px solid var(--accent3); }
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .obj-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; }
+  .obj-num { min-width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+
+  .reacao-box { background: #fff8f0; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px 20px; margin: 14px 0; text-align: center; }
+  .reacao-box p { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+  .parte-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .parte-badge  { background: var(--accent); color: white; font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; white-space: nowrap; }
+  .parte-title  { font-size: 17px; font-weight: 600; color: var(--text); }
+
+  .step-list { display: flex; flex-direction: column; gap: 12px; }
+  .step { display: flex; gap: 14px; }
+  .step-num { min-width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 3px; }
+  .step-body h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .step-body p  { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .step-tip  { margin-top: 8px; background: #fff8e6; border-left: 3px solid var(--accent2); padding: 6px 10px; border-radius: 4px; font-size: 13px; color: #7a5500; }
+  .step-warn { margin-top: 8px; background: #fdf2f2; border-left: 3px solid var(--accent3); padding: 6px 10px; border-radius: 4px; font-size: 13px; color: #7a1010; }
+
+  .alert { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; font-size: 14px; margin: 12px 0; }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-tip    { background: #f0faf4; border: 1px solid #b2dfca; }
+  .alert-info   { background: #f0f7ff; border: 1px solid #bdd8f5; }
+  .alert-danger { background: #fdf2f2; border: 1px solid #f5c6c6; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { background: var(--accent); color: white; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 13px; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #fdf8f4; }
+  .td-resposta  { background: #fafafa; min-height: 40px; }
+  .td-cabecalho { background: var(--surface2); font-weight: 600; font-size: 13px; }
+  .td-ref { background: #f0fff4; font-size: 12px; color: #2a7a00; font-weight: 600; }
+
+  .teste-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 12px 0; }
+  .teste-card { border-radius: 10px; padding: 14px 12px; text-align: center; border: 1px solid var(--border); }
+  .teste-card.t1 { background: #fff4eb; border-color: #f5c89a; }
+  .teste-card.t2 { background: #f0f7ff; border-color: #bdd8f5; }
+  .teste-card.t3 { background: #f7f7f7; border-color: #ddd; }
+  .teste-icon { font-size: 24px; margin-bottom: 6px; }
+  .teste-card h4 { font-size: 13px; margin-bottom: 3px; }
+  .teste-card p  { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  .formula-box { background: var(--surface2); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 16px 20px; margin: 14px 0; text-align: center; font-size: 16px; font-family: monospace; }
+  .formula-box .label { font-family: 'DM Sans', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; font-weight: 700; text-align: left; }
+
+  .safety-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .safety-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--muted); line-height: 1.4; }
+  .safety-icon { font-size: 18px; flex-shrink: 0; }
+
+  .report-items { display: flex; flex-direction: column; gap: 10px; }
+  .report-item  { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--surface2); border-radius: 8px; font-size: 14px; line-height: 1.5; }
+  .report-q     { min-width: 28px; height: 28px; background: var(--accent2); color: #1c1c1c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  .nav-index { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px; margin: 24px 0 28px; }
+  .nav-index-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .nav-index-list  { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .nav-index-list li { display: flex; align-items: center; gap: 8px; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .nav-index-list a { color: var(--accent); font-size: 14px; text-decoration: none; font-weight: 500; }
+
+  footer { text-align: center; padding: 28px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { margin: 15mm; size: A4 portrait; }
+    .nav-index { display: none !important; }
+    body { font-size: 10px !important; line-height: 1.35 !important; }
+    main { padding: 8px 0 !important; max-width: 100% !important; }
+    header { padding: 16px 20px !important; }
+    header h1 { font-size: 18px !important; }
+    header p { font-size: 10px !important; }
+    .header-badge { font-size: 8px !important; padding: 2px 8px !important; margin-bottom: 6px !important; }
+    .header-meta { margin-top: 8px !important; gap: 12px !important; }
+    .meta-item { font-size: 9px !important; }
+    .section-label { font-size: 8px !important; padding: 2px 7px !important; margin-bottom: 4px !important; break-after: avoid !important; }
+    h2 { font-size: 13px !important; padding: 3px 10px 4px !important; margin-bottom: 6px !important; break-after: avoid !important; }
+    h3 { font-size: 11px !important; break-after: avoid !important; }
+    h4 { font-size: 10px !important; break-after: avoid !important; }
+    .card { padding: 8px 12px !important; margin-bottom: 7px !important; break-inside: avoid !important; }
+    .divider { margin: 4px 0 !important; }
+    .reacao-box { padding: 8px 12px !important; margin: 5px 0 !important; }
+    .reacao-box p { font-size: 8px !important; }
+    .parte-header { margin-bottom: 5px !important; }
+    .parte-badge { font-size: 8px !important; padding: 2px 8px !important; }
+    .parte-title { font-size: 11px !important; }
+    .step-list { gap: 5px !important; }
+    .step { gap: 8px !important; }
+    .step-num { min-width: 20px !important; height: 20px !important; font-size: 9px !important; }
+    .step-body p { font-size: 9px !important; }
+    .step-body h4 { font-size: 10px !important; }
+    .step-tip, .step-warn { font-size: 8px !important; padding: 3px 7px !important; margin-top: 3px !important; }
+    .alert { padding: 4px 8px !important; font-size: 9px !important; margin: 4px 0 !important; break-inside: avoid !important; }
+    table { font-size: 9px !important; break-inside: avoid !important; }
+    th, td { padding: 4px 8px !important; font-size: 9px !important; }
+    .td-resposta { min-height: 22px !important; }
+    .teste-grid { gap: 5px !important; }
+    .teste-card { padding: 7px !important; }
+    .teste-icon { font-size: 16px !important; }
+    .teste-card h4 { font-size: 9px !important; }
+    .teste-card p { font-size: 8px !important; }
+    .formula-box { padding: 8px 12px !important; font-size: 12px !important; margin: 5px 0 !important; }
+    .formula-box .label { font-size: 8px !important; }
+    .safety-grid { gap: 5px !important; }
+    .safety-item { font-size: 9px !important; }
+    .report-items { gap: 4px !important; }
+    .report-item { padding: 5px 9px !important; font-size: 9px !important; break-inside: avoid !important; }
+    .report-q { min-width: 18px !important; height: 18px !important; font-size: 8px !important; }
+    footer { font-size: 8px !important; padding: 6px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Aula 5 · Marystela · Eng. Florestal</div>
+  <h1>Síntese da Aspirina</h1>
+  <p>Síntese do ácido acetilsalicílico por esterificação do ácido salicílico com anidrido acético, seguida de purificação e determinação do ponto de fusão.</p>
+  <div class="header-meta">
+    <div class="meta-item">⏱️ ~3 horas</div>
+    <div class="meta-item">👥 Grupos de 4</div>
+    <div class="meta-item">⚗️ Síntese + Purificação + PF</div>
+    <div class="meta-item">⚠️ H₂SO₄ concentrado</div>
+  </div>
+</header>
+
+<main>
+
+  <div class="nav-index">
+    <div class="nav-index-title">Nesta aula</div>
+    <ul class="nav-index-list">
+      <li><span class="nav-dot"></span><a href="#intro">Introdução — reação de esterificação</a></li>
+      <li><span class="nav-dot"></span><a href="#sintese">Parte I — Síntese do ácido acetilsalicílico</a></li>
+      <li><span class="nav-dot"></span><a href="#pureza">Parte II — Teste de pureza com FeCl₃</a></li>
+      <li><span class="nav-dot"></span><a href="#purificacao">Parte III — Purificação (recristalização)</a></li>
+      <li><span class="nav-dot"></span><a href="#visual">Guia Visual — fluxo completo</a></li>
+      <li><span class="nav-dot"></span><a href="#rendimento">Cálculo de rendimento</a></li>
+      <li><span class="nav-dot"></span><a href="#seguranca">Segurança</a></li>
+      <li><span class="nav-dot"></span><a href="#relatorio">Pré-relatório e Questões</a></li>
+    </ul>
+  </div>
+
+  <!-- OBJETIVOS -->
+  <div class="section-label">Objetivos</div>
+  <h2>O que você vai aprender</h2>
+  <div class="card card-accent-left">
+    <ul class="obj-list">
+      <li><div class="obj-num">1</div><span>Realizar uma <strong>síntese orgânica</strong> clássica: acetilação do ácido salicílico com anidrido acético catalisada por H₂SO₄</span></li>
+      <li><div class="obj-num">2</div><span>Compreender a <strong>reação de esterificação</strong> (fenol + ácido orgânico → éster)</span></li>
+      <li><div class="obj-num">3</div><span>Testar a pureza do produto com <strong>cloreto férrico</strong> (detecção de ácido salicílico residual)</span></li>
+      <li><div class="obj-num">4</div><span>Purificar a aspirina bruta por recristalização com etanol/água e calcular o <strong>rendimento</strong></span></li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- INTRODUÇÃO -->
+  <div id="intro" class="section-label">Introdução</div>
+  <h2>A Reação de Síntese</h2>
+
+  <div class="card card-accent-left">
+    <p style="font-size:15px; margin-bottom:14px;">A aspirina é obtida pela <strong>acetilação</strong> do grupo hidroxila (–OH) do ácido salicílico pelo anidrido acético, em presença de H₂SO₄ concentrado como catalisador. O produto é um <strong>éster</strong> (ácido acetilsalicílico) e como subproduto forma-se ácido acético.</p>
+
+    <div class="reacao-box">
+      <svg viewBox="0 0 520 80" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:520px; display:block; margin:0 auto;">
+        <!-- Ácido salicílico (texto) -->
+        <rect x="5" y="15" width="110" height="50" rx="6" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <text x="60" y="33" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Ác. Salicílico</text>
+        <text x="60" y="46" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">C₇H₆O₃</text>
+        <text x="60" y="59" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">MM = 138,1 g/mol</text>
+        <!-- + -->
+        <text x="127" y="45" text-anchor="middle" font-size="16" fill="#555" font-family="sans-serif">+</text>
+        <!-- Anidrido acético -->
+        <rect x="140" y="15" width="110" height="50" rx="6" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <text x="195" y="33" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Anidrido Acético</text>
+        <text x="195" y="46" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">C₄H₆O₃</text>
+        <text x="195" y="59" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">MM = 102,1 g/mol</text>
+        <!-- seta H+ -->
+        <line x1="262" y1="40" x2="295" y2="40" stroke="#c85a00" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="278" y="35" text-anchor="middle" font-size="9" fill="#c85a00" font-family="sans-serif" font-weight="bold">H⁺</text>
+        <text x="278" y="54" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">50–60°C</text>
+        <defs><marker id="arr" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c85a00"/></marker></defs>
+        <!-- Aspirina -->
+        <rect x="300" y="15" width="110" height="50" rx="6" fill="#f0fff4" stroke="#2a8a2a" stroke-width="1.5"/>
+        <text x="355" y="33" text-anchor="middle" font-size="10" fill="#2a8a2a" font-family="sans-serif" font-weight="bold">Ác. Acetilsalicílico</text>
+        <text x="355" y="46" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">C₉H₈O₄</text>
+        <text x="355" y="59" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">MM = 180,2 g/mol</text>
+        <!-- + -->
+        <text x="422" y="45" text-anchor="middle" font-size="16" fill="#555" font-family="sans-serif">+</text>
+        <!-- Ácido acético -->
+        <rect x="435" y="15" width="80" height="50" rx="6" fill="#f7f7f7" stroke="#aaa" stroke-width="1.5"/>
+        <text x="475" y="33" text-anchor="middle" font-size="10" fill="#555" font-family="sans-serif" font-weight="bold">Ác. Acético</text>
+        <text x="475" y="46" text-anchor="middle" font-size="9" fill="#888" font-family="sans-serif">CH₃COOH</text>
+        <text x="475" y="59" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">subproduto</text>
+      </svg>
+      <p>Reação de esterificação: o grupo –OH fenólico do ácido salicílico é acetilado pelo anidrido acético, formando o éster aspirina e liberando ácido acético como subproduto.</p>
+    </div>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">💡</span>
+      <span><strong>Por que H₂SO₄?</strong> O ácido sulfúrico concentrado atua como catalisador ativando o anidrido acético e acelerando a reação de esterificação. Sem ele, a reação seria muito lenta.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE I: SÍNTESE -->
+  <div id="sintese" class="section-label">Procedimento</div>
+  <h2>Parte I — Síntese</h2>
+
+  <div class="alert alert-danger">
+    <span class="alert-icon">☣️</span>
+    <span><strong>H₂SO₄ concentrado e anidrido acético causam queimaduras graves.</strong> Use luvas e óculos. Anidrido acético: manusear na área ventilada — vapores irritantes. Nunca adicionar água ao H₂SO₄.</span>
+  </div>
+
+  <div class="card card-accent-left">
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Pesar o ácido salicílico</h4>
+          <p>Pese <strong>~2,0 g de ácido salicílico</strong> em um béquer de 100 mL.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Adicionar anidrido acético</h4>
+          <p>Adicione <strong>5,0 mL de anidrido acético</strong> lentamente, com cuidado. Faça na área ventilada.</p>
+          <div class="step-warn">⚠️ Anidrido acético libera vapor de ácido acético — irritante. Não inalar.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Adicionar catalisador</h4>
+          <p>Junte <strong>5 gotas de H₂SO₄ concentrado</strong>. Agite suavemente até dissolver o ácido salicílico.</p>
+          <div class="step-warn">☣️ H₂SO₄ concentrado é extremamente corrosivo. Use pipeta Pasteur com pêra — nunca boca.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Aquecer em banho-maria</h4>
+          <p>Aqueça o béquer em <strong>banho-maria a 50–60°C por 10 minutos</strong>, agitando de vez em quando com bastão de vidro.</p>
+          <div class="step-tip">🌡️ Mantenha a temperatura entre 50–60°C. Acima de 60°C pode haver decomposição do produto.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Esfriar e cristalizar</h4>
+          <p>Retire do banho-maria e deixe <strong>esfriar ao ar</strong> para formação dos cristais. Se necessário, coloque em banho de gelo para acelerar.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h4>Adicionar água e filtrar</h4>
+          <p>Adicione <strong>30 mL de água destilada</strong>. Filtre sob sucção com funil de Buchner. Lave os cristais <strong>2× com 5 mL de água gelada</strong>.</p>
+          <div class="step-tip">💧 A água decompõe o excesso de anidrido acético e precipita a aspirina.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE II: TESTE DE PUREZA -->
+  <div id="pureza" class="section-label">Procedimento</div>
+  <h2>Parte II — Teste de Pureza com FeCl₃</h2>
+
+  <div class="card card-accent-left">
+    <p style="margin-bottom:14px; font-size:15px;">O cloreto férrico (FeCl₃) forma complexos coloridos com compostos fenólicos (como o ácido salicílico). A aspirina pura <strong>não tem grupo fenol livre</strong>, portanto não deve dar cor com FeCl₃.</p>
+
+    <div class="teste-grid">
+      <div class="teste-card t1">
+        <div class="teste-icon">🟣</div>
+        <h4>Tubo 1 — Controle +</h4>
+        <p>0,5 mL H₂O + ác. salicílico + 1 gota FeCl₃ 1%<br><strong>Cor esperada: violeta/vermelho</strong></p>
+      </div>
+      <div class="teste-card t2">
+        <div class="teste-icon">❓</div>
+        <h4>Tubo 2 — Produto</h4>
+        <p>0,5 mL H₂O + sua aspirina + 1 gota FeCl₃ 1%<br><strong>Puro: sem cor · Impuro: violeta</strong></p>
+      </div>
+      <div class="teste-card t3">
+        <div class="teste-icon">⚪</div>
+        <h4>Tubo 3 — Branco</h4>
+        <p>0,5 mL H₂O + 1 gota FeCl₃ 1%<br><strong>Cor esperada: amarelo-pálido</strong></p>
+      </div>
+    </div>
+
+    <div class="step-list" style="margin-top:12px;">
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <h4>Preparar os 3 tubos</h4>
+          <p>Coloque 0,5 mL de água em cada tubo. Tubo 1: dissolver pequena quantidade de ácido salicílico. Tubo 2: quantidade semelhante do seu produto (aspirina bruta). Tubo 3: somente água (controle).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">8</div>
+        <div class="step-body">
+          <h4>Adicionar FeCl₃</h4>
+          <p>Adicione <strong>1 gota de FeCl₃ a 1%</strong> em cada tubo. Agite e registre a cor observada.</p>
+          <div class="step-tip">🎨 Cor violeta/vermelho intensa = ácido salicílico presente. Amarelo = sem fenol livre = produto puro.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA TESTE -->
+  <div class="card card-accent-yellow">
+    <h3 style="margin-bottom:10px;">📋 Tabela — Teste de Pureza (FeCl₃)</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Tubo</th><th>Conteúdo</th><th>Cor observada</th><th>Interpretação</th></tr>
+        <tr><td class="td-cabecalho">1 — Controle +</td><td>Ác. salicílico + FeCl₃</td><td class="td-resposta"></td><td class="td-ref">Deve ser violeta</td></tr>
+        <tr><td class="td-cabecalho">2 — Produto</td><td>Aspirina bruta + FeCl₃</td><td class="td-resposta"></td><td class="td-resposta"></td></tr>
+        <tr><td class="td-cabecalho">3 — Branco</td><td>Água + FeCl₃</td><td class="td-resposta"></td><td class="td-ref">Amarelo-pálido</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE III: PURIFICAÇÃO -->
+  <div id="purificacao" class="section-label">Procedimento</div>
+  <h2>Parte III — Purificação</h2>
+
+  <div class="card card-accent-left">
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">9</div>
+        <div class="step-body">
+          <h4>Dissolver em etanol quente</h4>
+          <p>Dissolva o produto bruto em <strong>10 mL de álcool etílico</strong>, aquecendo em banho-maria.</p>
+          <div class="step-warn">🔥 Álcool etílico é inflamável — use placa de aquecimento, sem chamas abertas.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">10</div>
+        <div class="step-body">
+          <h4>Verter sobre água quente</h4>
+          <p>Verta a solução alcoólica quente sobre <strong>22 mL de água quente</strong> em béquer de 100 mL. Se precipitar, aqueça em banho-maria até dissolver.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">11</div>
+        <div class="step-body">
+          <h4>Cristalizar na geladeira</h4>
+          <p>Deixe o béquer em <strong>repouso na geladeira</strong>. Cristais em forma de agulha serão obtidos.</p>
+          <div class="step-tip">❄️ Cristais em agulha = aspirina pura. Formato diferente pode indicar impurezas.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">12</div>
+        <div class="step-body">
+          <h4>Filtrar, lavar e secar</h4>
+          <p>Filtre no Buchner (pese o papel de filtro antes). Lave com alguns mL de <strong>água gelada</strong>, depois com <strong>álcool gelado</strong>. Seque ao ar ou em estufa a <strong>50°C</strong>.</p>
+          <div class="step-warn">⚠️ Cristais úmidos abaixam o ponto de fusão — secar completamente antes de medir.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">13</div>
+        <div class="step-body">
+          <h4>Pesar + PF + repetir teste</h4>
+          <p>Pese os cristais purificados. Determine o <strong>ponto de fusão</strong> no aparelho elétrico. Repita o teste de pureza com FeCl₃.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA RESULTADOS -->
+  <div class="card card-accent-yellow">
+    <h3 style="margin-bottom:10px;">📋 Tabela — Resultados Gerais</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Parâmetro</th><th>Valor</th></tr>
+        <tr><td>Massa de ácido salicílico usada (g)</td><td class="td-resposta"></td></tr>
+        <tr><td>Massa de aspirina bruta obtida (g)</td><td class="td-resposta"></td></tr>
+        <tr><td>Massa de aspirina purificada (g)</td><td class="td-resposta"></td></tr>
+        <tr><td>Rendimento bruto (%)</td><td class="td-resposta"></td></tr>
+        <tr><td>Rendimento após purificação (%)</td><td class="td-resposta"></td></tr>
+        <tr><td>PF experimental da aspirina (°C)</td><td class="td-resposta"></td></tr>
+        <tr><td>PF teórico da aspirina (°C)</td><td class="td-ref">135–136</td></tr>
+        <tr><td>Teste FeCl₃ — produto bruto</td><td class="td-resposta"></td></tr>
+        <tr><td>Teste FeCl₃ — produto purificado</td><td class="td-resposta"></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- GUIA VISUAL -->
+  <div id="visual" class="section-label" style="break-before: page;">Guia Visual</div>
+  <h2>Fluxo Completo da Síntese</h2>
+
+  <div class="card" style="padding:20px;">
+    <svg viewBox="0 0 540 240" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:540px; display:block; margin:0 auto 12px;">
+
+      <!-- LINHA 1: Síntese (passos 1-3) -->
+
+      <!-- PASSO 1: PESAR -->
+      <g transform="translate(10,10)">
+        <text x="75" y="14" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">① Pesar + Misturar</text>
+        <rect x="25" y="20" width="100" height="55" rx="8" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <text x="75" y="38" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">2,0 g ác. salicílico</text>
+        <text x="75" y="50" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">+ 5 mL anidrido acét.</text>
+        <text x="75" y="62" text-anchor="middle" font-size="9" fill="#c85a00" font-family="sans-serif" font-weight="bold">+ 5 gotas H₂SO₄</text>
+        <text x="75" y="86" text-anchor="middle" font-size="8.5" fill="#888" font-family="sans-serif">béquer 100 mL</text>
+      </g>
+
+      <!-- SETA -->
+      <text x="162" y="52" text-anchor="middle" font-size="16" fill="#c85a00" font-family="sans-serif">→</text>
+
+      <!-- PASSO 2: BANHO-MARIA -->
+      <g transform="translate(175,10)">
+        <text x="75" y="14" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">② Banho-maria</text>
+        <rect x="15" y="45" width="120" height="22" rx="4" fill="#f5d88a" opacity="0.5" stroke="#c8a820" stroke-width="1"/>
+        <rect x="25" y="20" width="100" height="55" rx="8" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+        <polygon points="75,65 50,65 57,35 93,35 100,65" fill="#f5d58a" opacity="0.5"/>
+        <text x="75" y="38" text-anchor="middle" font-size="9" fill="#c85a00" font-family="sans-serif" font-weight="bold">50–60°C</text>
+        <text x="75" y="52" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">10 minutos</text>
+        <text x="75" y="63" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">agitar com bastão</text>
+        <text x="75" y="86" text-anchor="middle" font-size="8.5" fill="#888" font-family="sans-serif">reação de esterificação</text>
+      </g>
+
+      <!-- SETA -->
+      <text x="302" y="52" text-anchor="middle" font-size="16" fill="#c85a00" font-family="sans-serif">→</text>
+
+      <!-- PASSO 3: CRISTALIZAR + FILTRAR -->
+      <g transform="translate(315,10)">
+        <text x="75" y="14" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">③ Cristalizar + Filtrar</text>
+        <rect x="25" y="20" width="100" height="55" rx="8" fill="#e8f4ff" stroke="#4488cc" stroke-width="1.5"/>
+        <text x="75" y="35" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">esfriar ao ar</text>
+        <text x="75" y="47" text-anchor="middle" font-size="9" fill="#4488cc" font-family="sans-serif">+ 30 mL H₂O</text>
+        <text x="75" y="59" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">filtrar (Buchner)</text>
+        <text x="75" y="69" text-anchor="middle" font-size="8.5" fill="#555" font-family="sans-serif">lavar 2× 5mL H₂O gelada</text>
+        <text x="75" y="86" text-anchor="middle" font-size="8.5" fill="#4488cc" font-family="sans-serif">aspirina bruta ↓</text>
+      </g>
+
+      <!-- LINHA 2: teste + purificação -->
+      <!-- seta para baixo -->
+      <text x="390" y="118" text-anchor="middle" font-size="16" fill="#c85a00" font-family="sans-serif">↓</text>
+
+      <!-- PASSO 4: TESTE FeCl3 -->
+      <g transform="translate(315,128)">
+        <text x="75" y="14" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">④ Teste FeCl₃</text>
+        <rect x="25" y="20" width="100" height="55" rx="8" fill="#fff0ff" stroke="#9b59b6" stroke-width="1.5"/>
+        <text x="75" y="36" text-anchor="middle" font-size="8.5" fill="#555" font-family="sans-serif">3 tubos de ensaio</text>
+        <text x="75" y="48" text-anchor="middle" font-size="8.5" fill="#9b59b6" font-family="sans-serif">🟣 salicílico → violeta</text>
+        <text x="75" y="60" text-anchor="middle" font-size="8.5" fill="#2a8a2a" font-family="sans-serif">✅ puro → amarelo</text>
+        <text x="75" y="72" text-anchor="middle" font-size="8.5" fill="#888" font-family="sans-serif">⚪ branco → amarelo pálido</text>
+      </g>
+
+      <!-- seta para esquerda -->
+      <text x="302" y="166" text-anchor="middle" font-size="16" fill="#c85a00" font-family="sans-serif">←</text>
+
+      <!-- PASSO 5: PURIFICAÇÃO -->
+      <g transform="translate(175,128)">
+        <text x="75" y="14" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">⑤ Purificação</text>
+        <rect x="25" y="20" width="100" height="55" rx="8" fill="#f0fff4" stroke="#2a8a2a" stroke-width="1.5"/>
+        <text x="75" y="36" text-anchor="middle" font-size="8.5" fill="#555" font-family="sans-serif">dissolver: 10 mL EtOH</text>
+        <text x="75" y="48" text-anchor="middle" font-size="8.5" fill="#555" font-family="sans-serif">+ 22 mL H₂O quente</text>
+        <text x="75" y="60" text-anchor="middle" font-size="8.5" fill="#4488cc" font-family="sans-serif">geladeira → agulhas</text>
+        <text x="75" y="72" text-anchor="middle" font-size="8.5" fill="#2a8a2a" font-family="sans-serif">filtrar · secar · pesar</text>
+      </g>
+
+      <!-- seta para esquerda -->
+      <text x="162" y="166" text-anchor="middle" font-size="16" fill="#c85a00" font-family="sans-serif">←</text>
+
+      <!-- PASSO 6: PF + RESULTADO -->
+      <g transform="translate(10,128)">
+        <text x="75" y="14" text-anchor="middle" font-size="10" fill="#2a8a2a" font-family="sans-serif" font-weight="bold">⑥ PF + Rendimento</text>
+        <rect x="25" y="20" width="100" height="55" rx="8" fill="#f0fff4" stroke="#2a8a2a" stroke-width="2"/>
+        <text x="75" y="35" text-anchor="middle" font-size="8.5" fill="#2a8a2a" font-family="sans-serif" font-weight="bold">PF teórico: 135–136°C</text>
+        <text x="75" y="47" text-anchor="middle" font-size="8.5" fill="#555" font-family="sans-serif">cristais brancos em agulha</text>
+        <text x="75" y="59" text-anchor="middle" font-size="8.5" fill="#555" font-family="sans-serif">calcular % rendimento</text>
+        <text x="75" y="71" text-anchor="middle" font-size="8.5" fill="#2a8a2a" font-family="sans-serif">repetir teste FeCl₃</text>
+      </g>
+
+      <!-- rodapé fórmula rendimento -->
+      <rect x="10" y="210" width="520" height="24" rx="8" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+      <text x="270" y="226" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">% rendimento = (m aspirina obtida / m aspirina teórica) × 100</text>
+
+    </svg>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RENDIMENTO -->
+  <div id="rendimento" class="section-label">Cálculo</div>
+  <h2>Rendimento Teórico</h2>
+
+  <div class="card card-accent-left">
+    <h3 style="margin-bottom:10px;">Estequiometria (base: 2,0 g de ác. salicílico)</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Parâmetro</th><th>Ácido Salicílico</th><th>Aspirina</th></tr>
+        <tr><td>Massa molar (g/mol)</td><td>138,1</td><td>180,2</td></tr>
+        <tr><td>Moles usados/esperados</td><td>2,0 / 138,1 = <strong>0,0145 mol</strong></td><td>0,0145 mol (1:1)</td></tr>
+        <tr><td>Massa teórica</td><td>2,0 g</td><td>0,0145 × 180,2 = <strong>2,61 g</strong></td></tr>
+      </table>
+    </div>
+    <div class="formula-box" style="margin-top:12px;">
+      <div class="label">Rendimento</div>
+      % = (m obtida / 2,61 g) × 100
+    </div>
+    <div class="alert alert-tip" style="margin-top:8px; margin-bottom:0;">
+      <span class="alert-icon">📌</span>
+      <span>Rendimentos típicos: <strong>60–85%</strong> (bruto) e <strong>40–65%</strong> (após purificação). Perdas nas lavagens e filtração são normais.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SEGURANÇA -->
+  <div id="seguranca" class="section-label">Segurança</div>
+  <h2>Normas do Laboratório</h2>
+  <div class="card">
+    <div class="safety-grid">
+      <div class="safety-item"><span class="safety-icon">☣️</span><span><strong>H₂SO₄ concentrado</strong> — corrosivo. Nunca adicionar água. Pipeta Pasteur com pêra.</span></div>
+      <div class="safety-item"><span class="safety-icon">⚗️</span><span><strong>Anidrido acético</strong> — irritante e volátil. Usar em área ventilada, luvas e óculos.</span></div>
+      <div class="safety-item"><span class="safety-icon">🔥</span><span><strong>Álcool etílico</strong> — inflamável. Sem chamas abertas. Placa de aquecimento.</span></div>
+      <div class="safety-item"><span class="safety-icon">🥼</span><span>Avental, óculos e luvas nitrílicas obrigatórios durante toda a prática.</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RELATÓRIO -->
+  <div id="relatorio" class="section-label">Relatório</div>
+  <h2>Pré-Relatório e Questões</h2>
+
+  <div class="alert alert-info" style="margin-bottom:14px;">
+    <span class="alert-icon">📝</span>
+    <span>O <strong>pré-relatório</strong> deve ser entregue antes da aula. O <strong>relatório completo</strong> deve conter descrição do experimento, resultados dos testes de pureza, cálculos de rendimento, PF e discussão.</span>
+  </div>
+
+  <div class="report-items">
+    <div class="report-item">
+      <div class="report-q">P1</div>
+      <span><strong>[Pré]</strong> Faça um esquema de todas as etapas da síntese.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">P2</div>
+      <span><strong>[Pré]</strong> Qual o objetivo da adição de H₂SO₄ na primeira etapa? O que acontece se for omitido? Quais os cuidados necessários com o H₂SO₄?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">P3</div>
+      <span><strong>[Pré]</strong> Qual o ponto de fusão teórico da aspirina?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">P4</div>
+      <span><strong>[Pré]</strong> Qual o objetivo da purificação da aspirina (Parte III)?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">1</div>
+      <span>Que tipo de reação se verifica na obtenção da aspirina? Escreva a equação balanceada.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">2</div>
+      <span>Qual o ponto de fusão teórico da aspirina? Compare com o valor obtido experimentalmente e discuta a diferença.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">3</div>
+      <span>Qual o objetivo da purificação da aspirina? O que o teste de FeCl₃ revelou antes e depois da purificação?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">4</div>
+      <span>Calcule o rendimento teórico de aspirina em mol e gramas se <strong>1,0 kg de ácido salicílico</strong> for usado com <strong>2,0 kg de anidrido acético</strong>. Qual reagente é limitante?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">5</div>
+      <span>Se os cristais de aspirina não estiverem totalmente secos antes da determinação do PF, que efeito isso terá no resultado? Explique o motivo.</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Lab Química Orgânica · UFSCar &nbsp;|&nbsp; Prof. Marystela Ferreira &nbsp;|&nbsp; Aula 5 — Síntese da Aspirina
+</footer>
+</body>
+</html>

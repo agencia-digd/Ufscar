@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roteiro do Aluno – Fermentação e Destilação do Etanol</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --surface: #ffffff; --surface2: #f7f9f8;
+    --accent: #c85a00; --accent2: #e8a020; --accent3: #c0392b;
+    --text: #1c1c1c; --muted: #555555; --border: #e8ddd5; --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.7; color-scheme: light; }
+
+  header { background: var(--accent); color: white; padding: 40px 40px 32px; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%; background: rgba(255,255,255,0.05); top: -80px; right: -60px; }
+  .header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; color: #1c1c1c; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(22px, 4vw, 36px); font-weight: 400; margin-bottom: 8px; line-height: 1.2; }
+  header p { opacity: 0.88; font-size: 15px; max-width: 600px; }
+  .header-meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 8px; font-size: 13px; opacity: 0.9; }
+
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: white; background: var(--accent); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 8px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 22px; color: #ffffff; background: var(--accent); display: inline-block; padding: 6px 16px 8px; border-radius: 6px; margin-bottom: 16px; }
+  h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 20px; }
+  .card-accent-left   { border-left: 4px solid var(--accent); }
+  .card-accent-yellow { border-left: 4px solid var(--accent2); }
+  .card-accent-red    { border-left: 4px solid var(--accent3); }
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .obj-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; }
+  .obj-num { min-width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+
+  .eq-box { background: #fff8f0; border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 20px; margin: 14px 0; text-align: center; font-size: 15px; font-family: monospace; }
+  .eq-box .label { font-family: 'DM Sans', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; font-weight: 700; text-align: left; }
+
+  .conceito-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .conceito-card { border-radius: 10px; padding: 14px 12px; border: 1px solid var(--border); }
+  .conceito-card.ferm { background: #fff4eb; border-color: #f5c89a; }
+  .conceito-card.dest { background: #e8f4ff; border-color: #b0d4f5; }
+  .conceito-icon { font-size: 22px; margin-bottom: 6px; }
+  .conceito-card h4 { font-size: 13px; margin-bottom: 4px; }
+  .conceito-card p  { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  .parte-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .parte-badge  { background: var(--accent); color: white; font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; white-space: nowrap; }
+  .parte-title  { font-size: 17px; font-weight: 600; color: var(--text); }
+
+  .step-list { display: flex; flex-direction: column; gap: 12px; }
+  .step { display: flex; gap: 14px; }
+  .step-num { min-width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 3px; }
+  .step-body h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .step-body p  { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .step-tip  { margin-top: 8px; background: #fff8e6; border-left: 3px solid var(--accent2); padding: 6px 10px; border-radius: 4px; font-size: 13px; color: #7a5500; }
+  .step-warn { margin-top: 8px; background: #fdf2f2; border-left: 3px solid var(--accent3); padding: 6px 10px; border-radius: 4px; font-size: 13px; color: #7a1010; }
+
+  .alert { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; font-size: 14px; margin: 12px 0; }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-tip    { background: #f0faf4; border: 1px solid #b2dfca; }
+  .alert-info   { background: #f0f7ff; border: 1px solid #bdd8f5; }
+  .alert-danger { background: #fdf2f2; border: 1px solid #f5c6c6; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { background: var(--accent); color: white; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 13px; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #fdf8f4; }
+  .td-resposta  { background: #fafafa; min-height: 40px; }
+  .td-cabecalho { background: var(--surface2); font-weight: 600; font-size: 13px; }
+
+  .safety-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .safety-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--muted); line-height: 1.4; }
+  .safety-icon { font-size: 18px; flex-shrink: 0; }
+
+  .report-items { display: flex; flex-direction: column; gap: 10px; }
+  .report-item  { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--surface2); border-radius: 8px; font-size: 14px; line-height: 1.5; }
+  .report-q     { min-width: 28px; height: 28px; background: var(--accent2); color: #1c1c1c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  .nav-index { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px; margin: 24px 0 28px; }
+  .nav-index-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .nav-index-list  { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .nav-index-list li { display: flex; align-items: center; gap: 8px; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .nav-index-list a { color: var(--accent); font-size: 14px; text-decoration: none; font-weight: 500; }
+
+  /* destilação SVG label */
+  .comp-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; }
+
+  footer { text-align: center; padding: 28px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { margin: 15mm; size: A4 portrait; }
+    .nav-index { display: none !important; }
+    body { font-size: 10px !important; line-height: 1.35 !important; }
+    main { padding: 8px 0 !important; max-width: 100% !important; }
+    header { padding: 16px 20px !important; }
+    header h1 { font-size: 18px !important; }
+    header p { font-size: 10px !important; }
+    .header-badge { font-size: 8px !important; padding: 2px 8px !important; margin-bottom: 6px !important; }
+    .header-meta { margin-top: 8px !important; gap: 12px !important; }
+    .meta-item { font-size: 9px !important; }
+    .section-label { font-size: 8px !important; padding: 2px 7px !important; margin-bottom: 4px !important; break-after: avoid !important; }
+    h2 { font-size: 13px !important; padding: 3px 10px 4px !important; margin-bottom: 6px !important; break-after: avoid !important; }
+    h3 { font-size: 11px !important; break-after: avoid !important; }
+    h4 { font-size: 10px !important; break-after: avoid !important; }
+    .card { padding: 8px 12px !important; margin-bottom: 7px !important; break-inside: avoid !important; }
+    .divider { margin: 4px 0 !important; }
+    .eq-box { padding: 6px 12px !important; font-size: 11px !important; margin: 4px 0 !important; }
+    .conceito-grid { gap: 5px !important; margin: 5px 0 !important; }
+    .conceito-card { padding: 7px !important; }
+    .conceito-icon { font-size: 14px !important; margin-bottom: 2px !important; }
+    .conceito-card h4 { font-size: 9px !important; }
+    .conceito-card p { font-size: 8px !important; }
+    .parte-header { margin-bottom: 5px !important; }
+    .parte-badge { font-size: 8px !important; padding: 2px 8px !important; }
+    .parte-title { font-size: 11px !important; }
+    .step-list { gap: 5px !important; }
+    .step { gap: 8px !important; }
+    .step-num { min-width: 20px !important; height: 20px !important; font-size: 9px !important; }
+    .step-body p { font-size: 9px !important; }
+    .step-body h4 { font-size: 10px !important; }
+    .step-tip, .step-warn { font-size: 8px !important; padding: 3px 7px !important; margin-top: 3px !important; }
+    .alert { padding: 4px 8px !important; font-size: 9px !important; margin: 4px 0 !important; break-inside: avoid !important; }
+    table { font-size: 9px !important; break-inside: avoid !important; }
+    th, td { padding: 4px 8px !important; font-size: 9px !important; }
+    .td-resposta { min-height: 22px !important; }
+    .safety-grid { gap: 5px !important; }
+    .safety-item { font-size: 9px !important; }
+    .report-items { gap: 4px !important; }
+    .report-item { padding: 5px 9px !important; font-size: 9px !important; break-inside: avoid !important; }
+    .report-q { min-width: 18px !important; height: 18px !important; font-size: 8px !important; }
+    footer { font-size: 8px !important; padding: 6px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Aula 6 · Marystela · Eng. Florestal</div>
+  <h1>Fermentação e Destilação do Etanol</h1>
+  <p>Obtenção de etanol por fermentação do caldo de cana e destilação simples — processo análogo à produção industrial de cachaça.</p>
+  <div class="header-meta">
+    <div class="meta-item">⏱️ ~3 horas (destilação)</div>
+    <div class="meta-item">🍶 Fermentação: 5–7 dias antes</div>
+    <div class="meta-item">🔥 Manta aquecedora</div>
+    <div class="meta-item">📐 Alcoômetro de Gay-Lussac</div>
+  </div>
+</header>
+
+<main>
+
+  <div class="nav-index">
+    <div class="nav-index-title">Nesta aula</div>
+    <ul class="nav-index-list">
+      <li><span class="nav-dot"></span><a href="#intro">Introdução — fermentação e destilação</a></li>
+      <li><span class="nav-dot"></span><a href="#parteI">Parte I — Fermentação (preparada pelo técnico)</a></li>
+      <li><span class="nav-dot"></span><a href="#parteII">Parte II — Montagem e destilação</a></li>
+      <li><span class="nav-dot"></span><a href="#teste">Teste de chama e medição de teor alcoólico</a></li>
+      <li><span class="nav-dot"></span><a href="#visual">Guia Visual — sistema de destilação</a></li>
+      <li><span class="nav-dot"></span><a href="#seguranca">Segurança</a></li>
+      <li><span class="nav-dot"></span><a href="#relatorio">Relatório e Questões</a></li>
+    </ul>
+  </div>
+
+  <!-- OBJETIVOS -->
+  <div class="section-label">Objetivos</div>
+  <h2>O que você vai aprender</h2>
+  <div class="card card-accent-left">
+    <ul class="obj-list">
+      <li><div class="obj-num">1</div><span>Compreender a <strong>fermentação alcoólica</strong> como processo anaeróbico de conversão de glicose em etanol e CO₂</span></li>
+      <li><div class="obj-num">2</div><span>Montar e operar um <strong>sistema de destilação simples</strong> para separação do etanol da mistura fermentada</span></li>
+      <li><div class="obj-num">3</div><span>Medir o teor alcoólico do destilado com o <strong>alcoômetro de Gay-Lussac</strong></span></li>
+      <li><div class="obj-num">4</div><span>Relacionar o conceito de <strong>mistura azeotrópica</strong> com os limites da destilação do etanol</span></li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- INTRODUÇÃO -->
+  <div id="intro" class="section-label">Introdução</div>
+  <h2>Fermentação e Destilação</h2>
+
+  <div class="card card-accent-left">
+    <div class="conceito-grid">
+      <div class="conceito-card ferm">
+        <div class="conceito-icon">🍬</div>
+        <h4>Fermentação Alcoólica</h4>
+        <p>Oxidação anaeróbica parcial da glicose por leveduras (<em>Saccharomyces cerevisiae</em>), produzindo etanol e CO₂. A sacarose do caldo de cana é hidrolisada em glicose e frutose pelas leveduras antes da fermentação.</p>
+      </div>
+      <div class="conceito-card dest">
+        <div class="conceito-icon">🌡️</div>
+        <h4>Destilação Simples</h4>
+        <p>Separação de líquidos com pontos de ebulição diferentes. O etanol (PE = 78°C) evapora antes da água (PE = 100°C). Coleta-se a fração rica em etanol entre <strong>88–90°C</strong>.</p>
+      </div>
+    </div>
+
+    <div class="eq-box" style="margin-top:10px;">
+      <div class="label">Equação da Fermentação (anaerobiose)</div>
+      C₆H₁₂O₆ → 2 C₂H₅OH + 2 CO₂
+      <div style="font-size:12px; color:var(--muted); margin-top:6px; font-family:'DM Sans',sans-serif;">Glicose → Etanol + Gás carbônico</div>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:4px;">
+      <span class="alert-icon">💡</span>
+      <span><strong>Limite da destilação:</strong> não é possível obter etanol com concentração superior a 97,2% em volume apenas por destilação. Nessa composição a mistura água-etanol é <strong>azeotrópica</strong> — vapor e líquido têm a mesma composição.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE I -->
+  <div id="parteI" class="section-label">Preparação (técnico)</div>
+  <h2>Parte I — Fermentação do Caldo de Cana</h2>
+
+  <div class="alert alert-tip">
+    <span class="alert-icon">📋</span>
+    <span><strong>Esta etapa é preparada pelo técnico 5–7 dias antes da aula.</strong> Na aula, você apenas recupera o Erlenmeyer do seu grupo com a solução fermentada pronta.</span>
+  </div>
+
+  <div class="card card-accent-left">
+    <h3 style="margin-bottom:10px;">O que foi feito pelo técnico:</h3>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Preparo do mosto</h4>
+          <p>150 mL de caldo de cana (~200 g/L de sacarose) em Erlenmeyer de 250 mL + 5 g de fermento de pão desmanchado.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Vedação e incubação</h4>
+          <p>Erlenmeyer vedado com papel laminado perfurado (saída de CO₂) ou telinha. Identificado com nome do grupo. Incubado em local adequado por 5–7 dias.</p>
+        </div>
+      </div>
+    </div>
+    <div class="step-tip" style="margin-top:12px;">👃 Sinais de fermentação bem-sucedida: odor alcoólico característico, turbidez e possível depósito de levedura no fundo.</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PARTE II -->
+  <div id="parteII" class="section-label">Procedimento</div>
+  <h2>Parte II — Destilação Simples</h2>
+
+  <div class="alert alert-danger">
+    <span class="alert-icon">🔥</span>
+    <span><strong>Etanol é inflamável (PE = 78°C).</strong> Use exclusivamente manta aquecedora — sem chamas abertas durante a destilação. O teste de chama (passo 8) deve ser feito na área ventilada longe do equipamento.</span>
+  </div>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Montagem</span>
+      <span class="parte-title">Sistema de Destilação Simples</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Transferir o fermentado</h4>
+          <p>Recupere o Erlenmeyer do seu grupo. Transfira o conteúdo para o <strong>balão de fundo redondo de 250 mL</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Montar o sistema</h4>
+          <p>Monte conforme o diagrama: balão (3) → cabeça de destilação (4) → condensador (7) → alonga → béquer coletor 100 mL (8). Conecte as mangueiras: <strong>água entra por baixo (9b), sai por cima (9a)</strong>.</p>
+          <div class="step-tip">💧 Abra a água de resfriamento do condensador ANTES de ligar a manta.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Posicionar o termômetro</h4>
+          <p>O bulbo do termômetro deve ficar na <strong>saída lateral da cabeça de destilação</strong> — não dentro do líquido.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Destilação</span>
+      <span class="parte-title">Coleta do Etanol</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Ligar a manta e aquecer</h4>
+          <p>Ligue a manta aquecedora e monitore a temperatura. Aguarde estabilizar na faixa de <strong>88–90°C</strong>.</p>
+          <div class="step-tip">⏱️ Tempo de aquecimento: ~15–20 min até iniciar a destilação.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Coletar o destilado</h4>
+          <p>Colete o líquido destilado enquanto a temperatura se mantiver entre <strong>88–90°C</strong>. Duração: ~30 minutos para 150 mL de fermentado.</p>
+          <div class="step-tip">📊 Anote a temperatura de início e fim da coleta. Registre o volume coletado.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h4>Desligar quando atingir 92°C</h4>
+          <p>Desligue a manta quando a temperatura chegar a <strong>92°C</strong>. Acima disso a proporção de água no destilado aumenta significativamente.</p>
+          <div class="step-warn">⚠️ Não deixar a destilação prosseguir acima de 92°C — qualidade do destilado cai.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Testes</span>
+      <span class="parte-title">Confirmação e Teor Alcoólico</span>
+    </div>
+    <div class="step-list" id="teste">
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <h4>Medir o teor alcoólico</h4>
+          <p>Use o <strong>alcoômetro de Gay-Lussac</strong> para medir o teor alcoólico do destilado. Anote o valor em % (v/v).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">8</div>
+        <div class="step-body">
+          <h4>Teste de chama</h4>
+          <p>Com pipeta Pasteur, retire ~3 mL do destilado e deposite em um <strong>cadinho de porcelana</strong>. Atear fogo com fósforo ou isqueiro.</p>
+          <div class="step-tip">🔵 Chama azulada quase incolor = presença de etanol confirmada. Odor característico também é evidência.</div>
+          <div class="step-warn">🔥 Faça o teste de chama AFASTADO do sistema de destilação e de qualquer solvente.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA RESULTADOS -->
+  <div class="card card-accent-yellow">
+    <h3 style="margin-bottom:10px;">📋 Tabela — Resultados da Destilação</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Parâmetro</th><th>Valor</th></tr>
+        <tr><td>Volume de fermentado (mL)</td><td class="td-resposta"></td></tr>
+        <tr><td>Temperatura de início da coleta (°C)</td><td class="td-resposta"></td></tr>
+        <tr><td>Temperatura de fim da coleta (°C)</td><td class="td-resposta"></td></tr>
+        <tr><td>Volume de destilado coletado (mL)</td><td class="td-resposta"></td></tr>
+        <tr><td>Teor alcoólico (% v/v) — alcoômetro</td><td class="td-resposta"></td></tr>
+        <tr><td>Cor da chama no teste</td><td class="td-resposta"></td></tr>
+        <tr><td>Odor do destilado</td><td class="td-resposta"></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- GUIA VISUAL -->
+  <div id="visual" class="section-label" style="break-before: page;">Guia Visual</div>
+  <h2>Sistema de Destilação Simples</h2>
+
+  <div class="card" style="padding:20px;">
+    <svg viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:520px; display:block; margin:0 auto 14px;">
+
+      <!-- SUPORTE UNIVERSAL -->
+      <rect x="198" y="10" width="6" height="260" rx="3" fill="#888"/>
+      <rect x="178" y="265" width="46" height="8" rx="3" fill="#666"/>
+
+      <!-- MANTA AQUECEDORA -->
+      <ellipse cx="120" cy="230" rx="55" ry="18" fill="#c85a00" opacity="0.3" stroke="#c85a00" stroke-width="1.5"/>
+      <rect x="68" y="218" width="104" height="20" rx="4" fill="#c85a00" opacity="0.2" stroke="#c85a00" stroke-width="1"/>
+      <text x="120" y="212" text-anchor="middle" font-size="9" fill="#c85a00" font-family="sans-serif" font-weight="bold">② Manta aquecedora</text>
+
+      <!-- BALÃO 250mL -->
+      <circle cx="120" cy="185" r="45" fill="#fff4eb" stroke="#c85a00" stroke-width="2"/>
+      <rect x="108" y="135" width="24" height="20" rx="4" fill="#ddd" stroke="#aaa" stroke-width="1.5"/>
+      <!-- líquido no balão -->
+      <path d="M80,195 Q120,210 160,195 Q160,225 120,228 Q80,225 80,195Z" fill="#f5d58a" opacity="0.6"/>
+      <text x="120" y="188" text-anchor="middle" font-size="8.5" fill="#c85a00" font-family="sans-serif" font-weight="bold">③ Balão 250 mL</text>
+      <text x="120" y="200" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">fermentado</text>
+
+      <!-- GARRA + CABEÇA DE DESTILAÇÃO -->
+      <rect x="196" y="128" width="28" height="8" rx="2" fill="#888"/>
+      <!-- cabeça de destilação -->
+      <rect x="116" y="118" width="20" height="22" rx="3" fill="#e8f4ff" stroke="#4488cc" stroke-width="1.5"/>
+      <!-- termômetro -->
+      <rect x="122" y="65" width="8" height="58" rx="3" fill="#f0f8ff" stroke="#4488cc" stroke-width="1.5"/>
+      <ellipse cx="126" cy="65" rx="5" ry="5" fill="#ff6666" stroke="#cc4444" stroke-width="1"/>
+      <text x="126" y="56" text-anchor="middle" font-size="9" fill="#4488cc" font-family="sans-serif" font-weight="bold">① Termômetro</text>
+      <text x="200" y="120" font-size="8.5" fill="#c85a00" font-family="sans-serif" font-weight="bold">④ Cabeça de dest.</text>
+
+      <!-- TUBO CONDENSADOR (diagonal) -->
+      <line x1="136" y1="122" x2="340" y2="195" stroke="#4488cc" stroke-width="10" opacity="0.2"/>
+      <line x1="136" y1="122" x2="340" y2="195" stroke="#4488cc" stroke-width="2"/>
+      <line x1="146" y1="118" x2="350" y2="191" stroke="#4488cc" stroke-width="2"/>
+      <!-- água resfriamento -->
+      <text x="225" y="148" text-anchor="middle" font-size="8" fill="#4488cc" font-family="sans-serif" transform="rotate(-25,225,148)">⑦ Condensador</text>
+      <!-- setas água -->
+      <text x="165" y="168" text-anchor="middle" font-size="8" fill="#4488cc" font-family="sans-serif" transform="rotate(-25,165,168)">9b ← entra fria</text>
+      <text x="295" y="175" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif" transform="rotate(-25,295,175)">9a → sai quente</text>
+
+      <!-- ALONGA + COLETOR -->
+      <line x1="350" y1="191" x2="390" y2="205" stroke="#888" stroke-width="2"/>
+      <!-- béquer coletor -->
+      <rect x="375" y="205" width="60" height="55" rx="5" fill="#f0fff4" stroke="#2a8a2a" stroke-width="2"/>
+      <rect x="376" y="235" width="58" height="23" rx="3" fill="#a8e4c0" opacity="0.5"/>
+      <text x="405" y="222" text-anchor="middle" font-size="8.5" fill="#2a8a2a" font-family="sans-serif" font-weight="bold">⑧ Destilado</text>
+      <text x="405" y="233" text-anchor="middle" font-size="8" fill="#2a8a2a" font-family="sans-serif">etanol</text>
+      <text x="405" y="270" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">béquer 100 mL</text>
+
+      <!-- faixa de temperatura -->
+      <rect x="10" y="10" width="140" height="38" rx="6" fill="#fff4eb" stroke="#c85a00" stroke-width="1.5"/>
+      <text x="80" y="26" text-anchor="middle" font-size="10" fill="#c85a00" font-family="sans-serif" font-weight="bold">Coletar: 88–90°C</text>
+      <text x="80" y="40" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">Desligar em: 92°C</text>
+
+      <!-- faixa azeotropo -->
+      <rect x="10" y="255" width="360" height="38" rx="6" fill="#e8f4ff" stroke="#4488cc" stroke-width="1.5"/>
+      <text x="185" y="270" text-anchor="middle" font-size="9.5" fill="#4488cc" font-family="sans-serif" font-weight="bold">Azeótropo: máx. 97,2% etanol em volume por destilação</text>
+      <text x="185" y="284" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">Mistura água-etanol com mesma composição em fase líquida e vapor</text>
+
+    </svg>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:4px;">
+      <div style="background:#fff8e6; border-left:3px solid #e8a020; border-radius:6px; padding:8px 10px; font-size:12px;">
+        💧 <strong>Água de resfriamento:</strong> ligar ANTES da manta
+      </div>
+      <div style="background:#fdf2f2; border-left:3px solid #c0392b; border-radius:6px; padding:8px 10px; font-size:12px;">
+        🔥 <strong>Sem chamas</strong> durante destilação
+      </div>
+      <div style="background:#f0fff4; border-left:3px solid #2a8a2a; border-radius:6px; padding:8px 10px; font-size:12px;">
+        🔵 <strong>Chama azul</strong> = etanol confirmado
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SEGURANÇA -->
+  <div id="seguranca" class="section-label">Segurança</div>
+  <h2>Normas do Laboratório</h2>
+  <div class="card">
+    <div class="safety-grid">
+      <div class="safety-item"><span class="safety-icon">🔥</span><span><strong>Etanol é inflamável</strong> (PE = 78°C). Somente manta aquecedora — sem chamas abertas durante a destilação.</span></div>
+      <div class="safety-item"><span class="safety-icon">💧</span><span>Abrir a água do condensador <strong>antes</strong> de ligar a manta. Verificar vazamentos nas conexões.</span></div>
+      <div class="safety-item"><span class="safety-icon">🧤</span><span>Luvas e óculos durante toda a montagem e operação do sistema.</span></div>
+      <div class="safety-item"><span class="safety-icon">🌡️</span><span>Não superaquecer — manter abaixo de 92°C. Desligar se observar ebulição violenta.</span></div>
+      <div class="safety-item"><span class="safety-icon">🔵</span><span>Teste de chama: fazer <strong>longe</strong> do sistema, em cadinho de porcelana, com pouco volume (~3 mL).</span></div>
+      <div class="safety-item"><span class="safety-icon">🥼</span><span>Avental e óculos obrigatórios. Cabelo preso durante o teste de chama.</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RELATÓRIO -->
+  <div id="relatorio" class="section-label">Relatório</div>
+  <h2>Questões para o Relatório</h2>
+
+  <div class="alert alert-info" style="margin-bottom:14px;">
+    <span class="alert-icon">📝</span>
+    <span>O relatório deve incluir os valores de teor alcoólico obtidos, a teoria da destilação com o diagrama de fases de uma mistura binária líquida, e as respostas às questões abaixo.</span>
+  </div>
+
+  <div class="report-items">
+    <div class="report-item">
+      <div class="report-q">1</div>
+      <span>Explique a destilação simples e a destilação fracionada. Qual é a principal diferença entre elas?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">2</div>
+      <span>O experimento é um caso de destilação simples ou fracionada? Por quê?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">3</div>
+      <span>Descreva as principais propriedades organolépticas que caracterizam o etanol (ponto de fusão, ponto de ebulição, densidade, solubilidade, odor, etc.).</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">4</div>
+      <span>Por que é possível separar o etanol da água até certo ponto através da destilação? O que limita esse processo?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">5</div>
+      <span>O que é uma mistura azeotrópica? Dê um exemplo e explique por que ela não pode ser separada por destilação convencional.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">6</div>
+      <span>Por que não é possível obter etanol com concentração superior a 97,2% em volume (95,6% em peso) apenas por destilação?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">7</div>
+      <span>Por que, apesar de ser um composto orgânico de fórmula C₂H₅OH (classificável como solvente), o etanol possui ponto de ebulição relativamente alto (78°C) em comparação com compostos de massa molar similar?</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Lab Química Orgânica · UFSCar &nbsp;|&nbsp; Prof. Marystela Ferreira &nbsp;|&nbsp; Aula 6 — Fermentação e Destilação do Etanol
+</footer>
+</body>
+</html>

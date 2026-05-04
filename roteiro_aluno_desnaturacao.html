@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roteiro do Aluno – Desnaturação e Precipitação de Proteínas</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --surface: #ffffff; --surface2: #f4f8f6;
+    --accent: #1a6b4a; --accent2: #e8a020; --accent3: #c0392b;
+    --text: #1c1c1c; --muted: #555555; --border: #d8e8e0; --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.7; color-scheme: light; }
+  header { background: var(--accent); color: white; padding: 40px 40px 32px; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%; background: rgba(255,255,255,0.05); top: -80px; right: -60px; }
+  .header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; color: #1c1c1c; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(20px, 4vw, 34px); font-weight: 400; margin-bottom: 8px; line-height: 1.2; }
+  header p { opacity: 0.88; font-size: 15px; max-width: 620px; }
+  .header-meta { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 8px; font-size: 13px; opacity: 0.9; }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: white; background: var(--accent); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 8px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 22px; color: #ffffff; background: var(--accent); display: inline-block; padding: 6px 16px 8px; border-radius: 6px; margin-bottom: 16px; }
+  h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 26px; margin-bottom: 20px; }
+  .card-accent-left { border-left: 4px solid var(--accent); }
+  .card-accent-yellow { border-left: 4px solid var(--accent2); }
+  .divider { height: 1px; background: var(--border); margin: 28px 0; }
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .obj-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; }
+  .obj-num { min-width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+  .conceito-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 12px 0; }
+  .conceito-card { border-radius: 10px; padding: 12px 10px; border: 1px solid var(--border); text-align: center; }
+  .conceito-card.a { background: #f0fff4; border-color: #a8dfc0; }
+  .conceito-card.b { background: #fff8e6; border-color: #f5c89a; }
+  .conceito-card.c { background: #fdf2f2; border-color: #f5c6c6; }
+  .conceito-icon { font-size: 20px; margin-bottom: 5px; }
+  .conceito-card h4 { font-size: 12px; margin-bottom: 3px; font-weight: 600; }
+  .conceito-card p { font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .alert { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; font-size: 14px; margin: 10px 0; }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-tip    { background: #f0faf4; border: 1px solid #b2dfca; }
+  .alert-danger { background: #fdf2f2; border: 1px solid #f5c6c6; }
+  .alert-info   { background: #f0f7ff; border: 1px solid #bdd8f5; }
+  .exp-table-wrap { overflow-x: auto; margin: 14px 0; }
+  .exp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .exp-table th { background: var(--accent); color: white; padding: 8px 8px; text-align: center; font-size: 11px; font-weight: 600; }
+  .exp-table td { padding: 8px 8px; border: 1px solid var(--border); text-align: center; vertical-align: middle; }
+  .exp-table .row-label { background: var(--surface2); font-weight: 600; text-align: left; font-size: 11px; white-space: nowrap; }
+  .exp-table .vol { color: var(--accent); font-weight: 700; font-family: monospace; font-size: 11px; }
+  .exp-table .empty { color: #ccc; }
+  .exp-table .cond { background: #fff4eb; color: #c85a00; font-size: 10px; font-weight: 600; }
+  .exp-table .obs { background: #fafafa; min-width: 80px; }
+  .nav-index { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin: 20px 0 24px; }
+  .nav-index-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .nav-index-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .nav-index-list li { display: flex; align-items: center; gap: 8px; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .nav-index-list a { color: var(--accent); font-size: 13px; text-decoration: none; font-weight: 500; }
+  .report-items { display: flex; flex-direction: column; gap: 10px; }
+  .report-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--surface2); border-radius: 8px; font-size: 14px; line-height: 1.5; }
+  .report-q { min-width: 28px; height: 28px; background: var(--accent2); color: #1c1c1c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  footer { text-align: center; padding: 26px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { margin: 15mm; size: A4 portrait; }
+    .nav-index { display: none !important; }
+    body { font-size: 10px !important; line-height: 1.35 !important; }
+    main { padding: 8px 0 !important; max-width: 100% !important; }
+    header { padding: 14px 20px !important; }
+    header h1 { font-size: 16px !important; }
+    header p { font-size: 9px !important; }
+    .header-badge { font-size: 8px !important; padding: 2px 8px !important; margin-bottom: 5px !important; }
+    .header-meta { margin-top: 6px !important; gap: 10px !important; }
+    .meta-item { font-size: 8px !important; }
+    .section-label { font-size: 8px !important; padding: 2px 7px !important; break-after: avoid !important; }
+    h2 { font-size: 12px !important; padding: 3px 10px 4px !important; margin-bottom: 6px !important; break-after: avoid !important; }
+    h3 { font-size: 11px !important; break-after: avoid !important; }
+    .card { padding: 7px 10px !important; margin-bottom: 6px !important; break-inside: avoid !important; }
+    .divider { margin: 6px 0 !important; }
+    .conceito-grid { gap: 4px !important; margin: 4px 0 !important; }
+    .conceito-card { padding: 5px !important; }
+    .conceito-icon { font-size: 13px !important; }
+    .conceito-card h4 { font-size: 8px !important; }
+    .conceito-card p { font-size: 7px !important; }
+    .alert { padding: 4px 8px !important; font-size: 8px !important; margin: 3px 0 !important; break-inside: avoid !important; }
+    .exp-table th, .exp-table td { padding: 4px 5px !important; font-size: 8px !important; }
+    .report-items { gap: 4px !important; }
+    .report-item { padding: 5px 9px !important; font-size: 9px !important; break-inside: avoid !important; }
+    .report-q { min-width: 18px !important; height: 18px !important; font-size: 8px !important; }
+    footer { font-size: 8px !important; padding: 6px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-badge">Aula 5 · Vadim · Eng. Florestal</div>
+  <h1>Desnaturação e Precipitação de Proteínas</h1>
+  <p>Efeito de temperatura, pH ácido e solventes orgânicos na precipitação da soroalbumina bovina (BSA).</p>
+  <div class="header-meta">
+    <div class="meta-item">⏱️ ~2 horas</div>
+    <div class="meta-item">👥 Grupos de 4</div>
+    <div class="meta-item">🧪 5 tubos</div>
+    <div class="meta-item">🌡️ Banho-maria 95°C · 5 min</div>
+  </div>
+</header>
+<main>
+  <div class="nav-index">
+    <div class="nav-index-title">Nesta aula</div>
+    <ul class="nav-index-list">
+      <li><span class="nav-dot"></span><a href="#fundamentos">Fundamentos — estrutura e desnaturação de proteínas</a></li>
+      <li><span class="nav-dot"></span><a href="#exp">Experimento — 5 condições de desnaturação</a></li>
+      <li><span class="nav-dot"></span><a href="#visual">Guia Visual — tubos</a></li>
+      <li><span class="nav-dot"></span><a href="#relatorio">Relatório</a></li>
+    </ul>
+  </div>
+
+  <!-- OBJETIVOS -->
+  <div class="section-label">Objetivos</div>
+  <h2>O que você vai aprender</h2>
+  <div class="card card-accent-left">
+    <ul class="obj-list">
+      <li><div class="obj-num">1</div><span>Compreender o conceito de <strong>desnaturação proteica</strong> e suas causas</span></li>
+      <li><div class="obj-num">2</div><span>Observar o efeito de <strong>temperatura, pH ácido e solvente orgânico</strong> na precipitação da BSA</span></li>
+      <li><div class="obj-num">3</div><span>Relacionar a estrutura terciária das proteínas com sua solubilidade e estabilidade em solução</span></li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FUNDAMENTOS -->
+  <div id="fundamentos" class="section-label">Fundamentos</div>
+  <h2>Desnaturação de Proteínas</h2>
+  <div class="card card-accent-left">
+    <p style="font-size:15px; margin-bottom:14px;">Proteínas globulares solúveis mantêm sua estrutura por meio de interações não-covalentes (pontes de hidrogênio, interações hidrofóbicas, pontes dissulfeto). Agentes desnaturantes rompem essas interações, desdobrando a proteína e expondo regiões hidrofóbicas — o que leva à <strong>precipitação</strong>.</p>
+    <div class="conceito-grid">
+      <div class="conceito-card a">
+        <div class="conceito-icon">🌡️</div>
+        <h4>Calor (95°C)</h4>
+        <p>Vibração térmica rompe pontes de H e interações hidrofóbicas. Proteína se desdobra e agrega.</p>
+      </div>
+      <div class="conceito-card b">
+        <div class="conceito-icon">⚗️</div>
+        <h4>pH Ácido (HCl 6M)</h4>
+        <p>Prótons alteram a carga dos grupos ionizáveis, rompem pontes salinas e pontes de H intramoleculares.</p>
+      </div>
+      <div class="conceito-card c">
+        <div class="conceito-icon">🧴</div>
+        <h4>Solvente (Acetona)</h4>
+        <p>Solvente orgânico compete com as interações hidrofóbicas e desestrutura a camada de hidratação.</p>
+      </div>
+    </div>
+    <div class="alert alert-info" style="margin-top:8px;">
+      <span class="alert-icon">💡</span>
+      <span><strong>BSA</strong> (soroalbumina bovina) é uma proteína globular de 66 kDa, altamente solúvel em pH neutro. É o modelo clássico para estudos de desnaturação por ser estável, barata e de fácil obtenção.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- EXPERIMENTO -->
+  <div id="exp" class="section-label">Procedimento</div>
+  <h2>Experimento — 5 Condições</h2>
+  <div class="card card-accent-left">
+    <p style="font-size:14px; color:var(--muted); margin-bottom:12px;">Preparar 5 tubos conforme a tabela. Observar e registrar o aspecto da solução <strong>antes e depois</strong> do tratamento (turbidez, precipitado, cor).</p>
+    <div class="alert alert-danger">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>HCl 6M é fortemente corrosivo.</strong> Luvas e óculos obrigatórios ao pipetar. Nunca pipetar com a boca.</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:12px;">Tabela — Desnaturação da BSA</h3>
+    <div class="exp-table-wrap">
+      <table class="exp-table">
+        <tr>
+          <th>Tubo</th>
+          <th>BSA 50 mg/mL (mL)</th>
+          <th>H₂O (gotas)</th>
+          <th>HCl 6M (gotas)</th>
+          <th>Acetona (mL)</th>
+          <th>Condição</th>
+          <th>Aspecto antes</th>
+          <th>Aspecto depois</th>
+        </tr>
+        <tr>
+          <td class="row-label">Controle</td>
+          <td class="vol">1</td>
+          <td class="vol">3</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="cond">Temp. ambiente</td>
+          <td class="obs"></td>
+          <td class="obs"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 2</td>
+          <td class="vol">1</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="cond">95°C · 5 min</td>
+          <td class="obs"></td>
+          <td class="obs"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 3</td>
+          <td class="vol">1</td>
+          <td class="empty">—</td>
+          <td class="vol">4</td>
+          <td class="empty">—</td>
+          <td class="cond">Temp. ambiente</td>
+          <td class="obs"></td>
+          <td class="obs"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 4</td>
+          <td class="vol">1 (em Tris-HCl)</td>
+          <td class="empty">—</td>
+          <td class="vol">4</td>
+          <td class="empty">—</td>
+          <td class="cond">Temp. ambiente</td>
+          <td class="obs"></td>
+          <td class="obs"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 5</td>
+          <td class="vol">1</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="vol">1</td>
+          <td class="cond">Temp. ambiente</td>
+          <td class="obs"></td>
+          <td class="obs"></td>
+        </tr>
+      </table>
+    </div>
+    <p style="font-size:11px; color:var(--muted); margin-top:8px;">BSA: soroalbumina bovina 50 mg/mL. Tubo 4: BSA diluída em Tris-HCl 0,10 M pH 7,5 (tampão).</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- GUIA VISUAL -->
+  <div id="visual" class="section-label">Guia Visual</div>
+  <h2>Os 5 Tubos</h2>
+  <div class="card" style="padding:18px;">
+    <svg viewBox="0 0 540 170" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:540px; display:block; margin:0 auto 10px;">
+
+      <!-- Controle -->
+      <g transform="translate(5,10)">
+        <text x="50" y="13" text-anchor="middle" font-size="9" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Controle</text>
+        <rect x="28" y="18" width="44" height="88" rx="4" fill="#e8f4ff" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="50" cy="106" rx="22" ry="6" fill="#e8f4ff" stroke="#888" stroke-width="1.5"/>
+        <rect x="25" y="12" width="50" height="9" rx="2" fill="#ddd" stroke="#aaa"/>
+        <rect x="29" y="60" width="42" height="44" rx="2" fill="#a8c8f0" opacity="0.5"/>
+        <text x="50" y="124" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1mL BSA</text>
+        <text x="50" y="134" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">+ 3gt H₂O</text>
+        <text x="50" y="146" text-anchor="middle" font-size="8" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Amb.</text>
+      </g>
+
+      <!-- Tubo 2 - calor -->
+      <g transform="translate(113,10)">
+        <text x="50" y="13" text-anchor="middle" font-size="9" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 2</text>
+        <rect x="28" y="18" width="44" height="88" rx="4" fill="#fff4f4" stroke="#c0392b" stroke-width="1.5"/>
+        <ellipse cx="50" cy="106" rx="22" ry="6" fill="#fff4f4" stroke="#c0392b" stroke-width="1.5"/>
+        <rect x="25" y="12" width="50" height="9" rx="2" fill="#f5c6c6" stroke="#c0392b"/>
+        <rect x="29" y="60" width="42" height="44" rx="2" fill="#e8a090" opacity="0.5"/>
+        <text x="50" y="124" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1mL BSA</text>
+        <text x="50" y="134" text-anchor="middle" font-size="8" fill="#c0392b" font-family="sans-serif">95°C · 5min</text>
+        <text x="50" y="146" text-anchor="middle" font-size="8" fill="#c0392b" font-family="sans-serif" font-weight="bold">Calor</text>
+      </g>
+
+      <!-- Tubo 3 - HCl -->
+      <g transform="translate(221,10)">
+        <text x="50" y="13" text-anchor="middle" font-size="9" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 3</text>
+        <rect x="28" y="18" width="44" height="88" rx="4" fill="#fffaf0" stroke="#e8a020" stroke-width="1.5"/>
+        <ellipse cx="50" cy="106" rx="22" ry="6" fill="#fffaf0" stroke="#e8a020" stroke-width="1.5"/>
+        <rect x="25" y="12" width="50" height="9" rx="2" fill="#f5e0a0" stroke="#e8a020"/>
+        <rect x="29" y="60" width="42" height="44" rx="2" fill="#e0c060" opacity="0.4"/>
+        <text x="50" y="124" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1mL BSA</text>
+        <text x="50" y="134" text-anchor="middle" font-size="8" fill="#e8a020" font-family="sans-serif">+ 4gt HCl 6M</text>
+        <text x="50" y="146" text-anchor="middle" font-size="8" fill="#e8a020" font-family="sans-serif" font-weight="bold">pH ácido</text>
+      </g>
+
+      <!-- Tubo 4 - Tris + HCl -->
+      <g transform="translate(329,10)">
+        <text x="50" y="13" text-anchor="middle" font-size="9" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 4</text>
+        <rect x="28" y="18" width="44" height="88" rx="4" fill="#fffaf0" stroke="#e8a020" stroke-width="1.5"/>
+        <ellipse cx="50" cy="106" rx="22" ry="6" fill="#fffaf0" stroke="#e8a020" stroke-width="1.5"/>
+        <rect x="25" y="12" width="50" height="9" rx="2" fill="#f5e0a0" stroke="#e8a020"/>
+        <rect x="29" y="60" width="42" height="44" rx="2" fill="#e0c060" opacity="0.4"/>
+        <text x="50" y="122" text-anchor="middle" font-size="7.5" fill="#555" font-family="sans-serif">BSA em Tris-HCl</text>
+        <text x="50" y="132" text-anchor="middle" font-size="8" fill="#e8a020" font-family="sans-serif">+ 4gt HCl 6M</text>
+        <text x="50" y="146" text-anchor="middle" font-size="7.5" fill="#e8a020" font-family="sans-serif" font-weight="bold">pH ácido+tampão</text>
+      </g>
+
+      <!-- Tubo 5 - Acetona -->
+      <g transform="translate(437,10)">
+        <text x="50" y="13" text-anchor="middle" font-size="9" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 5</text>
+        <rect x="28" y="18" width="44" height="88" rx="4" fill="#f4f0ff" stroke="#8844cc" stroke-width="1.5"/>
+        <ellipse cx="50" cy="106" rx="22" ry="6" fill="#f4f0ff" stroke="#8844cc" stroke-width="1.5"/>
+        <rect x="25" y="12" width="50" height="9" rx="2" fill="#d8c8f8" stroke="#8844cc"/>
+        <rect x="29" y="60" width="42" height="44" rx="2" fill="#c0a0e8" opacity="0.4"/>
+        <text x="50" y="124" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1mL BSA</text>
+        <text x="50" y="134" text-anchor="middle" font-size="8" fill="#8844cc" font-family="sans-serif">+ 1mL acetona</text>
+        <text x="50" y="146" text-anchor="middle" font-size="8" fill="#8844cc" font-family="sans-serif" font-weight="bold">Solvente</text>
+      </g>
+
+      <!-- barra observar -->
+      <rect x="5" y="158" width="530" height="10" rx="4" fill="#f0faf4" stroke="#1a6b4a" stroke-width="1"/>
+      <text x="270" y="166" text-anchor="middle" font-size="8.5" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Observar turbidez e precipitação antes e após o tratamento</text>
+    </svg>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RELATÓRIO -->
+  <div id="relatorio" class="section-label">Relatório</div>
+  <h2>Questões para o Relatório</h2>
+  <div class="report-items">
+    <div class="report-item">
+      <div class="report-q">1</div>
+      <span>Pesquise sobre a estrutura (primária, secundária, terciária e quaternária) e a função biológica da <strong>BSA</strong> e da <strong>caseína do leite</strong>.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">2</div>
+      <span>Esquematize a estrutura tridimensional de uma proteína globular com <strong>todas as interações estabilizadoras</strong> possíveis em água. Indique como cada agente desnaturante usado nesta aula atua especificamente.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">3</div>
+      <span>Explique as <strong>bases físico-químicas</strong> da desnaturação e precipitação de proteínas, considerando os efeitos de pH, calor, agentes caotrópicos, solventes e agentes redutores nas forças estabilizadoras da estrutura proteica.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">4</div>
+      <span>Que <strong>outros fatores</strong> podem desnaturar proteínas? (tema do próximo roteiro)</span>
+    </div>
+  </div>
+</main>
+<footer>Lab Bioquímica · UFSCar &nbsp;|&nbsp; Prof. Dr. Vadim Viviani &nbsp;|&nbsp; Aula 5 — Desnaturação e Precipitação de Proteínas</footer>
+</body>
+</html>

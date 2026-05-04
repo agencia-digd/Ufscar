@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roteiro do Aluno – Cromatografia de Aminoácidos</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface2: #f7f9f8;
+    --accent: #1a6b4a;
+    --accent2: #e8a020;
+    --accent3: #c0392b;
+    --text: #1c1c1c;
+    --muted: #555555;
+    --border: #e0e8e4;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-text-size-adjust: 100%;
+    color-scheme: light;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--accent);
+    color: white;
+    padding: 52px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    top: -100px; right: -80px;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    bottom: -60px; left: 60px;
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--accent2);
+    color: #1c1c1c;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 46px);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  header p { opacity: 0.85; font-size: 15px; max-width: 560px; }
+  .header-meta { display: flex; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 8px; font-size: 13px; opacity: 0.9; }
+  .meta-icon { font-size: 16px; }
+
+  /* LAYOUT */
+  main { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* SECTION TITLES */
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #ffffff;
+    background: var(--accent); display: inline-block;
+    padding: 3px 10px; border-radius: 4px; margin-bottom: 10px;
+  }
+  h2 {
+    font-family: 'DM Serif Display', serif; font-size: 24px;
+    color: #ffffff; background: var(--accent);
+    display: inline-block; padding: 6px 16px 8px;
+    border-radius: 6px; margin-bottom: 16px;
+  }
+
+  /* CARDS */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 32px; margin-bottom: 28px; }
+  .card-accent-left { border-left: 4px solid var(--accent); }
+  .card-accent-yellow { border-left: 4px solid var(--accent2); }
+  .card-accent-red { border-left: 4px solid var(--accent3); }
+
+  /* OBJECTIVES */
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .obj-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; }
+  .obj-num {
+    min-width: 28px; height: 28px; background: var(--accent); color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; margin-top: 2px; flex-shrink: 0;
+  }
+
+  /* CONCEPT GRID */
+  .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 20px 0; }
+  .concept-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; }
+  .concept-icon { font-size: 36px; margin-bottom: 10px; }
+  .concept-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .concept-card p { font-size: 13px; color: var(--muted); }
+
+  /* POLARITY SCALE */
+  .pol-bar-wrap { margin: 20px 0; }
+  .pol-bar {
+    height: 32px; border-radius: 16px;
+    background: linear-gradient(to right, #2980b9 0%, #27ae60 40%, #f1c40f 70%, #e74c3c 100%);
+    position: relative; margin-bottom: 8px;
+  }
+  .pol-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .pol-rf { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* AMINOACID CARDS */
+  .aa-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 16px 0; }
+  .aa-card {
+    border-radius: 10px; padding: 16px 14px; text-align: center;
+    border: 1px solid var(--border);
+  }
+  .aa-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .aa-card .aa-rf { font-family: monospace; font-size: 18px; font-weight: 700; margin: 8px 0; }
+  .aa-card p { font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .aa-polar   { background: #eef7f2; border-color: #9dd8b5; }
+  .aa-polar   h4 { color: #1a6b4a; }
+  .aa-polar   .aa-rf { color: #2980b9; }
+  .aa-neutral { background: #f0faf4; border-color: #b2dfca; }
+  .aa-neutral h4 { color: #1a7a45; }
+  .aa-neutral .aa-rf { color: #27ae60; }
+  .aa-apolar  { background: #fef9e7; border-color: #fcd48c; }
+  .aa-apolar  h4 { color: #9a6900; }
+  .aa-apolar  .aa-rf { color: #e8a020; }
+
+  /* STEPS */
+  .step-list { display: flex; flex-direction: column; gap: 0; }
+  .step { display: flex; gap: 20px; position: relative; }
+  .step:not(:last-child)::before {
+    content: ''; position: absolute; left: 19px; top: 44px;
+    width: 2px; height: calc(100% - 20px); background: var(--border);
+  }
+  .step-num {
+    min-width: 40px; height: 40px; border-radius: 50%;
+    background: var(--accent); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; flex-shrink: 0; margin-top: 4px; z-index: 1;
+  }
+  .step-body { padding-bottom: 28px; }
+  .step-body h4 { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+  .step-body p { font-size: 14px; color: var(--muted); }
+  .step-tip {
+    margin-top: 8px; background: var(--surface2); border-radius: 8px;
+    padding: 10px 14px; font-size: 13px; color: var(--muted);
+    border-left: 3px solid var(--accent2);
+  }
+
+  /* DIAGRAM — papel cromatografia */
+  .papel-diagram {
+    background: #fffef5; border: 2px dashed #d4c87a;
+    border-radius: 12px; padding: 24px;
+    margin: 20px 0; text-align: center; position: relative;
+  }
+  .papel-title { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; }
+  .papel-inner {
+    background: white; border: 1px solid #e0d8a0; border-radius: 6px;
+    padding: 20px 16px; position: relative; min-height: 200px;
+    display: flex; flex-direction: column;
+  }
+  .papel-linha-base {
+    position: absolute; bottom: 40px; left: 12px; right: 12px;
+    height: 2px; background: #aaa;
+  }
+  .papel-linha-base-label {
+    position: absolute; bottom: 44px; left: 16px;
+    font-size: 10px; color: #999; font-style: italic;
+  }
+  .papel-pontos {
+    display: flex; justify-content: center; gap: 28px;
+    position: absolute; bottom: 36px; left: 0; right: 0;
+  }
+  .ponto {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .ponto-circle {
+    width: 10px; height: 10px; border-radius: 50%;
+    border: 1.5px solid #555;
+  }
+  .ponto-label { font-size: 10px; color: #666; font-weight: 600; }
+  .papel-manchas {
+    display: flex; justify-content: center; gap: 28px;
+    position: absolute; top: 20px; left: 0; right: 0;
+  }
+  .mancha {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .mancha-circle {
+    width: 14px; height: 14px; border-radius: 50%;
+  }
+  .mancha-label { font-size: 9px; color: #888; }
+  .frente-solvente {
+    position: absolute; top: 10px; left: 12px; right: 12px;
+    height: 1.5px; background: #2980b9; opacity: 0.5;
+  }
+  .frente-label {
+    position: absolute; top: 12px; right: 16px;
+    font-size: 10px; color: #2980b9; font-style: italic;
+  }
+  .seta-rf {
+    position: absolute; left: 30px; top: 20px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  /* RF FORMULA */
+  .rf-formula {
+    background: #1c1c1c; color: #e8e8e8;
+    border-radius: 10px; padding: 20px 24px;
+    font-family: monospace; font-size: 16px;
+    margin: 16px 0; line-height: 1.9; text-align: center;
+  }
+  .rf-formula .hl { color: #e8a020; font-weight: bold; }
+  .rf-formula .frac { display: inline-block; text-align: center; vertical-align: middle; }
+  .rf-formula .num { display: block; border-bottom: 1.5px solid #e8a020; padding: 0 12px 4px; }
+  .rf-formula .den { display: block; padding: 4px 12px 0; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 16px; }
+  th { background: var(--accent); color: white; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 13px; }
+  th:first-child { border-radius: 8px 0 0 0; }
+  th:last-child { border-radius: 0 8px 0 0; }
+  td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:nth-child(even) td { background: #fafaf8; }
+  tr:last-child td { border-bottom: none; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* ALERT BOX */
+  .alert { display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; border-radius: 10px; margin: 16px 0; font-size: 14px; }
+  .alert-danger { background: #fdf2f2; border: 1px solid #f5c6c6; }
+  .alert-info { background: #f0faf4; border: 1px solid #9dd8b5; }
+  .alert-tip { background: #f0faf4; border: 1px solid #b2dfca; }
+  .alert-warn { background: #fffbf0; border: 1px solid #fcd48c; }
+  .alert-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+
+  /* REPORT */
+  .report-items { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+  .report-item { display: flex; align-items: flex-start; gap: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; font-size: 14px; }
+  .report-q { min-width: 28px; height: 28px; background: var(--accent2); color: #1c1c1c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  /* SAFETY GRID */
+  .safety-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  .safety-item { display: flex; align-items: flex-start; gap: 10px; background: var(--surface2); border-radius: 10px; padding: 14px; border: 1px solid var(--border); font-size: 13px; }
+  .safety-icon { font-size: 22px; flex-shrink: 0; }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+  /* NAV INDEX */
+  .nav-index { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 36px; }
+  .nav-index-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .nav-index-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .nav-index-list li { display: flex; align-items: center; gap: 10px; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .nav-index-list a { color: var(--accent); font-size: 14px; text-decoration: none; font-weight: 500; }
+  .nav-index-list a:hover { text-decoration: underline; }
+
+  /* FOOTER */
+  footer { text-align: center; padding: 28px 24px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); background: white; }
+
+  /* MOBILE */
+  @media (max-width: 640px) {
+    header { padding: 28px 18px 24px; }
+    header h1 { font-size: 26px; }
+    main { padding: 24px 14px 60px; }
+    .card { padding: 16px; margin-bottom: 18px; }
+    .concept-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .aa-grid { grid-template-columns: 1fr 1fr; }
+    .safety-grid { grid-template-columns: 1fr; }
+    .step-body { padding-bottom: 20px; }
+    .alert { font-size: 13px; padding: 12px 14px; }
+    h2 { font-size: 20px; }
+    .divider { margin: 28px 0; }
+    .rf-formula { font-size: 14px; }
+  }
+
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    header { background: #1a6b4a !important; color: white !important; padding: 32px 28px !important; }
+    h2 { background: #1a6b4a !important; color: white !important; }
+    .section-label { background: #1a6b4a !important; color: white !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-badge">Aula 4 · Vadim · Eng. Florestal</div>
+  <h1>Cromatografia de Aminoácidos</h1>
+  <p>Separação e identificação de aminoácidos por cromatografia em papel — princípio da partição entre fases polar e apolar.</p>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-icon">⏱️</span> ~3 horas</div>
+    <div class="meta-item"><span class="meta-icon">👥</span> Grupos de 4</div>
+    <div class="meta-item"><span class="meta-icon">🧪</span> 1 Experimento</div>
+    <div class="meta-item"><span class="meta-icon">🥼</span> Avental + Óculos obrigatórios</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ÍNDICE -->
+  <div class="nav-index">
+    <div class="nav-index-title">Nesta aula</div>
+    <ul class="nav-index-list">
+      <li><span class="nav-dot"></span><a href="#contexto">Contexto — por que cromatografia?</a></li>
+      <li><span class="nav-dot"></span><a href="#fundamentos">Fundamentos — como funciona</a></li>
+      <li><span class="nav-dot"></span><a href="#aminoacidos">Os aminoácidos desta prática</a></li>
+      <li><span class="nav-dot"></span><a href="#rf">O fator Rf</a></li>
+      <li><span class="nav-dot"></span><a href="#material">Material e Reagentes</a></li>
+      <li><span class="nav-dot"></span><a href="#procedimento">Procedimento Experimental</a></li>
+      <li><span class="nav-dot"></span><a href="#resultados">Tabela de Resultados</a></li>
+      <li><span class="nav-dot"></span><a href="#analise">Análise dos Resultados</a></li>
+      <li><span class="nav-dot"></span><a href="#seguranca">Segurança</a></li>
+      <li><span class="nav-dot"></span><a href="#relatorio">Relatório</a></li>
+    </ul>
+  </div>
+
+  <!-- CONTEXTO -->
+  <div id="contexto" class="section-label">Contexto</div>
+  <h2>Por que cromatografia?</h2>
+
+  <div class="alert alert-info" style="margin-bottom: 16px;">
+    <span class="alert-icon">🌿</span>
+    <span>Para a <strong>Engenharia Florestal</strong>, identificar aminoácidos é útil em análise de solos, compostagem, qualidade de sementes e estresse em plantas. Esta técnica simples e barata é usada em campo e laboratório.</span>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-icon">🌱</div>
+      <h4>Ciclagem de Nitrogênio</h4>
+      <p>Aminoácidos são a forma orgânica do nitrogênio no solo. Identificá-los revela a qualidade da matéria orgânica e a atividade microbiana</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🌾</div>
+      <h4>Qualidade de Sementes</h4>
+      <p>O perfil de aminoácidos de sementes florestais indica vigor germinativo e valor nutricional — usado em análises de viveiro</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🍂</div>
+      <h4>Decomposição</h4>
+      <p>Durante a degradação da serrapilheira, proteínas se quebram em aminoácidos livres — monitorar esse processo é chave no manejo florestal</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🔬</div>
+      <h4>Técnica Versátil</h4>
+      <p>Cromatografia em papel é barata, portátil e não exige equipamento sofisticado — ideal para triagem rápida em laboratórios de campo</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FUNDAMENTOS -->
+  <div id="fundamentos" class="section-label">Fundamentos</div>
+  <h2>Como funciona a cromatografia em papel</h2>
+
+  <div class="card card-accent-left">
+    <p style="font-size:15px; margin-bottom: 16px;">A separação ocorre porque cada aminoácido tem uma <strong>afinidade diferente</strong> por duas fases que competem entre si:</p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      <div style="background:#eef7f2; border-radius:10px; padding:16px; text-align:center;">
+        <div style="font-size:28px; margin-bottom:8px;">💧</div>
+        <div style="font-weight:700; font-size:14px; color:#1a6b4a; margin-bottom:4px;">Fase Estacionária</div>
+        <div style="font-size:13px; color:var(--muted);">Água que hidrata a celulose do papel Whatman. É <strong>polar</strong> e fica parada.</div>
+      </div>
+      <div style="background:#fef9e7; border-radius:10px; padding:16px; text-align:center;">
+        <div style="font-size:28px; margin-bottom:8px;">🌊</div>
+        <div style="font-weight:700; font-size:14px; color:#9a6900; margin-bottom:4px;">Fase Móvel</div>
+        <div style="font-size:13px; color:var(--muted);">Solvente de Partridge (butanol/ácido acético/água). Migra pelo papel por <strong>capilaridade</strong>.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p style="font-size:14px; color:var(--muted); margin-bottom:12px;"><strong style="color:var(--text);">Regra geral:</strong></p>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <div class="alert alert-tip" style="margin:0;">
+        <span class="alert-icon">🏃</span>
+        <span>Aminoácido <strong>apolar</strong> (grupo R hidrofóbico) → prefere a fase móvel apolar → <strong>corre mais no papel → Rf alto</strong></span>
+      </div>
+      <div class="alert alert-info" style="margin:0;">
+        <span class="alert-icon">🐢</span>
+        <span>Aminoácido <strong>polar</strong> (grupo R hidrofílico) → prefere a fase estacionária polar → <strong>fica retido no papel → Rf baixo</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Diagrama visual do papel -->
+  <div class="papel-diagram">
+    <div class="papel-title">Papel de cromatografia após corrida (visão esquemática)</div>
+    <div class="papel-inner">
+      <div class="frente-solvente"></div>
+      <div class="frente-label">← Frente do solvente</div>
+
+      <!-- Manchas após revelação -->
+      <div style="display:flex; justify-content:center; gap:32px; margin-top:16px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <div style="width:16px;height:16px;border-radius:50%;background:#8e44ad;opacity:.7;"></div>
+          <div style="font-size:10px;color:#666;">Lys<br><span style="font-weight:700;color:#8e44ad;">Rf 0,14</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:20px;">
+          <div style="width:16px;height:16px;border-radius:50%;background:#2980b9;opacity:.7;"></div>
+          <div style="font-size:10px;color:#666;">Asp<br><span style="font-weight:700;color:#2980b9;">Rf 0,24</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:40px;">
+          <div style="width:16px;height:16px;border-radius:50%;background:#27ae60;opacity:.7;"></div>
+          <div style="font-size:10px;color:#666;">Thr<br><span style="font-weight:700;color:#27ae60;">Rf 0,35</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:55px;">
+          <div style="width:16px;height:16px;border-radius:50%;background:#e8a020;opacity:.7;"></div>
+          <div style="font-size:10px;color:#666;">Ala<br><span style="font-weight:700;color:#e8a020;">Rf 0,45</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:70px;">
+          <div style="width:16px;height:16px;border-radius:50%;background:#e74c3c;opacity:.7;"></div>
+          <div style="font-size:10px;color:#666;">Leu<br><span style="font-weight:700;color:#e74c3c;">Rf 0,73</span></div>
+        </div>
+      </div>
+
+      <!-- Linha base e pontos de aplicação -->
+      <div style="position:absolute;bottom:32px;left:12px;right:12px;height:1.5px;background:#999;"></div>
+      <div style="position:absolute;bottom:18px;left:0;right:0;display:flex;justify-content:center;gap:32px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;"><div style="width:6px;height:6px;border-radius:50%;border:1.5px solid #555;"></div><div style="font-size:9px;color:#888;">1</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;"><div style="width:6px;height:6px;border-radius:50%;border:1.5px solid #555;"></div><div style="font-size:9px;color:#888;">2</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;"><div style="width:6px;height:6px;border-radius:50%;border:1.5px solid #555;"></div><div style="font-size:9px;color:#888;">3</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;"><div style="width:6px;height:6px;border-radius:50%;border:1.5px solid #555;"></div><div style="font-size:9px;color:#888;">4</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;"><div style="width:6px;height:6px;border-radius:50%;border:1.5px solid #555;"></div><div style="font-size:9px;color:#888;">5</div></div>
+      </div>
+      <div style="position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:9px;color:#aaa;font-style:italic;">linha de aplicação (2 cm da borda inferior)</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- AMINOÁCIDOS -->
+  <div id="aminoacidos" class="section-label">Aminoácidos da Prática</div>
+  <h2>Padrões e amostra desconhecida</h2>
+
+  <p style="color:var(--muted); font-size:14px; margin-bottom:20px;">Você vai trabalhar com <strong>4 aminoácidos padrão</strong> conhecidos e <strong>1 amostra desconhecida</strong>. Observe como a polaridade do grupo R determina o Rf de cada um.</p>
+
+  <div class="aa-grid">
+    <div class="aa-card aa-polar">
+      <h4>Arginina (Arg)</h4>
+      <div class="aa-rf">0,20</div>
+      <p>Grupo R com guanidínio — muito polar e carregado positivamente. Baixa mobilidade</p>
+    </div>
+    <div class="aa-card aa-neutral">
+      <h4>Glicina (Gly)</h4>
+      <div class="aa-rf">0,26</div>
+      <p>Menor aminoácido — sem grupo R lateral, apenas H. Levemente polar</p>
+    </div>
+    <div class="aa-card aa-neutral">
+      <h4>Alanina (Ala)</h4>
+      <div class="aa-rf">0,45</div>
+      <p>Grupo R metila — pequeno e levemente apolar. Mobilidade média-alta</p>
+    </div>
+    <div class="aa-card aa-apolar">
+      <h4>Tirosina (Tyr)</h4>
+      <div class="aa-rf">0,50</div>
+      <p>Grupo R fenol — anel aromático com hidroxila. Mobilidade moderada</p>
+    </div>
+    <div class="aa-card aa-apolar">
+      <h4>Fenilalanina (Phe)</h4>
+      <div class="aa-rf">0,68</div>
+      <p>Grupo R benzil — anel aromático puro, apolar. Alta mobilidade na fase móvel</p>
+    </div>
+    <div class="aa-card" style="background:#f0faf4; border-color:#b2dfca;">
+      <h4 style="color:#1a6b4a;">Mistura (Ponto 6)</h4>
+      <div class="aa-rf" style="color:#1a6b4a;">???</div>
+      <p>Composição desconhecida. Observe quantas manchas aparecem e identifique cada uma pelo Rf</p>
+    </div>
+  </div>
+
+  <div class="alert alert-warn">
+    <span class="alert-icon">⚠️</span>
+    <span>Os valores de Rf da tabela são <strong>referência</strong> — os seus resultados podem diferir ligeiramente por temperatura, umidade e espessura das manchas. No ponto 6 (mistura), observe quantas manchas aparecem e tente identificar cada aminoácido pelo Rf.</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RF -->
+  <div id="rf" class="section-label">Conceito-Chave</div>
+  <h2>O Fator Rf</h2>
+
+  <div class="card">
+    <p style="font-size:14px; margin-bottom:16px;">O <strong>Rf (Fator de Retenção)</strong> é a "identidade cromatográfica" de cada substância — um número entre 0 e 1 que independe do tamanho do papel.</p>
+
+    <div class="rf-formula">
+      <span class="hl">Rf</span> = 
+      <span class="frac">
+        <span class="num">distância percorrida pelo aminoácido</span>
+        <span class="den">distância percorrida pelo solvente</span>
+      </span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px;">
+      <div style="background:#fef9e7; border-radius:8px; padding:14px; font-size:13px; color:var(--muted);">
+        <strong style="color:var(--text); display:block; margin-bottom:4px;">Rf próximo de 1</strong>
+        Aminoácido muito apolar — corre quase junto com o solvente (Fenilalanina: 0,68)
+      </div>
+      <div style="background:#eef7f2; border-radius:8px; padding:14px; font-size:13px; color:var(--muted);">
+        <strong style="color:var(--text); display:block; margin-bottom:4px;">Rf próximo de 0</strong>
+        Aminoácido muito polar — fica quase no ponto de aplicação (Arginina: 0,20)
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabela de Rf de referência -->
+  <div class="card card-accent-yellow">
+    <h3 style="font-size:16px; font-weight:600; margin-bottom:4px;">Tabela I — Rf de Referência</h3>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:8px;">★ Aminoácidos usados nesta prática estão destacados em verde.</p>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:14px;">Solvente de Partridge: n-butanol/ácido acético/água (4:1:1) · Papel Whatman nº 1 · 20°C</p>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Aminoácido</th><th>Código</th><th>Rf</th><th>Polaridade</th>
+        </tr>
+        <tr><td>Lisina</td><td>Lys</td><td><strong>0,14</strong></td><td>Muito polar (+)</td></tr>
+        <tr><td>Histidina</td><td>His</td><td><strong>0,20</strong></td><td>Polar (+)</td></tr>
+        <tr style="background:#f0faf4;"><td><strong>Arginina ★</strong></td><td>Arg</td><td><strong>0,20</strong></td><td>Polar (+)</td></tr>
+        <tr><td>Ácido Aspártico</td><td>Asp</td><td><strong>0,24</strong></td><td>Muito polar (−)</td></tr>
+        <tr style="background:#f0faf4;"><td><strong>Glicina ★</strong></td><td>Gly</td><td><strong>0,26</strong></td><td>Polar neutro</td></tr>
+        <tr><td>Serina</td><td>Ser</td><td><strong>0,27</strong></td><td>Polar neutro</td></tr>
+        <tr><td>Ácido Glutâmico</td><td>Glu</td><td><strong>0,30</strong></td><td>Polar (−)</td></tr>
+        <tr><td>Treonina</td><td>Thr</td><td><strong>0,35</strong></td><td>Polar neutro</td></tr>
+        <tr><td>Cisteína</td><td>Cys</td><td><strong>0,38</strong></td><td>Polar neutro</td></tr>
+        <tr style="background:#f0faf4;"><td><strong>Alanina ★</strong></td><td>Ala</td><td><strong>0,45</strong></td><td>Levemente apolar</td></tr>
+        <tr style="background:#f0faf4;"><td><strong>Tirosina ★</strong></td><td>Tyr</td><td><strong>0,50</strong></td><td>Moderado</td></tr>
+        <tr><td>Metionina</td><td>Met</td><td><strong>0,55</strong></td><td>Apolar</td></tr>
+        <tr><td>Valina</td><td>Val</td><td><strong>0,60</strong></td><td>Apolar</td></tr>
+        <tr style="background:#f0faf4;"><td><strong>Fenilalanina ★</strong></td><td>Phe</td><td><strong>0,68</strong></td><td>Muito apolar</td></tr>
+        <tr><td>Isoleucina</td><td>Ile</td><td><strong>0,72</strong></td><td>Muito apolar</td></tr>
+        <tr><td>Leucina</td><td>Leu</td><td><strong>0,73</strong></td><td>Muito apolar</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MATERIAL -->
+  <div id="material" class="section-label">Material</div>
+  <h2>O que você vai usar</h2>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+    <div class="card" style="margin-bottom:0;">
+      <h3 style="font-size:15px; font-weight:700; margin-bottom:12px; color:var(--accent);">🧪 Reagentes</h3>
+      <ul style="list-style:none; display:flex; flex-direction:column; gap:8px; font-size:14px; color:var(--muted);">
+        <li>• Arginina (Arg)</li>
+        <li>• Glicina (Gly)</li>
+        <li>• Alanina (Ala)</li>
+        <li>• Tirosina (Tyr)</li>
+        <li>• Fenilalanina (Phe)</li>
+        <li>• Mistura desconhecida (ponto 6)</li>
+        <li>• <strong>Solvente de Partridge</strong>:<br>n-butanol / ác. acético / H₂O (4:1:1)</li>
+        <li>• Ninhidrina 0,1% em acetona</li>
+      </ul>
+    </div>
+    <div class="card" style="margin-bottom:0;">
+      <h3 style="font-size:15px; font-weight:700; margin-bottom:12px; color:var(--accent);">🫙 Vidraria e Utensílios</h3>
+      <ul style="list-style:none; display:flex; flex-direction:column; gap:8px; font-size:14px; color:var(--muted);">
+        <li>• Papel Whatman nº 1 (23 × 16 cm)</li>
+        <li>• Placa de Petri grande</li>
+        <li>• Béquer 2 L (para cobrir o sistema)</li>
+        <li>• Capilares de vidro para aplicação</li>
+        <li>• Clips metálicos</li>
+        <li>• Lápis (nunca caneta!)</li>
+        <li>• Régua e fita métrica</li>
+        <li>• Estufa 80–100°C</li>
+        <li>• Luvas de nitrila</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-warn" style="margin-top: 16px;">
+    <span class="alert-icon">⏰</span>
+    <span>O <strong>solvente de Partridge</strong> deve ser preparado pelo técnico <strong>na véspera</strong> — sempre em volume de 600 mL (400 mL butanol + 100 mL ác. acético + 100 mL H₂O destilada) para garantir estabilidade e saturação da fase vapor.</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PROCEDIMENTO -->
+  <div id="procedimento" class="section-label">Procedimento</div>
+  <h2>Passo a Passo</h2>
+
+  <div class="alert alert-danger">
+    <span class="alert-icon">🧤</span>
+    <span><strong>Antes de começar:</strong> coloque avental e óculos de proteção. Use luvas ao manusear a ninhidrina (tóxica e corante permanente). Nunca toque no papel Whatman com os dedos — a gordura da pele contamina a amostra.</span>
+  </div>
+
+  <div class="step-list">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>Preparar o papel</h4>
+        <p>Pegue uma folha de papel Whatman nº 1 (23 × 16 cm). Com <strong>lápis</strong>, trace uma linha paralela à borda maior, a 2 cm da borda inferior. Deixe margens de 1,5 cm em cada lateral.</p>
+        <div class="step-tip">⚠️ Use SEMPRE lápis, nunca caneta — a tinta migra com o solvente e contamina as amostras. Segure o papel pelas bordas.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>Marcar os 6 pontos de aplicação</h4>
+        <p>Sobre a linha traçada, marque 6 pontos distantes 3 cm um do outro. Numere-os de 1 a 6 a lápis.</p>
+        <div style="background:var(--surface2); border-radius:8px; padding:12px 16px; margin-top:10px; font-size:13px; color:var(--muted); border:1px solid var(--border);">
+          <strong style="color:var(--text);">Distribuição das amostras:</strong><br>
+          Ponto 1 → Arginina (Arg)<br>
+          Ponto 2 → Glicina (Gly)<br>
+          Ponto 3 → Fenilalanina (Phe)<br>
+          Ponto 4 → Alanina (Ala)<br>
+          Ponto 5 → <strong>Tirosina (Tyr)</strong><br>
+          Ponto 6 → <strong>Mistura desconhecida</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4>Aplicar as amostras com capilar</h4>
+        <p>Mergulhe o capilar na solução do aminoácido e toque <strong>levemente</strong> o ponto marcado no papel. A mancha deve ser a menor possível — idealmente menor que 3 mm de diâmetro. Aplique cada amostra <strong>2 a 3 vezes</strong>, deixando secar entre cada aplicação.</p>
+        <div class="step-tip">💡 Manchas grandes = manchas que se sobrepõem = resultado ruim. A beleza da cromatografia está na capricho da aplicação!</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h4>Enrolar e prender o papel</h4>
+        <p>Enrole o papel formando um cilindro — as bordas laterais não devem se tocar (deixe ~1 cm de folga). Prenda as extremidades superiores com <strong>clips metálicos</strong>. As bordas não devem se sobrepor nem tocar as paredes da placa durante a corrida.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h4>Colocar no solvente</h4>
+        <p>Coloque 25 mL de solvente de Partridge na placa de Petri. Posicione o cilindro de papel verticalmente dentro da placa — <strong>a linha de aplicação deve ficar acima do nível do solvente</strong>. Cubra com um béquer de 2 L.</p>
+        <div class="step-tip">⚠️ Crítico: o papel NÃO pode tocar as paredes da placa. Se tocar, o solvente sobe de forma irregular e o resultado fica inválido.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <h4>Aguardar a corrida — solvente migrar 10 cm</h4>
+        <p>Deixe o sistema fechado até o solvente ter percorrido exatamente <strong>10 cm</strong> acima da linha de aplicação. Isso leva aproximadamente 60–90 minutos. <strong>Não abra o béquer</strong> durante a corrida — a saturação do vapor é essencial.</p>
+        <div class="step-tip">📏 Monitore pela lateral da placa. Quando chegar a 10 cm, retire imediatamente.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <h4>Marcar a frente do solvente</h4>
+        <p>Retire o papel e <strong>imediatamente</strong> marque com lápis a linha de frente do solvente. Faça isso antes de o papel secar — a frente desaparece com a evaporação.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">8</div>
+      <div class="step-body">
+        <h4>Secar na estufa</h4>
+        <p>Leve o papel à estufa a <strong>80–100°C</strong> por 10–15 minutos para evaporar completamente o solvente.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">9</div>
+      <div class="step-body">
+        <h4>Revelar com ninhidrina</h4>
+        <p>Mergulhe o papel na solução de <strong>ninhidrina 0,1% em acetona</strong> (ou borrife uniformemente). Leve à estufa a 80–100°C por 5–10 minutos. As manchas de aminoácidos aparecem em <strong>roxo (púrpura de Ruhemann)</strong>.</p>
+        <div class="step-tip">🧤 Use luvas! A ninhidrina reage com aminoácidos da sua pele e mancha permanentemente.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">10</div>
+      <div class="step-body">
+        <h4>Delimitar e medir as manchas</h4>
+        <p>Com lápis, contorne imediatamente cada mancha visível. Marque o <strong>centro de cada mancha</strong>. Meça com régua:</p>
+        <ul style="margin-top:8px; padding-left:18px; font-size:14px; color:var(--muted); display:flex; flex-direction:column; gap:4px;">
+          <li>Distância da linha de aplicação até o <strong>centro da mancha</strong> (= distância do aminoácido)</li>
+          <li>Distância da linha de aplicação até a <strong>frente do solvente</strong></li>
+        </ul>
+        <div class="step-tip">📐 Calcule o Rf de cada mancha e anote na tabela abaixo.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- TABELA DE RESULTADOS -->
+  <div id="resultados" class="section-label">Resultados</div>
+  <h2>Tabela de Registro</h2>
+
+  <div class="card card-accent-yellow">
+    <h4 style="font-size:15px; font-weight:600; margin-bottom:4px;">Distância da frente do solvente: ________ cm</h4>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:16px;">Meça da linha de aplicação até a frente marcada no papel.</p>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Ponto</th>
+          <th>Aminoácido</th>
+          <th>Dist. Mancha (cm)</th>
+          <th>Dist. Solvente (cm)</th>
+          <th>Rf Calculado</th>
+          <th>Rf Tabela</th>
+        </tr>
+        <tr>
+          <td>1</td><td>Arginina (Arg)</td>
+          <td style="min-width:110px;"></td><td></td>
+          <td></td><td style="color:var(--muted);">0,20</td>
+        </tr>
+        <tr>
+          <td>2</td><td>Glicina (Gly)</td>
+          <td></td><td></td>
+          <td></td><td style="color:var(--muted);">0,26</td>
+        </tr>
+        <tr>
+          <td>3</td><td>Fenilalanina (Phe)</td>
+          <td></td><td></td>
+          <td></td><td style="color:var(--muted);">0,68</td>
+        </tr>
+        <tr>
+          <td>4</td><td>Alanina (Ala)</td>
+          <td></td><td></td>
+          <td></td><td style="color:var(--muted);">0,45</td>
+        </tr>
+        <tr>
+          <td>5</td><td>Tirosina (Tyr)</td>
+          <td></td><td></td>
+          <td></td><td style="color:var(--muted);">0,50</td>
+        </tr>
+        <tr>
+          <td>6</td><td>Mistura (padrões)</td>
+          <td colspan="3" style="color:var(--muted); font-style:italic;">observe quantas manchas aparecem</td>
+          <td>—</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ANÁLISE -->
+  <div id="analise" class="section-label">Análise dos Resultados</div>
+  <h2>Interpretando os dados</h2>
+
+  <div class="card card-accent-left">
+    <h3 style="font-size:16px; font-weight:600; margin-bottom:14px;">Como identificar o aminoácido desconhecido</h3>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num" style="width:32px;height:32px;font-size:13px;">A</div>
+        <div class="step-body">
+          <h4>Compare o Rf calculado com a Tabela I</h4>
+          <p>Encontre o aminoácido cujo Rf de referência mais se aproxima do seu valor medido no ponto 5. Não espere valores idênticos — uma variação de ±0,05 é normal.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="width:32px;height:32px;font-size:13px;">B</div>
+        <div class="step-body">
+          <h4>Confirme visualmente com os padrões</h4>
+          <p>Se a desconhecida coincide com algum padrão do ponto 6 (mistura), isso reforça a identificação. A posição das manchas deve ser a mesma.</p>
+        </div>
+      </div>
+      <div class="step" style="margin-bottom:0;">
+        <div class="step-num" style="width:32px;height:32px;font-size:13px;">C</div>
+        <div class="step-body" style="padding-bottom:0;">
+          <h4>Discuta as possíveis discrepâncias</h4>
+          <p>Manchas maiores, temperatura diferente de 20°C, umidade do papel — todos afetam o Rf. Liste os fatores que podem ter causado diferença em relação à tabela.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SEGURANÇA -->
+  <div id="seguranca" class="section-label">Segurança</div>
+  <h2>Normas do Laboratório</h2>
+
+  <div class="card">
+    <div class="safety-grid">
+      <div class="safety-item">
+        <span class="safety-icon">🥼</span>
+        <span>Avental fechado e óculos de proteção <strong>obrigatórios</strong> durante toda a prática</span>
+      </div>
+      <div class="safety-item">
+        <span class="safety-icon">🧤</span>
+        <span>Use luvas de nitrila especialmente ao manusear ninhidrina e solvente orgânico</span>
+      </div>
+      <div class="safety-item">
+        <span class="safety-icon">🌬️</span>
+        <span>Trabalhe com <strong>butanol e acetona na capela</strong> — vapores orgânicos são irritantes</span>
+      </div>
+      <div class="safety-item">
+        <span class="safety-icon">👟</span>
+        <span>Calçado fechado obrigatório — sem sandálias, bermudas ou mini-saias</span>
+      </div>
+      <div class="safety-item">
+        <span class="safety-icon">🍽️</span>
+        <span>Terminantemente proibido comer, beber ou fumar dentro do laboratório</span>
+      </div>
+      <div class="safety-item">
+        <span class="safety-icon">🔪</span>
+        <span>Não use vidraria quebrada ou com arestas — descarte no local indicado pelo técnico</span>
+      </div>
+    </div>
+
+    <div class="alert alert-danger" style="margin-top: 16px; margin-bottom:0;">
+      <span class="alert-icon">🔥</span>
+      <span><strong>Butanol e acetona são inflamáveis.</strong> Mantenha longe de chamas. A estufa deve ser elétrica — nunca use bico de Bunsen perto destes solventes.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RELATÓRIO -->
+  <div id="relatorio" class="section-label">Relatório</div>
+  <h2>O que entregar</h2>
+
+  <div class="report-items">
+    <div class="report-item">
+      <div class="report-q">1</div>
+      <span>Desenhe a <strong>estrutura química</strong> dos aminoácidos Arginina, Glicina, Alanina, Tirosina e Fenilalanina. Identifique o grupo R de cada um e classifique sua polaridade.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">2</div>
+      <span>Apresente a <strong>tabela de resultados</strong> completa com as distâncias medidas e os Rf calculados para cada ponto.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">3</div>
+      <span>Compare seus valores de Rf com os da <strong>Tabela I</strong>. Eles coincidem? Discuta a relação entre polaridade do grupo R e o valor de Rf observado.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">4</div>
+      <span><strong>Identifique o aminoácido desconhecido</strong> com base no Rf medido. Justifique sua resposta comparando com os padrões e com a Tabela I.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">5</div>
+      <span>Discuta as <strong>possíveis causas de discrepância</strong> entre seus resultados e os valores de referência. Quais fatores experimentais influenciam o Rf?</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">6</div>
+      <span><strong>[Questão extra — Florestal]</strong> Em que contextos do manejo florestal ou análise ambiental a cromatografia de aminoácidos poderia ser aplicada? Cite ao menos dois exemplos concretos.</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Lab Química Orgânica · UFSCar &nbsp;|&nbsp; Prof. Vadim &nbsp;|&nbsp; Aula 4 — Cromatografia de Aminoácidos
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia do Técnico — Desnaturação e Precipitação de Proteínas</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --surface2: #21262d; --border: #30363d;
+  --accent: #238636; --accent-dim: rgba(35,134,54,0.15); --accent-border: rgba(35,134,54,0.35);
+  --accent2: #e6a817; --danger: #da3633; --info: #388bfd;
+  --text: #e6edf3; --muted: #8b949e; --green: #3fb950; --orange: #f0883e; --red: #ff7b72;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 15px; line-height: 1.6; padding: 0 0 60px; color-scheme: light; }
+#progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; z-index: 999; }
+.header { background: linear-gradient(135deg, #0d1117 0%, #0d1f12 50%, #0d1117 100%); border-bottom: 2px solid var(--accent); padding: 32px 24px 28px; position: relative; overflow: hidden; }
+.header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(35,134,54,0.12) 0%, transparent 70%); border-radius: 50%; }
+.header-badge { display: inline-flex; gap: 6px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+.header h1 { font-size: clamp(16px, 4vw, 25px); font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.header h1 span { color: var(--green); }
+.header-sub { color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; }
+.nav-index { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin: 20px 16px; padding: 16px; }
+.nav-index h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; }
+.nav-index ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.nav-index a { color: var(--info); text-decoration: none; font-size: 13px; display: flex; gap: 6px; padding: 4px 6px; border-radius: 6px; }
+.section { margin: 20px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.section-header { background: var(--surface2); border-bottom: 1px solid var(--border); padding: 14px 18px; display: flex; align-items: center; gap: 10px; }
+.section-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.section-icon.green  { background: rgba(63,185,80,0.2); }
+.section-icon.yellow { background: rgba(230,168,23,0.2); }
+.section-icon.red    { background: rgba(218,54,51,0.2); }
+.section-icon.blue   { background: rgba(56,139,253,0.2); }
+.section-header h2 { font-size: 16px; font-weight: 700; color: var(--text); }
+.section-header .badge { margin-left: auto; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: rgba(56,139,253,0.15); color: var(--info); border: 1px solid rgba(56,139,253,0.3); }
+.section-body { padding: 18px; }
+.kit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kit-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+.kit-item .qty { background: rgba(56,139,253,0.15); border: 1px solid rgba(56,139,253,0.3); color: var(--info); font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 6px; flex-shrink: 0; white-space: nowrap; }
+.recipe { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+.recipe:last-child { margin-bottom: 0; }
+.recipe-header { background: var(--accent-dim); border-bottom: 1px solid var(--accent-border); padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+.recipe-label { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: white; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.recipe-header h3 { font-size: 14px; font-weight: 700; color: var(--text); }
+.recipe-body { padding: 14px; }
+.steps { list-style: none; }
+.steps li { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
+.steps li:last-child { margin-bottom: 0; }
+.step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+.calc-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+.calc-table th { background: var(--surface2); padding: 8px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--border); }
+.calc-table td { padding: 8px 12px; border-bottom: 1px solid rgba(48,54,61,0.5); font-size: 13px; }
+.calc-table tr:last-child td { border-bottom: none; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+.alert { border-radius: 8px; padding: 12px 14px; margin: 10px 0; display: flex; gap: 10px; font-size: 13px; line-height: 1.5; }
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert.danger  { background: rgba(218,54,51,0.1);  border: 1px solid rgba(218,54,51,0.35); color: #ff8080; }
+.alert.warning { background: rgba(230,168,23,0.1); border: 1px solid rgba(230,168,23,0.35); color: var(--accent2); }
+.alert.info    { background: rgba(56,139,253,0.1); border: 1px solid rgba(56,139,253,0.35); color: var(--info); }
+.alert.success { background: rgba(63,185,80,0.1);  border: 1px solid rgba(63,185,80,0.35); color: var(--green); }
+.alert.green   { background: var(--accent-dim);    border: 1px solid var(--accent-border);  color: var(--green); }
+.checklist { list-style: none; }
+.checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(48,54,61,0.4); font-size: 13px; }
+.checklist li:last-child { border-bottom: none; }
+.check-box { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+.parte-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green); background: var(--accent-dim); border: 1px solid var(--accent-border); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 10px; }
+footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  #progress-bar { display: none !important; }
+  @page { margin: 15mm 12mm; size: A4; }
+  body { font-size: 10px !important; line-height: 1.35 !important; }
+  .header { padding: 12px 18px !important; }
+  .header h1 { font-size: 14px !important; }
+  .header-sub { font-size: 8px !important; gap: 10px !important; }
+  .header-badge { font-size: 7px !important; padding: 2px 7px !important; }
+  .nav-index { display: none !important; }
+  .section { margin: 10px 0 !important; break-inside: avoid; }
+  .section-header { padding: 8px 12px !important; break-after: avoid !important; }
+  .section-header h2 { font-size: 12px !important; }
+  .section-icon { width: 24px !important; height: 24px !important; font-size: 12px !important; }
+  .section-body { padding: 10px 12px !important; break-before: avoid !important; }
+  .kit-grid { gap: 5px !important; }
+  .kit-item { padding: 6px 8px !important; font-size: 9px !important; }
+  .kit-item .qty { font-size: 9px !important; }
+  .recipe { margin-bottom: 8px !important; break-inside: avoid !important; }
+  .recipe-header { padding: 6px 10px !important; }
+  .recipe-header h3 { font-size: 10px !important; }
+  .recipe-body { padding: 8px 10px !important; }
+  .steps li { font-size: 9px !important; margin-bottom: 4px !important; }
+  .step-num { width: 16px !important; height: 16px !important; font-size: 8px !important; }
+  .calc-table th, .calc-table td { padding: 4px 8px !important; font-size: 9px !important; }
+  .alert { padding: 5px 9px !important; font-size: 9px !important; margin: 4px 0 !important; break-inside: avoid !important; }
+  .checklist li { padding: 4px 0 !important; font-size: 9px !important; }
+  .check-box { width: 14px !important; height: 14px !important; }
+  .parte-label { font-size: 8px !important; padding: 2px 7px !important; margin-bottom: 5px !important; }
+  footer { font-size: 8px !important; padding: 8px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+<div class="header">
+  <div class="header-badge">Guia do Técnico</div>
+  <h1><span>Desnaturação e Precipitação de Proteínas</span> — Aula 5</h1>
+  <div class="header-sub">
+    <span>Prof. Dr. Vadim Viviani</span>
+    <span>6–10 grupos</span>
+    <span>5 tubos por grupo</span>
+    <span>BM 95°C · 5 min</span>
+  </div>
+</div>
+<div class="nav-index">
+  <h3>Seções</h3>
+  <ul>
+    <li><a href="#kits">📦 Kit por grupo</a></li>
+    <li><a href="#bancada">🧪 Bancada Central</a></li>
+    <li><a href="#preparo">⚗️ Preparo de Soluções</a></li>
+    <li><a href="#quantidades">🔢 Quantidades</a></li>
+    <li><a href="#checklist">☑️ Checklist</a></li>
+  </ul>
+</div>
+
+<!-- KIT POR GRUPO -->
+<div class="section" id="kits">
+  <div class="section-header">
+    <div class="section-icon green">📦</div>
+    <h2>Kit por Grupo</h2>
+  </div>
+  <div class="section-body">
+    <div class="kit-grid">
+      <div class="kit-item"><span class="qty">5×</span><span>Tubos de ensaio</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Estante para tubos</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Pipeta Pasteur + pêra</span></div>
+      <div class="kit-item"><span class="qty">1 par</span><span>Luvas nitrílicas (HCl 6M é corrosivo)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BANCADA CENTRAL -->
+<div class="section" id="bancada">
+  <div class="section-header">
+    <div class="section-icon green">🧪</div>
+    <h2>Bancada Central</h2>
+  </div>
+  <div class="section-body">
+    <div class="kit-grid">
+      <div class="kit-item"><span class="qty">pipeta 1mL</span><span>BSA 50 mg/mL — etiquetada · em gelo</span></div>
+      <div class="kit-item"><span class="qty">pipeta Pasteur</span><span>HCl 6M — etiquetada · CORROSIVO</span></div>
+      <div class="kit-item"><span class="qty">pipeta 1mL</span><span>Acetona — etiquetada · área ventilada</span></div>
+      <div class="kit-item"><span class="qty">pipeta Pasteur</span><span>H₂O destilada — etiquetada</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Banho-maria 95°C ligado com antecedência</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Béquer de descarte</span></div>
+    </div>
+    <div class="alert danger" style="margin-top:10px;">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>HCl 6M é fortemente corrosivo.</strong> Disponibilizar luvas ao lado do frasco. Sinalizar claramente. Acetona é inflamável — sem chamas na bancada.</span>
+    </div>
+  </div>
+</div>
+
+<!-- PREPARO -->
+<div class="section" id="preparo">
+  <div class="section-header">
+    <div class="section-icon yellow">⚗️</div>
+    <h2>Preparo de Soluções</h2>
+    <span class="badge">véspera</span>
+  </div>
+  <div class="section-body">
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">A</div>
+        <h3>BSA 50 mg/mL — 10 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Pesar <strong>0,50 g de BSA</strong> (soroalbumina bovina)</span></li>
+          <li><div class="step-num">2</div><span>Dissolver em água destilada e completar para <strong>10 mL</strong>. Manter em gelo</span></li>
+        </ul>
+        <div class="alert warning" style="margin-top:8px;">
+          <span class="alert-icon">📌</span>
+          <span>BSA diferente da aula de Biureto — aqui é <strong>50 mg/mL em água destilada</strong>. Na aula de Biureto é 8 mg/mL. Não confundir os frascos!</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">B</div>
+        <h3>Tris-HCl 0,10 M pH 7,5 — 50 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Pesar <strong>0,606 g de Tris base</strong> (MM = 121,1 g/mol · 0,1 M × 0,05 L)</span></li>
+          <li><div class="step-num">2</div><span>Dissolver em ~45 mL de água destilada</span></li>
+          <li><div class="step-num">3</div><span>Ajustar pH para <strong>7,5</strong> com HCl concentrado. Completar para 50 mL</span></li>
+          <li><div class="step-num">4</div><span>Diluir 50 mL de leite com 50 mL deste tampão (mistura leite+tampão para o Tubo 4)</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">C</div>
+        <h3>HCl 6M — uso direto</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>HCl concentrado (37%) ≈ 12 M. Diluir 1:1 em água para obter 6M, ou usar HCl 6M já preparado</span></li>
+          <li><div class="step-num">2</div><span>Sempre adicionar ácido à água, nunca o contrário</span></li>
+        </ul>
+        <div class="alert danger" style="margin-top:8px;">
+          <span class="alert-icon">🧤</span>
+          <span>Manipular HCl concentrado em área com exaustão. Luvas e óculos obrigatórios.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUANTIDADES -->
+<div class="section" id="quantidades">
+  <div class="section-header">
+    <div class="section-icon blue">🔢</div>
+    <h2>Quantidades Totais</h2>
+    <span class="badge">para 10 grupos</span>
+  </div>
+  <div class="section-body">
+    <table class="calc-table">
+      <tr><th>Reagente</th><th>Por grupo</th><th>10 grupos</th><th>Preparar</th></tr>
+      <tr><td>BSA 50 mg/mL</td><td class="mono">5 mL (5 tubos × 1)</td><td class="mono">50 mL</td><td class="mono">~60 mL</td></tr>
+      <tr><td>HCl 6M</td><td class="mono">~0,5 mL (gotas)</td><td class="mono">~5 mL</td><td class="mono">~15 mL</td></tr>
+      <tr><td>Acetona</td><td class="mono">1 mL</td><td class="mono">10 mL</td><td class="mono">~15 mL</td></tr>
+      <tr><td>Tampão Tris-HCl 0,1 M pH 7,5</td><td class="mono">1 mL (tubo 4)</td><td class="mono">10 mL</td><td class="mono">50 mL</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="section-header">
+    <div class="section-icon green">☑️</div>
+    <h2>Checklist</h2>
+  </div>
+  <div class="section-body">
+    <p class="parte-label">Véspera</p>
+    <ul class="checklist" style="margin-bottom:14px;">
+      <li><div class="check-box"></div><span>Preparar BSA 50 mg/mL (10 mL) em água destilada — refrigerar</span></li>
+      <li><div class="check-box"></div><span>Preparar Tris-HCl 0,10 M pH 7,5 (50 mL)</span></li>
+      <li><div class="check-box"></div><span>Verificar HCl 6M e acetona em estoque</span></li>
+    </ul>
+    <p class="parte-label">No dia</p>
+    <ul class="checklist" style="margin-bottom:14px;">
+      <li><div class="check-box"></div><span>Ligar banho-maria a 95°C com 1h de antecedência</span></li>
+      <li><div class="check-box"></div><span>Montar bancada central com reagentes etiquetados</span></li>
+      <li><div class="check-box"></div><span>Disponibilizar luvas ao lado do HCl 6M</span></li>
+      <li><div class="check-box"></div><span>Distribuir 5 tubos + estante por grupo</span></li>
+    </ul>
+    <p class="parte-label">Ao final</p>
+    <ul class="checklist">
+      <li><div class="check-box"></div><span>Descartar resíduos com HCl diluído na pia com água abundante</span></li>
+      <li><div class="check-box"></div><span>Descartar acetona no frasco de orgânicos não-halogenados</span></li>
+      <li><div class="check-box"></div><span>Guardar BSA sobressalente refrigerada — será usada na Aula 6 (Biureto)</span></li>
+    </ul>
+  </div>
+</div>
+
+<footer>Lab Bioquímica · UFSCar &nbsp;|&nbsp; Prof. Dr. Vadim Viviani &nbsp;|&nbsp; Guia Técnico — Aula 5 Desnaturação</footer>
+<script>
+  window.addEventListener('scroll', () => {
+    const pct = (document.documentElement.scrollTop / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  });
+</script>
+</body>
+</html>

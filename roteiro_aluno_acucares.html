@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roteiro do Aluno – Identificação de Açúcares Redutores</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff; --surface: #ffffff; --surface2: #f4f8f6;
+    --accent: #1a6b4a; --accent2: #e8a020; --accent3: #c0392b;
+    --text: #1c1c1c; --muted: #555555; --border: #d8e8e0; --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.7; color-scheme: light; }
+
+  header { background: var(--accent); color: white; padding: 40px 40px 32px; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%; background: rgba(255,255,255,0.05); top: -80px; right: -60px; }
+  .header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent2); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 700; color: #1c1c1c; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(22px, 4vw, 36px); font-weight: 400; margin-bottom: 8px; line-height: 1.2; }
+  header p { opacity: 0.88; font-size: 15px; max-width: 600px; }
+  .header-meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 8px; font-size: 13px; opacity: 0.9; }
+
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: white; background: var(--accent); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 8px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 22px; color: #ffffff; background: var(--accent); display: inline-block; padding: 6px 16px 8px; border-radius: 6px; margin-bottom: 16px; }
+  h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 20px; }
+  .card-accent-left { border-left: 4px solid var(--accent); }
+  .card-accent-yellow { border-left: 4px solid var(--accent2); }
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  .obj-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .obj-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; }
+  .obj-num { min-width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+
+  /* SUGAR GRID */
+  .sugar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 14px 0; }
+  .sugar-card { border-radius: 10px; padding: 12px 10px; text-align: center; border: 1px solid var(--border); }
+  .sugar-card.reducer { background: #f0fff4; border-color: #a8dfc0; }
+  .sugar-card.nonreducer { background: #fdf8f0; border-color: #e8c88a; }
+  .sugar-card.polysac { background: #f0f7ff; border-color: #a8c8f0; }
+  .sugar-icon { font-size: 22px; margin-bottom: 5px; }
+  .sugar-card h4 { font-size: 12px; margin-bottom: 3px; }
+  .sugar-card p { font-size: 10px; color: var(--muted); line-height: 1.3; }
+  .tag { display: inline-block; font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 8px; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .tag.red  { background: #f0fff4; color: #1a6b4a; border: 1px solid #a8dfc0; }
+  .tag.no   { background: #fdf2f2; color: #c0392b; border: 1px solid #f5c6c6; }
+  .tag.poly { background: #f0f7ff; color: #2255aa; border: 1px solid #a8c8f0; }
+
+  .parte-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .parte-badge  { background: var(--accent); color: white; font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; white-space: nowrap; }
+  .parte-title  { font-size: 17px; font-weight: 600; color: var(--text); }
+
+  .step-list { display: flex; flex-direction: column; gap: 10px; }
+  .step { display: flex; gap: 12px; }
+  .step-num { min-width: 26px; height: 26px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 3px; }
+  .step-body p { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .step-tip  { margin-top: 7px; background: #f0fff4; border-left: 3px solid var(--accent); padding: 5px 10px; border-radius: 4px; font-size: 13px; color: #1a5a38; }
+
+  .alert { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 8px; font-size: 14px; margin: 12px 0; }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-info   { background: #f0f7ff; border: 1px solid #bdd8f5; }
+  .alert-tip    { background: #f0faf4; border: 1px solid #b2dfca; }
+  .alert-danger { background: #fdf2f2; border: 1px solid #f5c6c6; }
+
+  /* TABELAS DE EXPERIMENTO */
+  .exp-table-wrap { overflow-x: auto; margin: 14px 0; }
+  .exp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .exp-table th { background: var(--accent); color: white; padding: 8px 10px; text-align: center; font-size: 12px; font-weight: 600; }
+  .exp-table td { padding: 8px 10px; border: 1px solid var(--border); text-align: center; vertical-align: middle; }
+  .exp-table .row-label { background: var(--surface2); font-weight: 600; text-align: left; font-size: 12px; }
+  .exp-table .vol { color: var(--accent); font-weight: 600; font-family: monospace; }
+  .exp-table .empty { color: #ccc; }
+  .exp-table .obs { background: #fafafa; min-width: 90px; }
+  .exp-table .bm { background: #fff4eb; color: #c85a00; font-size: 11px; font-weight: 600; }
+
+  /* RESULTADO VISUAL */
+  .resultado-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 12px 0; }
+  .resultado-card { border-radius: 10px; padding: 10px 8px; text-align: center; border: 1px solid var(--border); }
+  .resultado-card h4 { font-size: 11px; font-weight: 700; margin-bottom: 6px; }
+  .resultado-card .cor { width: 36px; height: 36px; border-radius: 50%; margin: 0 auto 6px; border: 2px solid rgba(0,0,0,0.1); }
+  .resultado-card p { font-size: 10px; color: var(--muted); line-height: 1.3; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { background: var(--accent); color: white; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 13px; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f4f8f6; }
+  .td-resposta { background: #fafafa; min-height: 40px; }
+  .td-cabecalho { background: var(--surface2); font-weight: 600; font-size: 13px; }
+
+  .report-items { display: flex; flex-direction: column; gap: 10px; }
+  .report-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--surface2); border-radius: 8px; font-size: 14px; line-height: 1.5; }
+  .report-q { min-width: 28px; height: 28px; background: var(--accent2); color: #1c1c1c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  .nav-index { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px; margin: 24px 0 28px; }
+  .nav-index-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .nav-index-list  { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .nav-index-list li { display: flex; align-items: center; gap: 8px; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .nav-index-list a { color: var(--accent); font-size: 14px; text-decoration: none; font-weight: 500; }
+
+  footer { text-align: center; padding: 28px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { margin: 15mm; size: A4 portrait; }
+    .nav-index { display: none !important; }
+    body { font-size: 10px !important; line-height: 1.35 !important; }
+    main { padding: 8px 0 !important; max-width: 100% !important; }
+    header { padding: 16px 20px !important; }
+    header h1 { font-size: 18px !important; }
+    header p { font-size: 10px !important; }
+    .header-badge { font-size: 8px !important; padding: 2px 8px !important; margin-bottom: 6px !important; }
+    .header-meta { margin-top: 8px !important; gap: 12px !important; }
+    .meta-item { font-size: 9px !important; }
+    .section-label { font-size: 8px !important; padding: 2px 7px !important; break-after: avoid !important; }
+    h2 { font-size: 13px !important; padding: 3px 10px 4px !important; margin-bottom: 6px !important; break-after: avoid !important; }
+    h3 { font-size: 11px !important; break-after: avoid !important; }
+    h4 { font-size: 10px !important; break-after: avoid !important; }
+    .card { padding: 8px 12px !important; margin-bottom: 7px !important; break-inside: avoid !important; }
+    .divider { margin: 6px 0 !important; }
+    .sugar-grid { gap: 4px !important; margin: 5px 0 !important; }
+    .sugar-card { padding: 6px !important; }
+    .sugar-icon { font-size: 14px !important; margin-bottom: 2px !important; }
+    .sugar-card h4 { font-size: 9px !important; }
+    .sugar-card p { font-size: 8px !important; }
+    .tag { font-size: 7px !important; }
+    .parte-header { margin-bottom: 6px !important; }
+    .parte-badge { font-size: 8px !important; padding: 2px 8px !important; }
+    .parte-title { font-size: 11px !important; }
+    .step-list { gap: 5px !important; }
+    .step { gap: 8px !important; }
+    .step-num { min-width: 20px !important; height: 20px !important; font-size: 9px !important; }
+    .step-body p { font-size: 9px !important; }
+    .step-tip { font-size: 8px !important; padding: 3px 7px !important; margin-top: 3px !important; }
+    .alert { padding: 4px 8px !important; font-size: 9px !important; margin: 4px 0 !important; break-inside: avoid !important; }
+    .exp-table th, .exp-table td { padding: 4px 6px !important; font-size: 8px !important; }
+    .resultado-grid { gap: 4px !important; }
+    .resultado-card { padding: 6px !important; }
+    .resultado-card h4 { font-size: 9px !important; }
+    .resultado-card .cor { width: 24px !important; height: 24px !important; }
+    .resultado-card p { font-size: 8px !important; }
+    table { font-size: 9px !important; break-inside: avoid !important; }
+    th, td { padding: 4px 8px !important; font-size: 9px !important; }
+    .td-resposta { min-height: 20px !important; }
+    .report-items { gap: 4px !important; }
+    .report-item { padding: 5px 9px !important; font-size: 9px !important; break-inside: avoid !important; }
+    .report-q { min-width: 18px !important; height: 18px !important; font-size: 8px !important; }
+    footer { font-size: 8px !important; padding: 6px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Aula 2 · Vadim · Eng. Florestal</div>
+  <h1>Identificação de Açúcares Redutores</h1>
+  <p>Detecção de açúcares redutores pelo reagente de Benedict e identificação de amido pelo reagente de Lugol.</p>
+  <div class="header-meta">
+    <div class="meta-item">⏱️ ~2 horas</div>
+    <div class="meta-item">👥 Grupos de 4</div>
+    <div class="meta-item">🧪 2 Experimentos</div>
+    <div class="meta-item">🌡️ Banho-maria 95°C · 5 min</div>
+  </div>
+</header>
+
+<main>
+
+  <div class="nav-index">
+    <div class="nav-index-title">Nesta aula</div>
+    <ul class="nav-index-list">
+      <li><span class="nav-dot"></span><a href="#fundamentos">Fundamentos — açúcares redutores e não-redutores</a></li>
+      <li><span class="nav-dot"></span><a href="#expI">Experimento I — Reação de Benedict (açúcares redutores)</a></li>
+      <li><span class="nav-dot"></span><a href="#expII">Experimento II — Reação com Lugol (amido)</a></li>
+      <li><span class="nav-dot"></span><a href="#visual">Guia Visual — tubos e reagentes</a></li>
+      <li><span class="nav-dot"></span><a href="#relatorio">Relatório e Questões</a></li>
+    </ul>
+  </div>
+
+  <!-- OBJETIVOS -->
+  <div class="section-label">Objetivos</div>
+  <h2>O que você vai aprender</h2>
+  <div class="card card-accent-left">
+    <ul class="obj-list">
+      <li><div class="obj-num">1</div><span>Distinguir açúcares <strong>redutores</strong> de <strong>não-redutores</strong> com base na reação de Benedict</span></li>
+      <li><div class="obj-num">2</div><span>Identificar <strong>amido</strong> pela reação de coloração com reagente de Lugol (iodo-iodeto)</span></li>
+      <li><div class="obj-num">3</div><span>Relacionar estrutura química (carbono anomérico disponível) com propriedade redutora dos carboidratos</span></li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FUNDAMENTOS -->
+  <div id="fundamentos" class="section-label">Fundamentos</div>
+  <h2>Açúcares Redutores e Estrutura</h2>
+
+  <div class="card card-accent-left">
+    <p style="font-size:15px; margin-bottom:14px;">Um açúcar é <strong>redutor</strong> quando possui um <strong>carbono anomérico livre</strong> (grupo –CHO ou –C=O em equilíbrio com a forma aberta), capaz de reduzir o Cu²⁺ do reagente de Benedict a Cu₂O (precipitado vermelho). Açúcares <strong>não-redutores</strong> têm o carbono anomérico bloqueado por ligação glicosídica.</p>
+
+    <div class="sugar-grid">
+      <div class="sugar-card reducer">
+        <div class="sugar-icon">🍬</div>
+        <h4>Glicose</h4>
+        <p>Monossacarídeo hexose · aldose · C anomérico livre</p>
+        <span class="tag red">Redutor ✓</span>
+      </div>
+      <div class="sugar-card reducer">
+        <div class="sugar-icon">🍎</div>
+        <h4>Frutose</h4>
+        <p>Monossacarídeo hexose · cetose · C anomérico livre</p>
+        <span class="tag red">Redutor ✓</span>
+      </div>
+      <div class="sugar-card nonreducer">
+        <div class="sugar-icon">🍯</div>
+        <h4>Sacarose</h4>
+        <p>Dissacarídeo (Glc+Fru) · C anomérico bloqueado</p>
+        <span class="tag no">Não-redutor ✗</span>
+      </div>
+      <div class="sugar-card reducer">
+        <div class="sugar-icon">🌾</div>
+        <h4>Maltose</h4>
+        <p>Dissacarídeo (Glc+Glc) · 1 C anomérico livre</p>
+        <span class="tag red">Redutor ✓</span>
+      </div>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:4px;">
+      <span class="alert-icon">🔵</span>
+      <span><strong>Reação de Benedict:</strong> Cu²⁺ (azul) + açúcar redutor → Cu₂O (vermelho/laranja) + ácido aldônico. Quanto mais açúcar redutor, mais intenso o precipitado vermelho.</span>
+    </div>
+    <div class="alert alert-tip">
+      <span class="alert-icon">🟤</span>
+      <span><strong>Lugol (I₂/KI):</strong> reage com amido formando complexo de inclusão azul-escuro/preto nas hélices da amilose. Monossacarídeos e dissacarídeos não reagem — solução permanece amarela/laranja.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- EXPERIMENTO I -->
+  <div id="expI" class="section-label">Procedimento</div>
+  <h2>Experimento I — Reação de Benedict</h2>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Materiais</span>
+      <span class="parte-title">5 tubos de ensaio · pipetas · estante</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><p>Separar <strong>5 tubos de ensaio</strong> numerados na estante.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body"><p>Adicionar os reagentes conforme a <strong>Tabela I</strong> abaixo.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body"><p>Adicionar <strong>1 mL de reagente de Benedict</strong> em todos os tubos e agitar levemente.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <p>Levar todos os tubos ao <strong>banho-maria a 95°C por 5 minutos</strong>.</p>
+          <div class="step-tip">🌡️ Não agitar durante o banho-maria. Observar a mudança de cor durante o aquecimento.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body"><p>Observar a coloração de cada tubo e registrar na tabela de resultados.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA I -->
+  <div class="card">
+    <h3 style="margin-bottom:12px;">📋 Tabela I — Experimento Benedict</h3>
+    <div class="exp-table-wrap">
+      <table class="exp-table">
+        <tr>
+          <th>Ensaio</th>
+          <th>H₂O (mL)</th>
+          <th>Glicose 0,10M (mL)</th>
+          <th>Frutose 0,10M (mL)</th>
+          <th>Sacarose 0,10M (mL)</th>
+          <th>Maltose 0,1M (mL)</th>
+          <th>Benedict (mL)</th>
+          <th>BM 95°C / 5min</th>
+          <th>Cor observada</th>
+        </tr>
+        <tr>
+          <td class="row-label">Branco</td>
+          <td class="vol">1</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="vol">1</td>
+          <td class="bm">✓</td>
+          <td class="obs"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 1</td>
+          <td class="empty">—</td>
+          <td class="vol">1</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="vol">1</td>
+          <td class="bm">✓</td>
+          <td class="obs"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 2</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="vol">1</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="vol">1</td>
+          <td class="bm">✓</td>
+          <td class="obs"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 3</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="vol">1</td>
+          <td class="empty">—</td>
+          <td class="vol">1</td>
+          <td class="bm">✓</td>
+          <td class="obs"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 4</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="vol">1</td>
+          <td class="vol">1</td>
+          <td class="bm">✓</td>
+          <td class="obs"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- EXPERIMENTO II -->
+  <div id="expII" class="section-label">Procedimento</div>
+  <h2>Experimento II — Reação com Lugol</h2>
+
+  <div class="card card-accent-left">
+    <div class="parte-header">
+      <span class="parte-badge">Materiais</span>
+      <span class="parte-title">5 tubos de ensaio · pipetas · Lugol</span>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><p>Separar <strong>5 novos tubos de ensaio</strong> numerados na estante.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body"><p>Adicionar <strong>1 mL</strong> dos reagentes conforme a <strong>Tabela II</strong> abaixo.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <p>Adicionar <strong>2 gotas de reagente de Lugol</strong> em cada tubo, agitar levemente e observar imediatamente a cor.</p>
+          <div class="step-tip">👁️ A reação com amido é imediata — não é necessário aquecer. Anotar a cor antes e após a adição do Lugol.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA II -->
+  <div class="card">
+    <h3 style="margin-bottom:12px;">📋 Tabela II — Experimento Lugol</h3>
+    <div class="exp-table-wrap">
+      <table class="exp-table">
+        <tr>
+          <th>Ensaio</th>
+          <th>H₂O (mL)</th>
+          <th>Glicose 0,10M (mL)</th>
+          <th>Frutose 0,10M (mL)</th>
+          <th>Sacarose 0,10M (mL)</th>
+          <th>Amido 1% (mL)</th>
+          <th>Lugol (gotas)</th>
+          <th>Cor observada</th>
+        </tr>
+        <tr>
+          <td class="row-label">Branco</td>
+          <td class="vol">1</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="vol">2</td>
+          <td class="obs"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 1</td>
+          <td class="empty">—</td>
+          <td class="vol">1</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="vol">2</td>
+          <td class="obs"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 2</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="vol">1</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="vol">2</td>
+          <td class="obs"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 3</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="vol">1</td>
+          <td class="empty">—</td>
+          <td class="vol">2</td>
+          <td class="obs"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Tubo 4</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+          <td class="vol">1</td>
+          <td class="vol">2</td>
+          <td class="obs"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- GUIA VISUAL -->
+  <div id="visual" class="section-label" style="break-before: page;">Guia Visual</div>
+  <h2>Procedimento — Tubos e Reagentes</h2>
+
+  <div class="card" style="padding:20px;">
+
+    <!-- EXPERIMENTO I: BENEDICT -->
+    <h3 style="margin-bottom:14px;">Experimento I — Reação de Benedict (banho-maria 95°C · 5 min)</h3>
+
+    <svg viewBox="0 0 540 175" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:540px; display:block; margin:0 auto 14px;">
+
+      <!-- TUBO BRANCO -->
+      <g transform="translate(10,10)">
+        <text x="48" y="14" text-anchor="middle" font-size="10" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Branco</text>
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#e8f4ff" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#e8f4ff" stroke="#888" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="9" rx="2" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <!-- agua + benedict -->
+        <rect x="31" y="65" width="34" height="43" rx="2" fill="#4a90d9" opacity="0.5"/>
+        <text x="48" y="130" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1 mL H₂O</text>
+        <text x="48" y="141" text-anchor="middle" font-size="8" fill="#1a6b4a" font-family="sans-serif">+ Benedict</text>
+      </g>
+
+      <!-- SETA -->
+      <text x="102" y="72" text-anchor="middle" font-size="14" fill="#1a6b4a">→</text>
+
+      <!-- TUBO 1: GLICOSE -->
+      <g transform="translate(113,10)">
+        <text x="48" y="14" text-anchor="middle" font-size="10" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 1</text>
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#f0f8ff" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#f0f8ff" stroke="#888" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="9" rx="2" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="65" width="34" height="43" rx="2" fill="#4a90d9" opacity="0.5"/>
+        <text x="48" y="130" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1 mL glicose</text>
+        <text x="48" y="141" text-anchor="middle" font-size="8" fill="#1a6b4a" font-family="sans-serif">+ Benedict</text>
+      </g>
+
+      <!-- SETA -->
+      <text x="205" y="72" text-anchor="middle" font-size="14" fill="#1a6b4a">→</text>
+
+      <!-- TUBO 2: FRUTOSE -->
+      <g transform="translate(216,10)">
+        <text x="48" y="14" text-anchor="middle" font-size="10" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 2</text>
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#f0f8ff" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#f0f8ff" stroke="#888" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="9" rx="2" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="65" width="34" height="43" rx="2" fill="#4a90d9" opacity="0.5"/>
+        <text x="48" y="130" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1 mL frutose</text>
+        <text x="48" y="141" text-anchor="middle" font-size="8" fill="#1a6b4a" font-family="sans-serif">+ Benedict</text>
+      </g>
+
+      <!-- SETA -->
+      <text x="308" y="72" text-anchor="middle" font-size="14" fill="#1a6b4a">→</text>
+
+      <!-- TUBO 3: SACAROSE -->
+      <g transform="translate(319,10)">
+        <text x="48" y="14" text-anchor="middle" font-size="10" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 3</text>
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#f0f8ff" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#f0f8ff" stroke="#888" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="9" rx="2" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="65" width="34" height="43" rx="2" fill="#4a90d9" opacity="0.5"/>
+        <text x="48" y="130" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1 mL sacarose</text>
+        <text x="48" y="141" text-anchor="middle" font-size="8" fill="#1a6b4a" font-family="sans-serif">+ Benedict</text>
+      </g>
+
+      <!-- SETA -->
+      <text x="411" y="72" text-anchor="middle" font-size="14" fill="#1a6b4a">→</text>
+
+      <!-- TUBO 4: MALTOSE -->
+      <g transform="translate(422,10)">
+        <text x="48" y="14" text-anchor="middle" font-size="10" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 4</text>
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#f0f8ff" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#f0f8ff" stroke="#888" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="9" rx="2" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="65" width="34" height="43" rx="2" fill="#4a90d9" opacity="0.5"/>
+        <text x="48" y="130" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1 mL maltose</text>
+        <text x="48" y="141" text-anchor="middle" font-size="8" fill="#1a6b4a" font-family="sans-serif">+ Benedict</text>
+      </g>
+
+      <!-- banho-maria label -->
+      <rect x="10" y="153" width="520" height="18" rx="6" fill="#fff4eb" stroke="#c85a00" stroke-width="1.2"/>
+      <text x="270" y="165" text-anchor="middle" font-size="9.5" fill="#c85a00" font-family="sans-serif" font-weight="bold">Banho-maria 95°C por 5 minutos — observar mudança de cor</text>
+
+    </svg>
+
+    <!-- EXPERIMENTO II: LUGOL -->
+    <h3 style="margin: 18px 0 14px;">Experimento II — Reação com Lugol (temperatura ambiente)</h3>
+
+    <svg viewBox="0 0 540 165" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:540px; display:block; margin:0 auto 10px;">
+
+      <!-- TUBO BRANCO -->
+      <g transform="translate(10,10)">
+        <text x="48" y="14" text-anchor="middle" font-size="10" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Branco</text>
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#fefce8" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#fefce8" stroke="#888" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="9" rx="2" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="70" width="34" height="38" rx="2" fill="#d4a820" opacity="0.3"/>
+        <text x="48" y="130" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1 mL H₂O</text>
+        <text x="48" y="141" text-anchor="middle" font-size="8" fill="#7a5500" font-family="sans-serif">+ 2 gotas Lugol</text>
+      </g>
+
+      <text x="102" y="72" text-anchor="middle" font-size="14" fill="#1a6b4a">→</text>
+
+      <!-- TUBO 1: GLICOSE -->
+      <g transform="translate(113,10)">
+        <text x="48" y="14" text-anchor="middle" font-size="10" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 1</text>
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#fefce8" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#fefce8" stroke="#888" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="9" rx="2" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="70" width="34" height="38" rx="2" fill="#d4a820" opacity="0.3"/>
+        <text x="48" y="130" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1 mL glicose</text>
+        <text x="48" y="141" text-anchor="middle" font-size="8" fill="#7a5500" font-family="sans-serif">+ 2 gotas Lugol</text>
+      </g>
+
+      <text x="205" y="72" text-anchor="middle" font-size="14" fill="#1a6b4a">→</text>
+
+      <!-- TUBO 2: FRUTOSE -->
+      <g transform="translate(216,10)">
+        <text x="48" y="14" text-anchor="middle" font-size="10" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 2</text>
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#fefce8" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#fefce8" stroke="#888" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="9" rx="2" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="70" width="34" height="38" rx="2" fill="#d4a820" opacity="0.3"/>
+        <text x="48" y="130" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1 mL frutose</text>
+        <text x="48" y="141" text-anchor="middle" font-size="8" fill="#7a5500" font-family="sans-serif">+ 2 gotas Lugol</text>
+      </g>
+
+      <text x="308" y="72" text-anchor="middle" font-size="14" fill="#1a6b4a">→</text>
+
+      <!-- TUBO 3: SACAROSE -->
+      <g transform="translate(319,10)">
+        <text x="48" y="14" text-anchor="middle" font-size="10" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 3</text>
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#fefce8" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#fefce8" stroke="#888" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="9" rx="2" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="70" width="34" height="38" rx="2" fill="#d4a820" opacity="0.3"/>
+        <text x="48" y="130" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1 mL sacarose</text>
+        <text x="48" y="141" text-anchor="middle" font-size="8" fill="#7a5500" font-family="sans-serif">+ 2 gotas Lugol</text>
+      </g>
+
+      <text x="411" y="72" text-anchor="middle" font-size="14" fill="#1a6b4a">→</text>
+
+      <!-- TUBO 4: AMIDO -->
+      <g transform="translate(422,10)">
+        <text x="48" y="14" text-anchor="middle" font-size="10" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Tubo 4</text>
+        <rect x="30" y="20" width="36" height="90" rx="4" fill="#f0f4ff" stroke="#888" stroke-width="1.5"/>
+        <ellipse cx="48" cy="110" rx="18" ry="6" fill="#f0f4ff" stroke="#888" stroke-width="1.5"/>
+        <rect x="27" y="14" width="42" height="9" rx="2" fill="#ddd" stroke="#aaa" stroke-width="1"/>
+        <rect x="31" y="70" width="34" height="38" rx="2" fill="#d4a820" opacity="0.3"/>
+        <text x="48" y="130" text-anchor="middle" font-size="8" fill="#555" font-family="sans-serif">1 mL amido</text>
+        <text x="48" y="141" text-anchor="middle" font-size="8" fill="#7a5500" font-family="sans-serif">+ 2 gotas Lugol</text>
+      </g>
+
+      <!-- observar label -->
+      <rect x="10" y="153" width="520" height="8" rx="3" fill="#f0faf4" stroke="#1a6b4a" stroke-width="1"/>
+      <text x="270" y="160" text-anchor="middle" font-size="8" fill="#1a6b4a" font-family="sans-serif" font-weight="bold">Agitar levemente e observar a cor imediatamente</text>
+
+    </svg>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RELATÓRIO -->
+  <div id="relatorio" class="section-label">Relatório</div>
+  <h2>Questões para o Relatório</h2>
+
+  <div class="report-items">
+    <div class="report-item">
+      <div class="report-q">1</div>
+      <span>Desenhe as estruturas <strong>linear e cíclica</strong> (Haworth) de todos os carboidratos utilizados no experimento: glicose, frutose, sacarose, maltose e amido.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">2</div>
+      <span>Com base nas estruturas desenhadas, explique por que cada carboidrato é <strong>redutor ou não-redutor</strong>. Identifique o carbono anomérico em cada molécula.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">3</div>
+      <span>Com base na propriedade de redução dos açúcares, elabore um método de <strong>quantificação de glicose</strong>. Descreva o princípio do método e como seria feita a curva de calibração.</span>
+    </div>
+    <div class="report-item">
+      <div class="report-q">4</div>
+      <span>Explique a <strong>base estrutural da coloração por iodo</strong> (Lugol) no amido. Por que monossacarídeos e dissacarídeos não produzem essa coloração?</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Lab Bioquímica · UFSCar &nbsp;|&nbsp; Prof. Dr. Vadim Viviani &nbsp;|&nbsp; Aula 2 — Identificação de Açúcares Redutores
+</footer>
+</body>
+</html>

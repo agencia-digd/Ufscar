@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia do Técnico — Identificação de Açúcares Redutores</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --surface2: #21262d; --border: #30363d;
+  --accent: #238636; --accent-dim: rgba(35,134,54,0.15); --accent-border: rgba(35,134,54,0.35);
+  --accent2: #e6a817; --danger: #da3633; --info: #388bfd;
+  --text: #e6edf3; --muted: #8b949e; --green: #3fb950; --orange: #f0883e; --red: #ff7b72;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 15px; line-height: 1.6; padding: 0 0 60px; color-scheme: light; }
+#progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; z-index: 999; }
+
+.header { background: linear-gradient(135deg, #0d1117 0%, #0d1f12 50%, #0d1117 100%); border-bottom: 2px solid var(--accent); padding: 32px 24px 28px; position: relative; overflow: hidden; }
+.header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(35,134,54,0.12) 0%, transparent 70%); border-radius: 50%; }
+.header-badge { display: inline-flex; gap: 6px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+.header h1 { font-size: clamp(18px, 4vw, 28px); font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.header h1 span { color: var(--green); }
+.header-sub { color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; }
+
+.nav-index { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin: 20px 16px; padding: 16px; }
+.nav-index h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; }
+.nav-index ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.nav-index a { color: var(--info); text-decoration: none; font-size: 13px; display: flex; gap: 6px; padding: 4px 6px; border-radius: 6px; }
+
+.section { margin: 20px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.section-header { background: var(--surface2); border-bottom: 1px solid var(--border); padding: 14px 18px; display: flex; align-items: center; gap: 10px; }
+.section-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.section-icon.green  { background: rgba(63,185,80,0.2); }
+.section-icon.yellow { background: rgba(230,168,23,0.2); }
+.section-icon.red    { background: rgba(218,54,51,0.2); }
+.section-icon.blue   { background: rgba(56,139,253,0.2); }
+.section-icon.orange { background: rgba(240,136,62,0.2); }
+.section-header h2 { font-size: 16px; font-weight: 700; color: var(--text); }
+.section-header .badge { margin-left: auto; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: rgba(56,139,253,0.15); color: var(--info); border: 1px solid rgba(56,139,253,0.3); }
+.section-body { padding: 18px; }
+
+.kit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kit-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+.kit-item .qty { background: rgba(56,139,253,0.15); border: 1px solid rgba(56,139,253,0.3); color: var(--info); font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 6px; flex-shrink: 0; white-space: nowrap; }
+
+.recipe { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+.recipe:last-child { margin-bottom: 0; }
+.recipe-header { background: var(--accent-dim); border-bottom: 1px solid var(--accent-border); padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+.recipe-label { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: white; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.recipe-header h3 { font-size: 14px; font-weight: 700; color: var(--text); }
+.recipe-body { padding: 14px; }
+
+.steps { list-style: none; }
+.steps li { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
+.steps li:last-child { margin-bottom: 0; }
+.step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+
+.calc-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+.calc-table th { background: var(--surface2); padding: 8px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--border); }
+.calc-table td { padding: 8px 12px; border-bottom: 1px solid rgba(48,54,61,0.5); font-size: 13px; }
+.calc-table tr:last-child td { border-bottom: none; }
+.calc-table .ref-row td { font-family: 'JetBrains Mono', monospace; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.alert { border-radius: 8px; padding: 12px 14px; margin: 10px 0; display: flex; gap: 10px; font-size: 13px; line-height: 1.5; }
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert.danger  { background: rgba(218,54,51,0.1);  border: 1px solid rgba(218,54,51,0.35); color: #ff8080; }
+.alert.warning { background: rgba(230,168,23,0.1); border: 1px solid rgba(230,168,23,0.35); color: var(--accent2); }
+.alert.info    { background: rgba(56,139,253,0.1); border: 1px solid rgba(56,139,253,0.35); color: var(--info); }
+.alert.success { background: rgba(63,185,80,0.1);  border: 1px solid rgba(63,185,80,0.35); color: var(--green); }
+.alert.green   { background: var(--accent-dim);    border: 1px solid var(--accent-border);  color: var(--green); }
+
+.checklist { list-style: none; }
+.checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(48,54,61,0.4); font-size: 13px; }
+.checklist li:last-child { border-bottom: none; }
+.check-box { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+
+.timeline { display: flex; flex-direction: column; }
+.tl-item { display: flex; gap: 14px; position: relative; }
+.tl-item:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 34px; width: 2px; height: calc(100% - 12px); background: var(--border); }
+.tl-dot { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; z-index: 1; }
+.tl-dot.green  { border-color: var(--accent); background: var(--accent-dim); }
+.tl-dot.yellow { border-color: var(--accent2); background: rgba(230,168,23,0.15); }
+.tl-dot.blue   { border-color: var(--info); background: rgba(56,139,253,0.15); }
+.tl-dot.red    { border-color: var(--danger); background: rgba(218,54,51,0.15); }
+.tl-body { padding-bottom: 20px; flex: 1; }
+.tl-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.tl-title { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+.tl-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+.parte-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green); background: var(--accent-dim); border: 1px solid var(--accent-border); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 10px; }
+
+/* resultado cores */
+.res-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin: 10px 0; }
+.res-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 8px; text-align: center; }
+.res-card .dot { width: 32px; height: 32px; border-radius: 50%; margin: 0 auto 6px; border: 2px solid rgba(255,255,255,0.1); }
+.res-card strong { font-size: 11px; display: block; margin-bottom: 3px; }
+.res-card p { font-size: 10px; color: var(--muted); line-height: 1.3; }
+
+footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  #progress-bar { display: none !important; }
+  @page { margin: 15mm 12mm; size: A4; }
+  body { font-size: 10px !important; line-height: 1.35 !important; }
+  .header { padding: 14px 18px !important; }
+  .header h1 { font-size: 16px !important; }
+  .header-sub { font-size: 9px !important; gap: 10px !important; }
+  .header-badge { font-size: 8px !important; padding: 2px 8px !important; }
+  .nav-index { display: none !important; }
+  .section { margin: 10px 0 !important; break-inside: avoid; }
+  .section-header { padding: 8px 12px !important; break-after: avoid !important; }
+  .section-header h2 { font-size: 12px !important; }
+  .section-icon { width: 24px !important; height: 24px !important; font-size: 12px !important; }
+  .section-body { padding: 10px 12px !important; break-before: avoid !important; }
+  .kit-grid { gap: 5px !important; }
+  .kit-item { padding: 6px 8px !important; font-size: 9px !important; }
+  .kit-item .qty { font-size: 9px !important; }
+  .recipe { margin-bottom: 8px !important; break-inside: avoid !important; }
+  .recipe-header { padding: 6px 10px !important; }
+  .recipe-header h3 { font-size: 10px !important; }
+  .recipe-body { padding: 8px 10px !important; }
+  .steps li { font-size: 9px !important; margin-bottom: 5px !important; }
+  .step-num { width: 16px !important; height: 16px !important; font-size: 8px !important; }
+  .calc-table th, .calc-table td { padding: 4px 8px !important; font-size: 9px !important; }
+  .alert { padding: 6px 10px !important; font-size: 9px !important; margin: 5px 0 !important; break-inside: avoid !important; }
+  .checklist li { padding: 4px 0 !important; font-size: 9px !important; }
+  .check-box { width: 14px !important; height: 14px !important; }
+  .tl-dot { width: 24px !important; height: 24px !important; font-size: 10px !important; }
+  .tl-body { padding-bottom: 12px !important; }
+  .tl-time { font-size: 8px !important; }
+  .tl-title { font-size: 11px !important; }
+  .tl-desc { font-size: 9px !important; }
+  .res-grid { gap: 4px !important; }
+  .res-card { padding: 6px !important; }
+  .res-card .dot { width: 22px !important; height: 22px !important; }
+  .res-card strong { font-size: 9px !important; }
+  .res-card p { font-size: 8px !important; }
+  .parte-label { font-size: 8px !important; padding: 2px 7px !important; margin-bottom: 6px !important; }
+  footer { font-size: 8px !important; padding: 8px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<div class="header">
+  <div class="header-badge">⚙️ Guia do Técnico</div>
+  <h1><span>Identificação de Açúcares Redutores</span></h1>
+  <div class="header-sub">
+    <span>🔬 Prof. Dr. Vadim Viviani</span>
+    <span>👥 6–10 grupos</span>
+    <span>⏱️ ~2 horas</span>
+    <span>🌡️ Banho-maria 95°C</span>
+  </div>
+</div>
+
+<div class="nav-index">
+  <h3>Seções</h3>
+  <ul>
+    <li><a href="#kits">📦 Kit por grupo</a></li>
+    <li><a href="#preparo">⚗️ Preparo de Soluções</a></li>
+    <li><a href="#quantidades">🔢 Quantidades Totais</a></li>
+    <li><a href="#timeline">⏱️ Cronograma</a></li>
+    <li><a href="#resultados">✅ Resultados Esperados</a></li>
+    <li><a href="#checklist">☑️ Checklist</a></li>
+  </ul>
+</div>
+
+<!-- KIT POR GRUPO -->
+<div class="section" id="kits">
+  <div class="section-header">
+    <div class="section-icon green">📦</div>
+    <h2>Kit por Grupo</h2>
+    <span class="badge">por bancada</span>
+  </div>
+  <div class="section-body">
+
+    <div class="alert green" style="margin-bottom:14px;">
+      <span class="alert-icon">📌</span>
+      <span><strong>Todos os reagentes ficam na bancada central</strong>, não distribuídos por grupo. Cada frasco deve ter sua própria pipeta volumétrica de 1 mL etiquetada e pêra de sucção — os alunos vão até a bancada para pipetar. Isso evita contaminação cruzada entre reagentes.</span>
+    </div>
+
+    <p class="parte-label">Kit individual — vidraria por grupo</p>
+    <div class="kit-grid" style="margin-bottom:14px;">
+      <div class="kit-item"><span class="qty">10×</span><span>Tubos de ensaio (2 estantes de 5)</span></div>
+      <div class="kit-item"><span class="qty">2×</span><span>Estantes para tubos de ensaio</span></div>
+    </div>
+
+    <p class="parte-label">Bancada central — reagentes com pipetas etiquetadas</p>
+    <div class="kit-grid">
+      <div class="kit-item"><span class="qty">pipeta 1mL</span><span>Glicose 0,10 M — etiquetada "GLICOSE"</span></div>
+      <div class="kit-item"><span class="qty">pipeta 1mL</span><span>Frutose 0,10 M — etiquetada "FRUTOSE"</span></div>
+      <div class="kit-item"><span class="qty">pipeta 1mL</span><span>Sacarose 0,10 M — etiquetada "SACAROSE"</span></div>
+      <div class="kit-item"><span class="qty">pipeta 1mL</span><span>Maltose 0,10 M — etiquetada "MALTOSE"</span></div>
+      <div class="kit-item"><span class="qty">pipeta 1mL</span><span>Amido 1% — etiquetada "AMIDO"</span></div>
+      <div class="kit-item"><span class="qty">pipeta 1mL</span><span>Água destilada — etiquetada "H₂O"</span></div>
+      <div class="kit-item"><span class="qty">pipeta 1mL</span><span>Reagente de Benedict — etiquetada "BENEDICT"</span></div>
+      <div class="kit-item"><span class="qty">pipeta Pasteur</span><span>Lugol — pipeta Pasteur limpa para 2 gotas</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Pêra ou pump (compartilhada na bancada central)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Béquer plástico 2000 mL — descarte/lavagem (bancada central)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PREPARO DE SOLUÇÕES -->
+<div class="section" id="preparo">
+  <div class="section-header">
+    <div class="section-icon yellow">⚗️</div>
+    <h2>Preparo de Soluções</h2>
+    <span class="badge">véspera</span>
+  </div>
+  <div class="section-body">
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">1</div>
+        <h3>Glicose 0,10 mol·L⁻¹ — 100 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Pesar <strong>1,80 g de glicose anidra</strong> (MM = 180,2 g/mol)</span></li>
+          <li><div class="step-num">2</div><span>Dissolver em ~80 mL de água destilada com agitação</span></li>
+          <li><div class="step-num">3</div><span>Completar para 100 mL em balão volumétrico. Rotular e refrigerar</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">2</div>
+        <h3>Frutose 0,10 mol·L⁻¹ — 100 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Pesar <strong>1,80 g de frutose</strong> (MM = 180,2 g/mol)</span></li>
+          <li><div class="step-num">2</div><span>Dissolver e completar para 100 mL. Refrigerar — frutose é instável em temperatura ambiente</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">3</div>
+        <h3>Sacarose 0,10 mol·L⁻¹ — 100 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Pesar <strong>3,42 g de sacarose</strong> (MM = 342,3 g/mol)</span></li>
+          <li><div class="step-num">2</div><span>Dissolver e completar para 100 mL. Estável em temperatura ambiente</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">4</div>
+        <h3>Maltose 0,10 mol·L⁻¹ — 100 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Pesar <strong>3,60 g de maltose monohidratada</strong> (MM = 360,3 g/mol) ou <strong>3,42 g de maltose anidra</strong> (MM = 342,3 g/mol)</span></li>
+          <li><div class="step-num">2</div><span>Dissolver e completar para 100 mL</span></li>
+        </ul>
+        <div class="alert warning" style="margin-top:8px;">
+          <span class="alert-icon">📌</span>
+          <span>Verificar se a maltose disponível é anidra ou monohidratada — a massa a pesar muda. Checar o rótulo do frasco.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">5</div>
+        <h3>Amido 1% (m/v) — 100 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Fazer uma pasta com <strong>1 g de amido solúvel</strong> em ~5 mL de água fria</span></li>
+          <li><div class="step-num">2</div><span>Adicionar ~90 mL de água <strong>fervente</strong> com agitação até solução translúcida</span></li>
+          <li><div class="step-num">3</div><span>Esfriar e completar para 100 mL. Usar no mesmo dia — amido precipita com o tempo</span></li>
+        </ul>
+        <div class="alert success" style="margin-top:8px;">
+          <span class="alert-icon">💡</span>
+          <span>Preparar o amido no dia da aula para garantir solução homogênea. Solução opalescente é normal — não é problema para o experimento.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">6</div>
+        <h3>Reagente de Benedict — 500 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Dissolver <strong>85 g de citrato de sódio</strong> + <strong>50 g de carbonato de sódio (Na₂CO₃)</strong> em 350 mL de água quente. Agitar até dissolver completamente</span></li>
+          <li><div class="step-num">2</div><span>Separadamente: dissolver <strong>0,5 g de CuSO₄</strong> em 50 mL de água destilada</span></li>
+          <li><div class="step-num">3</div><span>Adicionar a solução de CuSO₄ <strong>lentamente</strong> sobre a solução de citrato/carbonato, com agitação constante</span></li>
+          <li><div class="step-num">4</div><span>Completar para <strong>500 mL</strong> com água destilada. Cor final: azul claro a azul esverdeado</span></li>
+        </ul>
+        <div class="alert info" style="margin-top:8px;">
+          <span class="alert-icon">💡</span>
+          <span>O citrato de sódio quelanta o Cu²⁺, impedindo precipitação de Cu(OH)₂ em meio alcalino. O Na₂CO₃ mantém o pH alcalino necessário para a reação de redução.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">7</div>
+        <h3>Reagente de Lugol (I₂/KI) — 250 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Dissolver <strong>3,75 g de iodeto de potássio (KI)</strong> em ~50 mL de água destilada primeiro — o KI facilita a dissolução do I₂</span></li>
+          <li><div class="step-num">2</div><span>Adicionar <strong>0,75 g de iodo (I₂)</strong> à solução de KI e agitar até dissolução completa (solução marrom-escura)</span></li>
+          <li><div class="step-num">3</div><span>Completar para <strong>250 mL</strong> com água destilada. Guardar em frasco âmbar — sensível à luz</span></li>
+          <li><div class="step-num">4</div><span>Disponibilizar com pipeta Pasteur limpa na bancada central para adicionar exatamente <strong>2 gotas</strong> por tubo</span></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUANTIDADES -->
+<div class="section" id="quantidades">
+  <div class="section-header">
+    <div class="section-icon blue">🔢</div>
+    <h2>Quantidades Totais</h2>
+    <span class="badge">para 10 grupos</span>
+  </div>
+  <div class="section-body">
+    <table class="calc-table">
+      <tr><th>Solução</th><th>Por grupo</th><th>10 grupos</th><th>Preparar</th></tr>
+      <tr><td>Glicose 0,10 M</td><td class="mono">3 mL</td><td class="mono">30 mL</td><td class="mono">100 mL</td></tr>
+      <tr><td>Frutose 0,10 M</td><td class="mono">3 mL</td><td class="mono">30 mL</td><td class="mono">100 mL</td></tr>
+      <tr><td>Sacarose 0,10 M</td><td class="mono">3 mL</td><td class="mono">30 mL</td><td class="mono">100 mL</td></tr>
+      <tr><td>Maltose 0,10 M</td><td class="mono">3 mL</td><td class="mono">30 mL</td><td class="mono">100 mL</td></tr>
+      <tr><td>Amido 1%</td><td class="mono">2 mL</td><td class="mono">20 mL</td><td class="mono">50 mL (dia)</td></tr>
+      <tr><td>Reagente de Benedict</td><td class="mono">5 mL</td><td class="mono">50 mL</td><td class="mono">~80 mL</td></tr>
+      <tr><td>Lugol</td><td class="mono">~0,5 mL</td><td class="mono">5 mL</td><td class="mono">~15 mL</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- CRONOGRAMA -->
+<div class="section" id="timeline">
+  <div class="section-header">
+    <div class="section-icon green">⏱️</div>
+    <h2>Cronograma da Aula</h2>
+    <span class="badge">~2 horas</span>
+  </div>
+  <div class="section-body">
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot green">📋</div>
+        <div class="tl-body">
+          <div class="tl-time">00:00 – 00:15 (15 min)</div>
+          <div class="tl-title">Introdução + distribuição</div>
+          <div class="tl-desc">Prof. Vadim apresenta o conceito de açúcares redutores e carbono anomérico. Técnico distribui kits. Banho-maria já a 95°C — <strong>ligar 1h a 1h30 antes</strong>.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot yellow">🧪</div>
+        <div class="tl-body">
+          <div class="tl-time">00:15 – 00:45 (30 min)</div>
+          <div class="tl-title">Experimento I — Benedict</div>
+          <div class="tl-desc">Pipetagem dos açúcares nos 5 tubos + Benedict. Colocar em banho-maria 95°C por 5 min. Observar e registrar cores.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot blue">🟤</div>
+        <div class="tl-body">
+          <div class="tl-time">00:45 – 01:10 (25 min)</div>
+          <div class="tl-title">Experimento II — Lugol</div>
+          <div class="tl-desc">Pipetagem nos 5 novos tubos. Adição de 2 gotas de Lugol. Observação imediata. Registrar cores. Comparar com Exp. I.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green">📊</div>
+        <div class="tl-body">
+          <div class="tl-time">01:10 – 01:45 (35 min)</div>
+          <div class="tl-title">Discussão e análise</div>
+          <div class="tl-desc">Prof. Vadim discute resultados. Grupos comparam tabelas. Introdução às estruturas Haworth para o relatório.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red">🗑️</div>
+        <div class="tl-body">
+          <div class="tl-time">01:45 – 02:00 (15 min)</div>
+          <div class="tl-title">Limpeza e descarte</div>
+          <div class="tl-desc">Tubos lavados. Soluções descartadas na pia (diluídas). Kits devolvidos.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTADOS ESPERADOS -->
+<div class="section" id="resultados">
+  <div class="section-header">
+    <div class="section-icon green">✅</div>
+    <h2>Resultados Esperados</h2>
+    <span class="badge">referência</span>
+  </div>
+  <div class="section-body">
+
+    <p class="parte-label">Experimento I — Benedict</p>
+    <div class="res-grid" style="margin-bottom:16px;">
+      <div class="res-card">
+        <div class="dot" style="background:#3a7fd5;"></div>
+        <strong>Branco</strong>
+        <p>Azul · sem redução</p>
+      </div>
+      <div class="res-card">
+        <div class="dot" style="background:#c0392b;"></div>
+        <strong>Glicose</strong>
+        <p>Vermelho tijolo · forte precipitado</p>
+      </div>
+      <div class="res-card">
+        <div class="dot" style="background:#d35400;"></div>
+        <strong>Frutose</strong>
+        <p>Laranja/tijolo · precipitado</p>
+      </div>
+      <div class="res-card">
+        <div class="dot" style="background:#3a7fd5;"></div>
+        <strong>Sacarose</strong>
+        <p>Azul · sem precipitado</p>
+      </div>
+      <div class="res-card">
+        <div class="dot" style="background:#c0392b;"></div>
+        <strong>Maltose</strong>
+        <p>Laranja/vermelho · precipitado</p>
+      </div>
+    </div>
+
+    <p class="parte-label">Experimento II — Lugol</p>
+    <div class="res-grid">
+      <div class="res-card">
+        <div class="dot" style="background:#c8a820;"></div>
+        <strong>Branco</strong>
+        <p>Âmbar · cor do Lugol</p>
+      </div>
+      <div class="res-card">
+        <div class="dot" style="background:#c8a820;"></div>
+        <strong>Glicose</strong>
+        <p>Âmbar · sem complexo</p>
+      </div>
+      <div class="res-card">
+        <div class="dot" style="background:#c8a820;"></div>
+        <strong>Frutose</strong>
+        <p>Âmbar · sem complexo</p>
+      </div>
+      <div class="res-card">
+        <div class="dot" style="background:#c8a820;"></div>
+        <strong>Sacarose</strong>
+        <p>Âmbar · sem complexo</p>
+      </div>
+      <div class="res-card">
+        <div class="dot" style="background:#1a1a7a;"></div>
+        <strong>Amido</strong>
+        <p>Azul-escuro/preto · complexo amilose</p>
+      </div>
+    </div>
+
+    <div class="alert success" style="margin-top:12px;">
+      <span class="alert-icon">💡</span>
+      <span><strong>Variações comuns:</strong> Frutose pode dar cor amarelo-laranja (menos intensa que glicose) pois cetoses reduzem mais lentamente. Se a sacarose der cor positiva no Benedict, houve hidrólise ácida (solução muito ácida ou aquecimento prolongado). Se o amido não der azul forte, a solução pode estar muito diluída — aumentar concentração para 2%.</span>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="section-header">
+    <div class="section-icon green">☑️</div>
+    <h2>Checklist</h2>
+  </div>
+  <div class="section-body">
+
+    <p class="parte-label">Na véspera</p>
+    <ul class="checklist" style="margin-bottom:16px;">
+      <li><div class="check-box"></div><span>Preparar glicose 0,10 M (100 mL) e refrigerar</span></li>
+      <li><div class="check-box"></div><span>Preparar frutose 0,10 M (100 mL) e refrigerar</span></li>
+      <li><div class="check-box"></div><span>Preparar sacarose 0,10 M (100 mL)</span></li>
+      <li><div class="check-box"></div><span>Preparar maltose 0,10 M (100 mL) — verificar se anidra ou monohidratada</span></li>
+      <li><div class="check-box"></div><span>Verificar estoque de reagente de Benedict e Lugol</span></li>
+      <li><div class="check-box"></div><span>Separar tubos de ensaio (mínimo 100 — 10 por grupo)</span></li>
+    </ul>
+
+    <p class="parte-label">No dia da aula</p>
+    <ul class="checklist" style="margin-bottom:16px;">
+      <li><div class="check-box"></div><span>Preparar amido 1% — 50 mL (usar no mesmo dia)</span></li>
+      <li><div class="check-box"></div><span><strong>Ligar banho-maria com 1h a 1h30 de antecedência</strong> — demora para atingir 95°C</span></li>
+      <li><div class="check-box"></div><span>Montar bancada central: cada reagente com sua pipeta volumétrica 1 mL <strong>etiquetada</strong> e pêra de sucção exclusiva</span></li>
+      <li><div class="check-box"></div><span>Posicionar Lugol com pipeta Pasteur limpa na bancada central</span></li>
+      <li><div class="check-box"></div><span>Distribuir aos grupos: 2 estantes de 5 tubos + pêra + béquer de descarte 2L</span></li>
+      <li><div class="check-box"></div><span>Verificar que todos os reagentes estão identificados e com volume suficiente</span></li>
+    </ul>
+
+    <p class="parte-label">Ao final da aula</p>
+    <ul class="checklist">
+      <li><div class="check-box"></div><span>Guardar soluções de açúcares refrigeradas para eventual reutilização</span></li>
+      <li><div class="check-box"></div><span>Descartar resíduos do Benedict na pia — solução de cobre diluída, pode ir na pia com água</span></li>
+      <li><div class="check-box"></div><span>Descartar Lugol residual no frasco de resíduos inorgânicos</span></li>
+      <li><div class="check-box"></div><span>Lavar e secar tubos de ensaio</span></li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  Lab Bioquímica · UFSCar &nbsp;|&nbsp; Prof. Dr. Vadim Viviani &nbsp;|&nbsp; Guia do Técnico — Aula 2 Açúcares Redutores
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const pct = (document.documentElement.scrollTop / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  });
+</script>
+</body>
+</html>

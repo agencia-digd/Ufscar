@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia do Técnico — Cristalização</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #21262d;
+  --border: #30363d;
+  --accent: #e06820;
+  --accent-dim: rgba(224,104,32,0.15);
+  --accent-border: rgba(224,104,32,0.35);
+  --accent2: #e6a817;
+  --danger: #da3633;
+  --info: #388bfd;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --green: #3fb950;
+  --orange: #f0883e;
+  --red: #ff7b72;
+  --purple: #d2a8ff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 15px; line-height: 1.6; padding: 0 0 60px; color-scheme: light; }
+#progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; transition: width 0.1s; z-index: 999; }
+
+.header { background: linear-gradient(135deg, #0d1117 0%, #1c1510 50%, #0d1117 100%); border-bottom: 2px solid var(--accent); padding: 32px 24px 28px; position: relative; overflow: hidden; }
+.header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(224,104,32,0.12) 0%, transparent 70%); border-radius: 50%; }
+.header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 600; color: var(--orange); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+.header h1 { font-size: clamp(22px, 5vw, 32px); font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 6px; }
+.header h1 span { color: var(--orange); }
+.header-sub { color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; }
+.header-sub span { display: flex; align-items: center; gap: 5px; }
+
+.nav-index { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin: 20px 16px; padding: 16px; }
+.nav-index h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; }
+.nav-index ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.nav-index a { color: var(--info); text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 6px; padding: 4px 6px; border-radius: 6px; }
+
+.section { margin: 20px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.section-header { background: var(--surface2); border-bottom: 1px solid var(--border); padding: 14px 18px; display: flex; align-items: center; gap: 10px; }
+.section-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.section-icon.orange { background: rgba(240,136,62,0.2); }
+.section-icon.green  { background: rgba(63,185,80,0.2); }
+.section-icon.yellow { background: rgba(230,168,23,0.2); }
+.section-icon.red    { background: rgba(218,54,51,0.2); }
+.section-icon.blue   { background: rgba(56,139,253,0.2); }
+.section-header h2 { font-size: 16px; font-weight: 700; color: var(--text); }
+.section-header .badge { margin-left: auto; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: rgba(56,139,253,0.15); color: var(--info); border: 1px solid rgba(56,139,253,0.3); }
+.section-body { padding: 18px; }
+
+.kit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kit-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+.kit-item .qty { background: rgba(56,139,253,0.15); border: 1px solid rgba(56,139,253,0.3); color: var(--info); font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 6px; flex-shrink: 0; white-space: nowrap; }
+
+.recipe { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+.recipe:last-child { margin-bottom: 0; }
+.recipe-header { background: var(--accent-dim); border-bottom: 1px solid var(--accent-border); padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+.recipe-label { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: white; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.recipe-header h3 { font-size: 14px; font-weight: 700; color: var(--text); }
+.recipe-body { padding: 14px; }
+
+.steps { list-style: none; }
+.steps li { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
+.steps li:last-child { margin-bottom: 0; }
+.step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+
+.calc-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+.calc-table th { background: var(--surface2); padding: 8px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--border); }
+.calc-table td { padding: 8px 12px; border-bottom: 1px solid rgba(48,54,61,0.5); font-size: 13px; }
+.calc-table tr:last-child td { border-bottom: none; }
+.calc-table .total-row td { background: var(--accent-dim); color: var(--orange); font-weight: 600; border-top: 1px solid var(--accent-border); font-family: 'JetBrains Mono', monospace; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.alert { border-radius: 8px; padding: 12px 14px; margin: 10px 0; display: flex; gap: 10px; font-size: 13px; line-height: 1.5; }
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert.danger  { background: rgba(218,54,51,0.1);  border: 1px solid rgba(218,54,51,0.35);  color: #ff8080; }
+.alert.warning { background: rgba(230,168,23,0.1); border: 1px solid rgba(230,168,23,0.35); color: var(--accent2); }
+.alert.info    { background: rgba(56,139,253,0.1); border: 1px solid rgba(56,139,253,0.35); color: var(--info); }
+.alert.success { background: rgba(63,185,80,0.1);  border: 1px solid rgba(63,185,80,0.35);  color: var(--green); }
+.alert.orange  { background: var(--accent-dim);    border: 1px solid var(--accent-border);   color: var(--orange); }
+
+.checklist { list-style: none; }
+.checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(48,54,61,0.4); font-size: 13px; }
+.checklist li:last-child { border-bottom: none; }
+.check-box { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.tl-item { display: flex; gap: 14px; position: relative; }
+.tl-item:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 34px; width: 2px; height: calc(100% - 12px); background: var(--border); }
+.tl-dot { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; z-index: 1; }
+.tl-dot.orange { border-color: var(--accent); background: var(--accent-dim); }
+.tl-dot.yellow { border-color: var(--accent2); background: rgba(230,168,23,0.15); }
+.tl-dot.red    { border-color: var(--danger); background: rgba(218,54,51,0.15); }
+.tl-dot.green  { border-color: var(--green); background: rgba(63,185,80,0.15); }
+.tl-dot.blue   { border-color: var(--info); background: rgba(56,139,253,0.15); }
+.tl-body { padding-bottom: 20px; flex: 1; }
+.tl-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.tl-title { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+.tl-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+.parte-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--orange); background: var(--accent-dim); border: 1px solid var(--accent-border); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 10px; }
+
+.bancada-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.bancada-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 13px; }
+.bancada-item .bicon { font-size: 18px; margin-bottom: 4px; display: block; }
+.bancada-item strong { display: block; font-size: 13px; margin-bottom: 2px; }
+
+.safety-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.safety-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; gap: 8px; font-size: 13px; color: var(--muted); }
+
+.result-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.result-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; text-align: center; }
+.result-card .emoji { font-size: 22px; margin-bottom: 5px; }
+.result-card strong { font-size: 12px; display: block; margin-bottom: 3px; color: var(--text); }
+.result-card p { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  #progress-bar { display: none !important; }
+  @page { margin: 15mm 12mm; size: A4; }
+  body { font-size: 10px !important; line-height: 1.35 !important; }
+  .header { padding: 16px 20px !important; }
+  .header h1 { font-size: 20px !important; }
+  .header-sub { font-size: 9px !important; gap: 10px !important; }
+  .header-badge { font-size: 8px !important; padding: 2px 8px !important; }
+  .nav-index { display: none !important; }
+  .section { margin: 10px 0 !important; break-inside: avoid; }
+  .section-header { padding: 8px 12px !important; break-after: avoid !important; }
+  .section-header h2 { font-size: 12px !important; }
+  .section-icon { width: 24px !important; height: 24px !important; font-size: 12px !important; }
+  .section-body { padding: 10px 12px !important; break-before: avoid !important; }
+  .kit-grid { gap: 5px !important; }
+  .kit-item { padding: 6px 8px !important; font-size: 9px !important; }
+  .kit-item .qty { font-size: 9px !important; }
+  .recipe { margin-bottom: 8px !important; break-inside: avoid !important; }
+  .recipe-header { padding: 6px 10px !important; }
+  .recipe-header h3 { font-size: 10px !important; }
+  .recipe-body { padding: 8px 10px !important; }
+  .steps li { font-size: 9px !important; margin-bottom: 5px !important; }
+  .step-num { width: 16px !important; height: 16px !important; font-size: 8px !important; }
+  .calc-table { font-size: 9px !important; }
+  .calc-table th, .calc-table td { padding: 4px 8px !important; font-size: 9px !important; }
+  .alert { padding: 6px 10px !important; font-size: 9px !important; margin: 5px 0 !important; break-inside: avoid !important; }
+  .checklist li { padding: 4px 0 !important; font-size: 9px !important; }
+  .check-box { width: 14px !important; height: 14px !important; }
+  .tl-item { gap: 8px !important; }
+  .tl-dot { width: 24px !important; height: 24px !important; font-size: 10px !important; }
+  .tl-body { padding-bottom: 12px !important; }
+  .tl-time { font-size: 8px !important; }
+  .tl-title { font-size: 11px !important; }
+  .tl-desc { font-size: 9px !important; }
+  .bancada-grid { gap: 5px !important; }
+  .bancada-item { padding: 6px 8px !important; font-size: 9px !important; }
+  .safety-grid { gap: 5px !important; }
+  .safety-item { padding: 6px 8px !important; font-size: 9px !important; }
+  .result-grid { gap: 5px !important; }
+  .result-card { padding: 8px !important; }
+  .parte-label { font-size: 8px !important; padding: 2px 7px !important; margin-bottom: 6px !important; }
+  footer { font-size: 8px !important; padding: 8px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<div class="header">
+  <div class="header-badge">⚙️ Guia do Técnico</div>
+  <h1><span>Cristalização</span> — Preparação da Aula</h1>
+  <div class="header-sub">
+    <span>🔬 Prof. Marystela Ferreira</span>
+    <span>👥 6–10 grupos · Eng. Florestal</span>
+    <span>⏱️ ~3 horas de aula</span>
+    <span>📋 Preparar na véspera</span>
+  </div>
+</div>
+
+<div class="nav-index">
+  <h3>Seções</h3>
+  <ul>
+    <li><a href="#kits">📦 Kit por grupo</a></li>
+    <li><a href="#bancada">🧪 Bancada Central</a></li>
+    <li><a href="#quantidades">🔢 Quantidades Totais</a></li>
+    <li><a href="#sulfanilamida">⚗️ Sobre a Sulfanilamida</a></li>
+    <li><a href="#timeline">⏱️ Cronograma</a></li>
+    <li><a href="#resultados">✅ Resultados Esperados</a></li>
+    <li><a href="#seguranca">🚨 Segurança e Resíduos</a></li>
+    <li><a href="#checklist">☑️ Checklist</a></li>
+  </ul>
+</div>
+
+<!-- KIT POR GRUPO -->
+<div class="section" id="kits">
+  <div class="section-header">
+    <div class="section-icon orange">📦</div>
+    <h2>Kit por Grupo</h2>
+    <span class="badge">por bancada</span>
+  </div>
+  <div class="section-body">
+
+    <div class="alert info" style="margin-bottom:14px;">
+      <span class="alert-icon">ℹ️</span>
+      <span>Monte uma bandeja por grupo. A sulfanilamida impura deve ser pré-pesada ou pesada na balança central durante a aula (mais didático). Para <strong>10 grupos</strong>, multiplique as quantidades.</span>
+    </div>
+
+    <p class="parte-label">Vidraria</p>
+    <div class="kit-grid" style="margin-bottom:14px;">
+      <div class="kit-item"><span class="qty">2×</span><span>Erlenmeyer 25 mL (Parte A)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Béquer 100 mL (Parte B)</span></div>
+      <div class="kit-item"><span class="qty">3×</span><span>Tubos de ensaio (Parte C)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Funil de Buchner + kitassato (filtração)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Vidro de relógio (cobrir + secar cristais)</span></div>
+      <div class="kit-item"><span class="qty">2×</span><span>Pipeta de Pasteur + pêra</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Proveta 10 mL</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Espátula</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Bastão de vidro</span></div>
+      <div class="kit-item"><span class="qty">~5×</span><span>Pérolas de vidro (ebulição segura)</span></div>
+    </div>
+
+    <p class="parte-label">Reagentes (por grupo)</p>
+    <div class="kit-grid" style="margin-bottom:14px;">
+      <div class="kit-item"><span class="qty">0,75 g</span><span>Sulfanilamida impura (Parte A)</span></div>
+      <div class="kit-item"><span class="qty">~20 mL</span><span>Álcool etílico 95% (Parte A)</span></div>
+      <div class="kit-item"><span class="qty">0,5 g</span><span>Ácido benzóico (Parte B)</span></div>
+      <div class="kit-item"><span class="qty">~20 mL</span><span>Água destilada (Parte B)</span></div>
+      <div class="kit-item"><span class="qty">~5 mL</span><span>Éter dietílico (Parte B e C)</span></div>
+      <div class="kit-item"><span class="qty">0,15 g</span><span>Naftaleno — 3 × 0,05 g (Parte C)</span></div>
+      <div class="kit-item"><span class="qty">~3 mL</span><span>Tolueno (Parte C)</span></div>
+    </div>
+
+    <p class="parte-label">Equipamentos / Acessórios</p>
+    <div class="kit-grid">
+      <div class="kit-item"><span class="qty">1×</span><span>Placa de aquecimento com agitação</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Suporte universal + garra (kitassato)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Trompa d'água ou bomba de vácuo</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Recipiente para banho de gelo (béquer 500mL)</span></div>
+      <div class="kit-item"><span class="qty">1 par</span><span>Luvas nitrílicas</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Papel de filtro Whatman nº 1 (funil Buchner)</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BANCADA CENTRAL -->
+<div class="section" id="bancada">
+  <div class="section-header">
+    <div class="section-icon orange">🧪</div>
+    <h2>Bancada Central</h2>
+    <span class="badge">acesso de todos</span>
+  </div>
+  <div class="section-body">
+    <div class="bancada-grid">
+      <div class="bancada-item">
+        <span class="bicon">⚖️</span>
+        <strong>Balança analítica</strong>
+        <span style="font-size:12px;color:var(--muted);">Para pesar sulfanilamida, ác. benzóico e naftaleno</span>
+      </div>
+      <div class="bancada-item">
+        <span class="bicon">🧊</span>
+        <strong>Gelo + água</strong>
+        <span style="font-size:12px;color:var(--muted);">Para o banho de resfriamento da Parte A · repor se necessário</span>
+      </div>
+      <div class="bancada-item">
+        <span class="bicon">🌡️</span>
+        <strong>Aparelho de ponto de fusão</strong>
+        <span style="font-size:12px;color:var(--muted);">Verificar calibração antes da aula · deixar ligado</span>
+      </div>
+      <div class="bancada-item">
+        <span class="bicon">🗑️</span>
+        <strong>Frascos de descarte</strong>
+        <span style="font-size:12px;color:var(--muted);">Orgânicos halogenados (éter/tolueno) e não-halogenados (álcool)</span>
+      </div>
+      <div class="bancada-item">
+        <span class="bicon">🧤</span>
+        <strong>EPI reserva</strong>
+        <span style="font-size:12px;color:var(--muted);">Luvas e óculos extras para quem esqueceu</span>
+      </div>
+      <div class="bancada-item">
+        <span class="bicon">🚿</span>
+        <strong>Frasco lava-olhos</strong>
+        <span style="font-size:12px;color:var(--muted);">Cheio e acessível — éter e tolueno são irritantes</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUANTIDADES TOTAIS -->
+<div class="section" id="quantidades">
+  <div class="section-header">
+    <div class="section-icon blue">🔢</div>
+    <h2>Quantidades Totais</h2>
+    <span class="badge">para 10 grupos</span>
+  </div>
+  <div class="section-body">
+    <div class="alert orange">
+      <span class="alert-icon">📌</span>
+      <span>Valores para <strong>10 grupos</strong> com ~20% de margem. Ajuste proporcionalmente para menos grupos.</span>
+    </div>
+
+    <p class="parte-label" style="margin-top:12px;">Sólidos</p>
+    <table class="calc-table">
+      <tr><th>Reagente</th><th>Por grupo</th><th>10 grupos</th><th>+20% margem</th></tr>
+      <tr><td>Sulfanilamida impura</td><td class="mono">0,75 g</td><td class="mono">7,5 g</td><td class="mono">~9 g</td></tr>
+      <tr><td>Ácido benzóico</td><td class="mono">0,5 g</td><td class="mono">5 g</td><td class="mono">~6 g</td></tr>
+      <tr><td>Naftaleno</td><td class="mono">0,15 g</td><td class="mono">1,5 g</td><td class="mono">~2 g</td></tr>
+    </table>
+
+    <p class="parte-label" style="margin-top:14px;">Solventes</p>
+    <table class="calc-table">
+      <tr><th>Solvente</th><th>Por grupo</th><th>10 grupos</th><th>+20% margem</th></tr>
+      <tr><td>Álcool etílico 95%</td><td class="mono">~20 mL</td><td class="mono">200 mL</td><td class="mono">~250 mL</td></tr>
+      <tr><td>Água destilada</td><td class="mono">~20 mL</td><td class="mono">200 mL</td><td class="mono">~250 mL</td></tr>
+      <tr><td>Éter dietílico</td><td class="mono">~5 mL</td><td class="mono">50 mL</td><td class="mono">~60 mL</td></tr>
+      <tr><td>Tolueno</td><td class="mono">~3 mL</td><td class="mono">30 mL</td><td class="mono">~36 mL</td></tr>
+    </table>
+
+    <div class="alert warning" style="margin-top:12px;">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>Éter e tolueno:</strong> distribuir em pequenos frascos por grupo (5 mL cada). Não deixar grandes volumes abertos nas bancadas.</span>
+    </div>
+  </div>
+</div>
+
+<!-- SOBRE SULFANILAMIDA -->
+<div class="section" id="sulfanilamida">
+  <div class="section-header">
+    <div class="section-icon yellow">⚗️</div>
+    <h2>Informações Técnicas — Sulfanilamida</h2>
+  </div>
+  <div class="section-body">
+    <table class="calc-table" style="margin-bottom:14px;">
+      <tr><th>Propriedade</th><th>Valor</th></tr>
+      <tr><td>Ponto de fusão (pura)</td><td class="mono">163–166 °C</td></tr>
+      <tr><td>Ponto de fusão (impura)</td><td class="mono">abaixo de 163°C · faixa alargada</td></tr>
+      <tr><td>Solvente de cristalização</td><td class="mono">Álcool etílico 95%</td></tr>
+      <tr><td>Solubilidade a quente</td><td class="mono">Alta em etanol quente</td></tr>
+      <tr><td>Solubilidade a frio</td><td class="mono">Baixa em etanol frio</td></tr>
+      <tr><td>Rendimento esperado</td><td class="mono">60–80% (cristalização simples)</td></tr>
+    </table>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">!</div>
+        <h3>Como preparar a sulfanilamida "impura"</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Misture sulfanilamida pura com <strong>5–10% de fluoreno ou naftaleno</strong> (contaminante apolar de cor diferente) para simular impureza real</span></li>
+          <li><div class="step-num">2</div><span>Homogeneize bem em almofariz. O ponto de fusão cairá e a faixa de fusão alargará — excelente para demonstração</span></li>
+          <li><div class="step-num">3</div><span>Porcionar ~0,75 g por grupo em pequenos vials ou envelopes de papel manteiga com antecedência</span></li>
+        </ul>
+        <div class="alert warning" style="margin-top:10px;">
+          <span class="alert-icon">📌</span>
+          <span>Se não houver sulfanilamida impura comercial disponível, prepare a mistura na véspera. Guarde em local seco e ao abrigo da luz.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CRONOGRAMA -->
+<div class="section" id="timeline">
+  <div class="section-header">
+    <div class="section-icon orange">⏱️</div>
+    <h2>Cronograma da Aula</h2>
+    <span class="badge">~3 horas</span>
+  </div>
+  <div class="section-body">
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot orange">📋</div>
+        <div class="tl-body">
+          <div class="tl-time">00:00 – 00:15 (15 min)</div>
+          <div class="tl-title">Introdução e distribuição</div>
+          <div class="tl-desc">Professora apresenta o princípio da cristalização. Técnico distribui bandejas com kits. Grupos pesam sulfanilamida na balança central.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot orange">🔥</div>
+        <div class="tl-body">
+          <div class="tl-time">00:15 – 00:45 (30 min)</div>
+          <div class="tl-title">Parte A — Dissolução a quente</div>
+          <div class="tl-desc">Aquecimento do solvente + dissolução da sulfanilamida. Tempo crítico: máx. 15 min da 1ª adição até dissolver. Técnico monitora temperaturas das placas.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot blue">❄️</div>
+        <div class="tl-body">
+          <div class="tl-time">00:45 – 01:30 (45 min)</div>
+          <div class="tl-title">Parte A — Resfriamento + Partes B e C em paralelo</div>
+          <div class="tl-desc">Enquanto a cristalização ocorre espontaneamente (coberto), grupos realizam as Partes B (ácido benzóico) e C (naftaleno). Éter e tolueno somente na área ventilada.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot orange">🧊</div>
+        <div class="tl-body">
+          <div class="tl-time">01:30 – 01:45 (15 min)</div>
+          <div class="tl-title">Parte A — Banho de gelo</div>
+          <div class="tl-desc">Colocar o Erlenmeyer em banho de gelo após cristalização inicial. Repor gelo na bancada central se necessário.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green">🔬</div>
+        <div class="tl-body">
+          <div class="tl-time">01:45 – 02:20 (35 min)</div>
+          <div class="tl-title">Parte A — Filtração a vácuo</div>
+          <div class="tl-desc">Montagem do sistema de Buchner + filtração + lavagem com solvente gelado. Técnico auxilia grupos com montagem do sistema de vácuo.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot yellow">🌡️</div>
+        <div class="tl-body">
+          <div class="tl-time">02:20 – 02:50 (30 min)</div>
+          <div class="tl-title">Pesagem + Ponto de Fusão</div>
+          <div class="tl-desc">Secagem dos cristais no vidro de relógio. Pesagem na balança central. Determinação do ponto de fusão (puro e impuro) no aparelho.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red">🗑️</div>
+        <div class="tl-body">
+          <div class="tl-time">02:50 – 03:00 (10 min)</div>
+          <div class="tl-title">Limpeza e descarte</div>
+          <div class="tl-desc">Éter/tolueno no frasco halogenado. Álcool no frasco de orgânicos não-halogenados. Lavar vidraria. Desligar placas de aquecimento.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTADOS ESPERADOS -->
+<div class="section" id="resultados">
+  <div class="section-header">
+    <div class="section-icon green">✅</div>
+    <h2>Resultados Esperados</h2>
+    <span class="badge">referência</span>
+  </div>
+  <div class="section-body">
+
+    <p class="parte-label">Parte A — Sulfanilamida</p>
+    <table class="calc-table" style="margin-bottom:14px;">
+      <tr><th>Parâmetro</th><th>Esperado</th></tr>
+      <tr><td>Aspecto dos cristais</td><td>Brancos/brancos-amarelados, forma regular</td></tr>
+      <tr><td>Rendimento</td><td class="mono">60–80% (0,45–0,60 g de 0,75 g iniciais)</td></tr>
+      <tr><td>PF sulfanilamida pura</td><td class="mono">163–166 °C · faixa estreita (&lt;2°C)</td></tr>
+      <tr><td>PF sulfanilamida impura</td><td class="mono">Abaixo de 163°C · faixa larga (≥5°C)</td></tr>
+    </table>
+
+    <p class="parte-label">Parte B — Ácido Benzóico</p>
+    <div class="result-grid" style="margin-bottom:14px;">
+      <div class="result-card">
+        <div class="emoji">❌</div>
+        <strong>Água fria</strong>
+        <p>Insolúvel — ácido benzóico é pouco polar, não dissolve em água fria</p>
+      </div>
+      <div class="result-card">
+        <div class="emoji">✅</div>
+        <strong>Água quente</strong>
+        <p>Dissolve — solubilidade aumenta muito com temperatura. Cristaliza ao esfriar</p>
+      </div>
+      <div class="result-card">
+        <div class="emoji">✅</div>
+        <strong>Éter (t. amb.)</strong>
+        <p>Dissolve facilmente — polaridade compatível. Porém éter é muito volátil, difícil controle</p>
+      </div>
+    </div>
+    <div class="alert success" style="margin-bottom:14px;">
+      <span class="alert-icon">💡</span>
+      <span><strong>Melhor solvente para cristalizar ácido benzóico: água quente.</strong> Dissolve bem a quente, pouco a frio — diferença de solubilidade ideal para cristalização. Éter dissolve demais e a frio também, além de ser perigoso.</span>
+    </div>
+
+    <p class="parte-label">Parte C — Naftaleno</p>
+    <table class="calc-table">
+      <tr><th>Solvente</th><th>Solubilidade</th><th>Adequado para cristalizar?</th></tr>
+      <tr><td>Éter dietílico</td><td style="color:var(--green);">Solúvel</td><td style="color:var(--accent2);">Possível mas problemático (muito volátil)</td></tr>
+      <tr><td>Água</td><td style="color:var(--red);">Insolúvel</td><td style="color:var(--red);">Não — naftaleno é apolar, água polar demais</td></tr>
+      <tr><td>Tolueno</td><td style="color:var(--green);">Solúvel</td><td style="color:var(--green);">Sim — melhor opção (dissolve a quente, cristaliza a frio)</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- SEGURANÇA -->
+<div class="section" id="seguranca">
+  <div class="section-header">
+    <div class="section-icon red">🚨</div>
+    <h2>Segurança e Resíduos</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="alert danger">
+      <span class="alert-icon">🔥</span>
+      <span><strong>Éter dietílico (PE 35°C) e tolueno são altamente inflamáveis.</strong> Proibido qualquer fonte de ignição quando abertos. Trabalhar exclusivamente em área com exaustão. Nunca evaporar éter até a secura — risco de peróxidos explosivos.</span>
+    </div>
+    <div class="alert danger">
+      <span class="alert-icon">🌡️</span>
+      <span><strong>Álcool etílico ferve a 78°C.</strong> Manter temperatura da placa baixa. Em caso de fogo por álcool: usar cobertor abafador ou CO₂ — NUNCA água.</span>
+    </div>
+
+    <p class="parte-label" style="margin-top:12px;">Descarte de Resíduos</p>
+    <div class="safety-grid">
+      <div class="safety-item"><span style="font-size:18px;">🟡</span><span><strong>Álcool etílico</strong><br>Frasco de orgânicos não-halogenados</span></div>
+      <div class="safety-item"><span style="font-size:18px;">🟠</span><span><strong>Éter + Tolueno</strong><br>Frasco de orgânicos halogenados/especiais</span></div>
+      <div class="safety-item"><span style="font-size:18px;">⚗️</span><span><strong>Filtrados aquosos</strong><br>Pia com água corrente abundante (pH neutro)</span></div>
+      <div class="safety-item"><span style="font-size:18px;">🧊</span><span><strong>Cristais de naftaleno</strong><br>Sólido orgânico — frasco de resíduos sólidos</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="section-header">
+    <div class="section-icon green">☑️</div>
+    <h2>Checklist — Véspera e Dia da Aula</h2>
+  </div>
+  <div class="section-body">
+
+    <p class="parte-label">Na véspera</p>
+    <ul class="checklist" style="margin-bottom:16px;">
+      <li><div class="check-box"></div><span>Preparar ou adquirir sulfanilamida impura (mistura com 5–10% de naftaleno/fluoreno)</span></li>
+      <li><div class="check-box"></div><span>Porcionar 0,75 g de sulfanilamida impura por grupo em vials identificados</span></li>
+      <li><div class="check-box"></div><span>Verificar estoque de álcool 95%, éter, tolueno, ácido benzóico e naftaleno</span></li>
+      <li><div class="check-box"></div><span>Checar papel de filtro Whatman nº 1 em tamanho compatível com o funil de Buchner</span></li>
+      <li><div class="check-box"></div><span>Separar pérolas de vidro (5 por grupo) para ebulição segura</span></li>
+      <li><div class="check-box"></div><span>Verificar calibração do aparelho de ponto de fusão — testar com padrão conhecido</span></li>
+      <li><div class="check-box"></div><span>Checar sistema de vácuo (trompa ou bomba) + mangueiras + conexões</span></li>
+    </ul>
+
+    <p class="parte-label">No dia — antes dos alunos chegarem</p>
+    <ul class="checklist" style="margin-bottom:16px;">
+      <li><div class="check-box"></div><span>Montar bandejas com kits completos para cada grupo</span></li>
+      <li><div class="check-box"></div><span>Ligar aparelho de ponto de fusão com antecedência (precisa estabilizar)</span></li>
+      <li><div class="check-box"></div><span>Preparar recipiente com gelo na bancada central (repor durante a aula)</span></li>
+      <li><div class="check-box"></div><span>Ligar exaustão da área de trabalho com éter/tolueno</span></li>
+      <li><div class="check-box"></div><span>Posicionar frascos de descarte identificados (orgânicos / halogenados)</span></li>
+      <li><div class="check-box"></div><span>Checar frasco lava-olhos (cheio e desobstruído)</span></li>
+      <li><div class="check-box"></div><span>Distribuir éter e tolueno em pequenos frascos por grupo (5 mL cada)</span></li>
+    </ul>
+
+    <p class="parte-label">Ao final da aula</p>
+    <ul class="checklist">
+      <li><div class="check-box"></div><span>Recolher frascos de descarte e armazenar corretamente no almoxarifado de resíduos</span></li>
+      <li><div class="check-box"></div><span>Desligar todas as placas de aquecimento e o aparelho de ponto de fusão</span></li>
+      <li><div class="check-box"></div><span>Lavar e secar vidraria — funis de Buchner e kitassatos com atenção especial</span></li>
+      <li><div class="check-box"></div><span>Guardar éter e tolueno remanescentes em armário para produtos inflamáveis</span></li>
+      <li><div class="check-box"></div><span>Registrar intercorrências no livro de ocorrências do laboratório</span></li>
+    </ul>
+
+  </div>
+</div>
+
+<footer>
+  Lab Química Orgânica · UFSCar &nbsp;|&nbsp; Prof. Marystela Ferreira &nbsp;|&nbsp; Guia do Técnico — Aula 2 Cristalização
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const pct = (document.documentElement.scrollTop / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  });
+</script>
+</body>
+</html>

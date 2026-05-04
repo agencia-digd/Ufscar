@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia do Técnico — Extração da Cafeína</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --surface2: #21262d; --border: #30363d;
+  --accent: #e06820; --accent-dim: rgba(224,104,32,0.15); --accent-border: rgba(224,104,32,0.35);
+  --accent2: #e6a817; --danger: #da3633; --info: #388bfd;
+  --text: #e6edf3; --muted: #8b949e; --green: #3fb950; --orange: #f0883e; --red: #ff7b72; --purple: #d2a8ff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 15px; line-height: 1.6; padding: 0 0 60px; color-scheme: light; }
+#progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; transition: width 0.1s; z-index: 999; }
+
+.header { background: linear-gradient(135deg, #0d1117 0%, #1c1510 50%, #0d1117 100%); border-bottom: 2px solid var(--accent); padding: 32px 24px 28px; position: relative; overflow: hidden; }
+.header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(224,104,32,0.12) 0%, transparent 70%); border-radius: 50%; }
+.header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 600; color: var(--orange); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+.header h1 { font-size: clamp(20px, 5vw, 30px); font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 6px; }
+.header h1 span { color: var(--orange); }
+.header-sub { color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; }
+
+.nav-index { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin: 20px 16px; padding: 16px; }
+.nav-index h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; }
+.nav-index ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.nav-index a { color: var(--info); text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 6px; padding: 4px 6px; border-radius: 6px; }
+
+.section { margin: 20px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.section-header { background: var(--surface2); border-bottom: 1px solid var(--border); padding: 14px 18px; display: flex; align-items: center; gap: 10px; }
+.section-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.section-icon.orange { background: rgba(240,136,62,0.2); }
+.section-icon.green  { background: rgba(63,185,80,0.2); }
+.section-icon.yellow { background: rgba(230,168,23,0.2); }
+.section-icon.red    { background: rgba(218,54,51,0.2); }
+.section-icon.blue   { background: rgba(56,139,253,0.2); }
+.section-header h2 { font-size: 16px; font-weight: 700; color: var(--text); }
+.section-header .badge { margin-left: auto; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: rgba(56,139,253,0.15); color: var(--info); border: 1px solid rgba(56,139,253,0.3); }
+.section-body { padding: 18px; }
+
+.kit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kit-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+.kit-item .qty { background: rgba(56,139,253,0.15); border: 1px solid rgba(56,139,253,0.3); color: var(--info); font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 6px; flex-shrink: 0; white-space: nowrap; }
+
+.recipe { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+.recipe:last-child { margin-bottom: 0; }
+.recipe-header { background: var(--accent-dim); border-bottom: 1px solid var(--accent-border); padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+.recipe-label { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: white; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.recipe-header h3 { font-size: 14px; font-weight: 700; color: var(--text); }
+.recipe-body { padding: 14px; }
+
+.steps { list-style: none; }
+.steps li { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
+.steps li:last-child { margin-bottom: 0; }
+.step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+
+.calc-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+.calc-table th { background: var(--surface2); padding: 8px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--border); }
+.calc-table td { padding: 8px 12px; border-bottom: 1px solid rgba(48,54,61,0.5); font-size: 13px; }
+.calc-table tr:last-child td { border-bottom: none; }
+.calc-table .total-row td { background: var(--accent-dim); color: var(--orange); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.alert { border-radius: 8px; padding: 12px 14px; margin: 10px 0; display: flex; gap: 10px; font-size: 13px; line-height: 1.5; }
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert.danger  { background: rgba(218,54,51,0.1);  border: 1px solid rgba(218,54,51,0.35);  color: #ff8080; }
+.alert.warning { background: rgba(230,168,23,0.1); border: 1px solid rgba(230,168,23,0.35); color: var(--accent2); }
+.alert.info    { background: rgba(56,139,253,0.1); border: 1px solid rgba(56,139,253,0.35); color: var(--info); }
+.alert.success { background: rgba(63,185,80,0.1);  border: 1px solid rgba(63,185,80,0.35);  color: var(--green); }
+.alert.orange  { background: var(--accent-dim);    border: 1px solid var(--accent-border);   color: var(--orange); }
+
+.checklist { list-style: none; }
+.checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(48,54,61,0.4); font-size: 13px; }
+.checklist li:last-child { border-bottom: none; }
+.check-box { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.tl-item { display: flex; gap: 14px; position: relative; }
+.tl-item:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 34px; width: 2px; height: calc(100% - 12px); background: var(--border); }
+.tl-dot { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; z-index: 1; }
+.tl-dot.orange { border-color: var(--accent); background: var(--accent-dim); }
+.tl-dot.yellow { border-color: var(--accent2); background: rgba(230,168,23,0.15); }
+.tl-dot.red    { border-color: var(--danger); background: rgba(218,54,51,0.15); }
+.tl-dot.green  { border-color: var(--green); background: rgba(63,185,80,0.15); }
+.tl-dot.blue   { border-color: var(--info); background: rgba(56,139,253,0.15); }
+.tl-body { padding-bottom: 20px; flex: 1; }
+.tl-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.tl-title { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+.tl-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+.parte-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--orange); background: var(--accent-dim); border: 1px solid var(--accent-border); display: inline-block; padding: 3px 10px; border-radius: 4px; margin-bottom: 10px; }
+
+.safety-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.safety-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; gap: 8px; font-size: 13px; color: var(--muted); }
+
+.result-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.result-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; text-align: center; }
+.result-card .emoji { font-size: 22px; margin-bottom: 5px; }
+.result-card strong { font-size: 12px; display: block; margin-bottom: 3px; color: var(--text); }
+.result-card p { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+.bancada-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.bancada-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 13px; }
+.bancada-item .bicon { font-size: 18px; margin-bottom: 4px; display: block; }
+.bancada-item strong { display: block; font-size: 13px; margin-bottom: 2px; }
+
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
+footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  #progress-bar { display: none !important; }
+  @page { margin: 15mm 12mm; size: A4; }
+  body { font-size: 10px !important; line-height: 1.35 !important; }
+  .header { padding: 16px 20px !important; }
+  .header h1 { font-size: 18px !important; }
+  .header-sub { font-size: 9px !important; gap: 10px !important; }
+  .header-badge { font-size: 8px !important; padding: 2px 8px !important; }
+  .nav-index { display: none !important; }
+  .section { margin: 10px 0 !important; break-inside: avoid; }
+  .section-header { padding: 8px 12px !important; break-after: avoid !important; }
+  .section-header h2 { font-size: 12px !important; }
+  .section-icon { width: 24px !important; height: 24px !important; font-size: 12px !important; }
+  .section-body { padding: 10px 12px !important; break-before: avoid !important; }
+  .kit-grid { gap: 5px !important; }
+  .kit-item { padding: 6px 8px !important; font-size: 9px !important; }
+  .kit-item .qty { font-size: 9px !important; }
+  .recipe { margin-bottom: 8px !important; break-inside: avoid !important; }
+  .recipe-header { padding: 6px 10px !important; }
+  .recipe-header h3 { font-size: 10px !important; }
+  .recipe-body { padding: 8px 10px !important; }
+  .steps li { font-size: 9px !important; margin-bottom: 5px !important; }
+  .step-num { width: 16px !important; height: 16px !important; font-size: 8px !important; }
+  .calc-table th, .calc-table td { padding: 4px 8px !important; font-size: 9px !important; }
+  .alert { padding: 6px 10px !important; font-size: 9px !important; margin: 5px 0 !important; break-inside: avoid !important; }
+  .checklist li { padding: 4px 0 !important; font-size: 9px !important; }
+  .check-box { width: 14px !important; height: 14px !important; }
+  .tl-dot { width: 24px !important; height: 24px !important; font-size: 10px !important; }
+  .tl-body { padding-bottom: 12px !important; }
+  .tl-time { font-size: 8px !important; }
+  .tl-title { font-size: 11px !important; }
+  .tl-desc { font-size: 9px !important; }
+  .bancada-grid, .safety-grid, .result-grid { gap: 5px !important; }
+  .bancada-item, .safety-item, .result-card { padding: 6px 8px !important; font-size: 9px !important; }
+  .parte-label { font-size: 8px !important; padding: 2px 7px !important; margin-bottom: 6px !important; }
+  footer { font-size: 8px !important; padding: 8px !important; color: #555 !important; border-top: 1px solid #ccc !important; }
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<div class="header">
+  <div class="header-badge">⚙️ Guia do Técnico</div>
+  <h1><span>Extração da Cafeína</span> — Preparação da Aula</h1>
+  <div class="header-sub">
+    <span>🔬 Prof. Marystela Ferreira</span>
+    <span>👥 6–10 grupos · Eng. Florestal</span>
+    <span>⏱️ ~3 horas de aula</span>
+    <span>☣️ Clorofórmio — exaustão obrigatória</span>
+  </div>
+</div>
+
+<div class="nav-index">
+  <h3>Seções</h3>
+  <ul>
+    <li><a href="#kits">📦 Kit por grupo</a></li>
+    <li><a href="#bancada">🧪 Bancada Central</a></li>
+    <li><a href="#quantidades">🔢 Quantidades Totais</a></li>
+    <li><a href="#preparo">⚗️ Preparo de Soluções</a></li>
+    <li><a href="#timeline">⏱️ Cronograma</a></li>
+    <li><a href="#resultados">✅ Resultados Esperados</a></li>
+    <li><a href="#seguranca">🚨 Segurança e Resíduos</a></li>
+    <li><a href="#checklist">☑️ Checklist</a></li>
+  </ul>
+</div>
+
+<!-- KIT POR GRUPO -->
+<div class="section" id="kits">
+  <div class="section-header">
+    <div class="section-icon orange">📦</div>
+    <h2>Kit por Grupo</h2>
+    <span class="badge">por bandeja</span>
+  </div>
+  <div class="section-body">
+
+    <div class="alert info" style="margin-bottom:14px;">
+      <span class="alert-icon">ℹ️</span>
+      <span>Monte uma bandeja por grupo. Clorofórmio e NaOH 6M ficam na <strong>bancada central</strong> — não distribuir individualmente por grupo.</span>
+    </div>
+
+    <p class="parte-label">Vidraria</p>
+    <div class="kit-grid" style="margin-bottom:14px;">
+      <div class="kit-item"><span class="qty">1×</span><span>Béquer 250 mL (infusão do chá)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Funil de separação 125–250 mL + suporte</span></div>
+      <div class="kit-item"><span class="qty">2×</span><span>Béquer 100 mL (coletar frações)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Béquer 50 mL (evaporação final)</span></div>
+      <div class="kit-item"><span class="qty">2×</span><span>Vidro de relógio (prensar saquinhos + secar)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Pipeta Pasteur + pêra (transferências)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Proveta 25 mL</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Bastão de vidro</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Frasco pequeno (vidro) para cafeína final</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Funil de Buchner + kitassato (purificação)</span></div>
+    </div>
+
+    <p class="parte-label">Reagentes (por grupo)</p>
+    <div class="kit-grid" style="margin-bottom:14px;">
+      <div class="kit-item"><span class="qty">3×</span><span>Saquinhos de chá preto</span></div>
+      <div class="kit-item"><span class="qty">~2 g</span><span>Na₂SO₄ anidro (em frasco tampado)</span></div>
+      <div class="kit-item"><span class="qty">~5 mL</span><span>2-propanol (purificação)</span></div>
+      <div class="kit-item"><span class="qty">~5 mL</span><span>Hexano (precipitação)</span></div>
+      <div class="kit-item"><span class="qty">~5 mL</span><span>Solução saturada de NaCl (anti-emulsão)</span></div>
+    </div>
+
+    <p class="parte-label">Equipamentos / Acessórios</p>
+    <div class="kit-grid">
+      <div class="kit-item"><span class="qty">1×</span><span>Placa de aquecimento (sem agitação obrigatória)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Suporte universal + garra (funil sep.)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Termômetro (verificar ~97°C na água)</span></div>
+      <div class="kit-item"><span class="qty">1 par</span><span>Luvas nitrílicas (CHCl₃ e NaOH)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Papel de filtro (purificação final)</span></div>
+      <div class="kit-item"><span class="qty">1×</span><span>Cronômetro (1 min exato de infusão)</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BANCADA CENTRAL -->
+<div class="section" id="bancada">
+  <div class="section-header">
+    <div class="section-icon orange">🧪</div>
+    <h2>Bancada Central</h2>
+    <span class="badge">acesso de todos</span>
+  </div>
+  <div class="section-body">
+    <div class="alert danger" style="margin-bottom:12px;">
+      <span class="alert-icon">☣️</span>
+      <span><strong>Clorofórmio e NaOH 6M centralizado obrigatório.</strong> Nunca distribuir grandes volumes por grupo. Alunos se servem na bancada central com pipeta ou proveta.</span>
+    </div>
+    <div class="bancada-grid">
+      <div class="bancada-item">
+        <span class="bicon">🟢</span>
+        <strong>CHCl₃ — Clorofórmio</strong>
+        <span style="font-size:12px;color:var(--muted);">Frasco âmbar fechado · Dispensar em proveta · sob exaustão</span>
+      </div>
+      <div class="bancada-item">
+        <span class="bicon">🔴</span>
+        <strong>NaOH 6 mol·L⁻¹</strong>
+        <span style="font-size:12px;color:var(--muted);">Frasco rotulado · com conta-gotas · CORROSIVO</span>
+      </div>
+      <div class="bancada-item">
+        <span class="bicon">⚖️</span>
+        <strong>Balança analítica</strong>
+        <span style="font-size:12px;color:var(--muted);">Pesar cafeína final · verificar calibração</span>
+      </div>
+      <div class="bancada-item">
+        <span class="bicon">🌡️</span>
+        <strong>Aparelho de ponto de fusão</strong>
+        <span style="font-size:12px;color:var(--muted);">PF determinado na PRÓXIMA aula</span>
+      </div>
+      <div class="bancada-item">
+        <span class="bicon">🧊</span>
+        <strong>Gelo + água</strong>
+        <span style="font-size:12px;color:var(--muted);">Para resfriar extrato antes do funil</span>
+      </div>
+      <div class="bancada-item">
+        <span class="bicon">🗑️</span>
+        <strong>Frascos de descarte</strong>
+        <span style="font-size:12px;color:var(--muted);">CHCl₃ halogenado separado · aquoso separado</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUANTIDADES TOTAIS -->
+<div class="section" id="quantidades">
+  <div class="section-header">
+    <div class="section-icon blue">🔢</div>
+    <h2>Quantidades Totais</h2>
+    <span class="badge">para 10 grupos</span>
+  </div>
+  <div class="section-body">
+    <div class="alert orange" style="margin-bottom:12px;">
+      <span class="alert-icon">📌</span>
+      <span>Valores para <strong>10 grupos</strong> com ~20% de margem. Clorofórmio: 3 × 20 mL = 60 mL por grupo → volumoso, compre/separe com antecedência.</span>
+    </div>
+
+    <p class="parte-label">Reagentes principais</p>
+    <table class="calc-table">
+      <tr><th>Reagente</th><th>Por grupo</th><th>10 grupos</th><th>+20% margem</th></tr>
+      <tr><td>Saquinhos de chá preto</td><td class="mono">3 unid.</td><td class="mono">30 unid.</td><td class="mono">~36 unid.</td></tr>
+      <tr><td>Clorofórmio (CHCl₃)</td><td class="mono">3 × 20 mL = 60 mL</td><td class="mono">600 mL</td><td class="mono">~750 mL</td></tr>
+      <tr><td>NaOH 6 mol·L⁻¹</td><td class="mono">2 × 20 mL = 40 mL</td><td class="mono">400 mL</td><td class="mono">~500 mL</td></tr>
+      <tr><td>Água destilada (lavagem)</td><td class="mono">20 mL</td><td class="mono">200 mL</td><td class="mono">~250 mL</td></tr>
+      <tr><td>Na₂SO₄ anidro</td><td class="mono">~2 g</td><td class="mono">20 g</td><td class="mono">~25 g</td></tr>
+      <tr><td>Sol. saturada NaCl</td><td class="mono">~5 mL</td><td class="mono">50 mL</td><td class="mono">~60 mL</td></tr>
+      <tr><td>2-propanol</td><td class="mono">~5 mL</td><td class="mono">50 mL</td><td class="mono">~60 mL</td></tr>
+      <tr><td>Hexano</td><td class="mono">~5 mL</td><td class="mono">50 mL</td><td class="mono">~60 mL</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- PREPARO DE SOLUÇÕES -->
+<div class="section" id="preparo">
+  <div class="section-header">
+    <div class="section-icon yellow">⚗️</div>
+    <h2>Preparo de Soluções</h2>
+    <span class="badge">véspera</span>
+  </div>
+  <div class="section-body">
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">1</div>
+        <h3>NaOH 6 mol·L⁻¹ — 500 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Pesar <strong>120 g de NaOH</strong> (pellets) em béquer de 1 L</span></li>
+          <li><div class="step-num">2</div><span>Adicionar ~400 mL de água destilada lentamente com agitação — forte exotermia, aguardar esfriar</span></li>
+          <li><div class="step-num">3</div><span>Transferir para balão volumétrico de 500 mL, completar com água destilada</span></li>
+          <li><div class="step-num">4</div><span>Transferir para frasco plástico rotulado em vermelho: <strong>NaOH 6M · CORROSIVO · data</strong></span></li>
+        </ul>
+        <div class="alert danger" style="margin-top:10px;">
+          <span class="alert-icon">⚠️</span>
+          <span>NaOH gera forte calor de dissolução. Prepare em béquer grande, adicione água lentamente, aguarde esfriar completamente antes de transferir ao balão volumétrico.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">2</div>
+        <h3>Solução Saturada de NaCl — 100 mL</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Adicione <strong>~36 g de NaCl</strong> a 100 mL de água destilada com agitação</span></li>
+          <li><div class="step-num">2</div><span>Agite até saturação — deve restar um pouco de sólido não dissolvido no fundo</span></li>
+          <li><div class="step-num">3</div><span>Decante ou filtre para frasco tampado. Rotule como <strong>NaCl saturado</strong></span></li>
+        </ul>
+        <div class="alert info" style="margin-top:10px;">
+          <span class="alert-icon">💡</span>
+          <span>A solução saturada de NaCl (salting-out) quebra emulsões ao aumentar a força iônica da fase aquosa, forçando a separação das fases orgânica e aquosa.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe">
+      <div class="recipe-header">
+        <div class="recipe-label">3</div>
+        <h3>CaCO₃ — Uso Alternativo (opcional)</h3>
+      </div>
+      <div class="recipe-body">
+        <ul class="steps">
+          <li><div class="step-num">1</div><span>Se a professora optar por usar CaCO₃ em vez de NaOH: adicionar <strong>~2 g de CaCO₃</strong> diretamente ao extrato aquoso de chá ainda quente</span></li>
+          <li><div class="step-num">2</div><span>Agitar por 2–3 min — CaCO₃ neutraliza os ácidos tânicos formando sais de cálcio insolúveis</span></li>
+          <li><div class="step-num">3</div><span>Filtrar para remover o precipitado antes de transferir ao funil de separação</span></li>
+        </ul>
+        <div class="alert warning" style="margin-top:10px;">
+          <span class="alert-icon">📌</span>
+          <span>O protocolo atual usa NaOH 6M (etapa 6) para remoção dos taninos após a extração com CHCl₃. O CaCO₃ é uma alternativa prévia à extração, conforme descrito na introdução do roteiro. Confirme com a Profa. Marystela qual abordagem será adotada.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CRONOGRAMA -->
+<div class="section" id="timeline">
+  <div class="section-header">
+    <div class="section-icon orange">⏱️</div>
+    <h2>Cronograma da Aula</h2>
+    <span class="badge">~3 horas</span>
+  </div>
+  <div class="section-body">
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot orange">📋</div>
+        <div class="tl-body">
+          <div class="tl-time">00:00 – 00:15 (15 min)</div>
+          <div class="tl-title">Introdução e distribuição de kits</div>
+          <div class="tl-desc">Professora apresenta o experimento. Técnico distribui bandejas. Grupos aquecem água (97–98°C) na placa. Técnico confirma que exaustão está ligada.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot orange">🍵</div>
+        <div class="tl-body">
+          <div class="tl-time">00:15 – 00:35 (20 min)</div>
+          <div class="tl-title">Infusão + resfriamento</div>
+          <div class="tl-desc">Infusão rigorosa de <strong>1 minuto</strong>. Prensagem dos saquinhos. Resfriamento em banho de gelo. Técnico monitora o cronômetro para os grupos.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot yellow">⚗️</div>
+        <div class="tl-body">
+          <div class="tl-time">00:35 – 01:20 (45 min)</div>
+          <div class="tl-title">Extração com CHCl₃ (3×) + lavagem com NaOH</div>
+          <div class="tl-desc">3 extrações de 20 mL cada no funil de separação. Combinar extratos. Lavar 2× com NaOH 6M + 1× água. Técnico auxilia grupos com funil e alívio de pressão.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot blue">🧂</div>
+        <div class="tl-body">
+          <div class="tl-time">01:20 – 01:40 (20 min)</div>
+          <div class="tl-title">Secagem com Na₂SO₄</div>
+          <div class="tl-desc">Adição de Na₂SO₄ anidro ao extrato orgânico. Decantação. Fase orgânica seca pronta para evaporação.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red">💨</div>
+        <div class="tl-body">
+          <div class="tl-time">01:40 – 02:20 (40 min)</div>
+          <div class="tl-title">Evaporação do CHCl₃ (na capela)</div>
+          <div class="tl-desc">Evaporação na chapa até ~3 mL. Transferência para frasco pequeno. Evaporação completa até formação de cristais. Técnico controla temperatura e exaustão.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green">🧊</div>
+        <div class="tl-body">
+          <div class="tl-time">02:20 – 02:50 (30 min)</div>
+          <div class="tl-title">Purificação com 2-propanol/hexano</div>
+          <div class="tl-desc">Dissolução em 2-propanol quente, adição de hexano, filtração dos cristais. Secagem e pesagem na balança central.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot orange">🗑️</div>
+        <div class="tl-body">
+          <div class="tl-time">02:50 – 03:00 (10 min)</div>
+          <div class="tl-title">Descarte e limpeza</div>
+          <div class="tl-desc">CHCl₃ e solventes halogenados no frasco específico. Aquosos na pia. Lavar vidraria. Desligar placas e exaustão.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTADOS ESPERADOS -->
+<div class="section" id="resultados">
+  <div class="section-header">
+    <div class="section-icon green">✅</div>
+    <h2>Resultados Esperados</h2>
+    <span class="badge">referência</span>
+  </div>
+  <div class="section-body">
+    <table class="calc-table" style="margin-bottom:14px;">
+      <tr><th>Parâmetro</th><th>Esperado</th></tr>
+      <tr><td>Aspecto do extrato após CHCl₃</td><td>Solução levemente esverdeada/amarelada (clorofila)</td></tr>
+      <tr><td>Aspecto após lavagem NaOH</td><td>Solução mais clara, amarelo-pálido</td></tr>
+      <tr><td>Massa de cafeína bruta</td><td class="mono">50–120 mg por grupo (3 saquinhos)</td></tr>
+      <tr><td>Massa cafeína purificada</td><td class="mono">30–80 mg (após recristalização)</td></tr>
+      <tr><td>Rendimento típico</td><td class="mono">0,5–1,5% em massa do chá seco</td></tr>
+      <tr><td>Aspecto dos cristais finais</td><td>Branco-acinzentado a branco, pó fino ou agulhas</td></tr>
+      <tr><td>Ponto de fusão (próx. aula)</td><td class="mono">235–238 °C</td></tr>
+    </table>
+
+    <div class="result-grid">
+      <div class="result-card">
+        <div class="emoji">🟡</div>
+        <strong>Extrato orgânico</strong>
+        <p>Cor esverdeada = clorofila. Normal — será removida na recristalização</p>
+      </div>
+      <div class="result-card">
+        <div class="emoji">⚗️</div>
+        <strong>Emulsão</strong>
+        <p>Comum neste experimento. Resolver com NaCl saturado + repouso 5 min</p>
+      </div>
+      <div class="result-card">
+        <div class="emoji">❄️</div>
+        <strong>Cristais finais</strong>
+        <p>Brancos, amargos ao gosto — característicos da cafeína pura</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEGURANÇA -->
+<div class="section" id="seguranca">
+  <div class="section-header">
+    <div class="section-icon red">🚨</div>
+    <h2>Segurança e Resíduos</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="alert danger">
+      <span class="alert-icon">☣️</span>
+      <span><strong>Clorofórmio é tóxico, suspeito carcinogênico e volátil (PE 61°C).</strong> Manipular exclusivamente na capela com exaustão ligada. Luvas nitrílicas obrigatórias — o CHCl₃ atravessa luvas de látex em minutos. Nunca evaporar ao ar livre da bancada.</span>
+    </div>
+    <div class="alert danger">
+      <span class="alert-icon">🔥</span>
+      <span><strong>Proibido chamas abertas.</strong> 2-propanol (PE 82°C) e hexano (PE 69°C) são inflamáveis. Use apenas placa de aquecimento com temperatura controlada.</span>
+    </div>
+    <div class="alert warning">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>Funil de separação com NaOH:</strong> ao agitar, abrir a torneira periodicamente para aliviar pressão. Apontar a torneira para longe das pessoas.</span>
+    </div>
+
+    <p class="parte-label" style="margin-top:12px;">Descarte de Resíduos</p>
+    <div class="safety-grid">
+      <div class="safety-item"><span style="font-size:18px;">🟠</span><span><strong>Clorofórmio + frações orgânicas</strong><br>Frasco de halogenados — nunca na pia</span></div>
+      <div class="safety-item"><span style="font-size:18px;">🟡</span><span><strong>2-propanol + hexano</strong><br>Frasco de orgânicos não-halogenados</span></div>
+      <div class="safety-item"><span style="font-size:18px;">💧</span><span><strong>Fase aquosa + NaOH diluído</strong><br>Neutralizar (pH 6–8) antes de descartar na pia</span></div>
+      <div class="safety-item"><span style="font-size:18px;">🧂</span><span><strong>Na₂SO₄ usado</strong><br>Sólido inorgânico — lixo comum (verificar normas locais)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="section-header">
+    <div class="section-icon green">☑️</div>
+    <h2>Checklist — Véspera e Dia da Aula</h2>
+  </div>
+  <div class="section-body">
+
+    <p class="parte-label">Na véspera</p>
+    <ul class="checklist" style="margin-bottom:16px;">
+      <li><div class="check-box"></div><span>Preparar NaOH 6 mol·L⁻¹ — 500 mL (exotérmico — preparar com antecedência)</span></li>
+      <li><div class="check-box"></div><span>Preparar solução saturada de NaCl — 100 mL</span></li>
+      <li><div class="check-box"></div><span>Verificar estoque de CHCl₃ — mínimo 750 mL disponível</span></li>
+      <li><div class="check-box"></div><span>Verificar Na₂SO₄ anidro — manter em dessecador até o uso (higroscópico)</span></li>
+      <li><div class="check-box"></div><span>Verificar estoque de chá preto — mínimo 36 saquinhos</span></li>
+      <li><div class="check-box"></div><span>Verificar frascos de descarte halogenados (CHCl₃) com espaço suficiente</span></li>
+      <li><div class="check-box"></div><span>Separar vidraria: funis de separação, béqueres, vidros de relógio</span></li>
+    </ul>
+
+    <p class="parte-label">No dia — antes dos alunos chegarem</p>
+    <ul class="checklist" style="margin-bottom:16px;">
+      <li><div class="check-box"></div><span>Ligar sistema de exaustão das capelas com antecedência mínima de 10 minutos</span></li>
+      <li><div class="check-box"></div><span>Montar bandejas com kits individuais para cada grupo</span></li>
+      <li><div class="check-box"></div><span>Distribuir Na₂SO₄ anidro em pequenos frascos tampados por grupo</span></li>
+      <li><div class="check-box"></div><span>Posicionar CHCl₃ na bancada central (frasco âmbar, dispensação com proveta)</span></li>
+      <li><div class="check-box"></div><span>Posicionar NaOH 6M na bancada central com sinalização de CORROSIVO</span></li>
+      <li><div class="check-box"></div><span>Preparar gelo + água na bancada central para resfriamento dos extratos</span></li>
+      <li><div class="check-box"></div><span>Checar frasco lava-olhos (cheio) e luvas nitrílicas extras disponíveis</span></li>
+    </ul>
+
+    <p class="parte-label">Ao final da aula</p>
+    <ul class="checklist">
+      <li><div class="check-box"></div><span>Recolher todo CHCl₃ residual no frasco de halogenados — nunca descartar na pia</span></li>
+      <li><div class="check-box"></div><span>Desligar placas de aquecimento e exaustão</span></li>
+      <li><div class="check-box"></div><span>Lavar vidraria com detergente — funis de separação com atenção à torneira</span></li>
+      <li><div class="check-box"></div><span>Guardar NaOH 6M remanescente em frasco fechado e rotulado</span></li>
+      <li><div class="check-box"></div><span>Registrar quantidade de cafeína obtida por grupo no livro do laboratório</span></li>
+      <li><div class="check-box"></div><span>Guardar amostras de cafeína dos grupos para ponto de fusão na próxima aula</span></li>
+    </ul>
+
+  </div>
+</div>
+
+<footer>
+  Lab Química Orgânica · UFSCar &nbsp;|&nbsp; Prof. Marystela Ferreira &nbsp;|&nbsp; Guia do Técnico — Aula 3 Extração da Cafeína
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const pct = (document.documentElement.scrollTop / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  });
+</script>
+</body>
+</html>
