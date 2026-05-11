@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab Orgânica · UFSCar Sorocaba</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:#f5f1ea;color:#2a241e;font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+:root{
+  --bg:#f5f1ea;--sidebar:#ede6da;--white:#fff;
+  --bl:#f0eadd;--border:#ddd2bf;
+  --ink:#2a241e;--body:#5a4f3e;--muted:#8a7e6a;--faint:#a8997e;
+  --clay:#a64a1a;--clay-bg:#fbeee0;--clay-bd:#f0d9bf;
+  --olive:#5a6b28;--olive-bg:#ecefdc;--olive-bd:#dde2c4;
+  --serif:'Fraunces','Cormorant Garamond',Georgia,serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+  --sh:0 1px 0 #ddd2bf,0 8px 24px -12px rgba(80,60,30,.12);
+  --shl:0 1px 0 #ddd2bf;
+}
+
+/* Layout */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:220px;min-width:220px;height:100vh;background:var(--sidebar);border-right:1px solid var(--border);padding:32px 22px;display:flex;flex-direction:column;overflow-y:auto}
+.main{flex:1;height:100vh;overflow-y:auto;padding:40px 56px 60px}
+
+/* Sidebar */
+.logo-name{font-family:var(--serif);font-size:22px;font-weight:500;font-style:italic;letter-spacing:-.02em;line-height:1.05}
+.logo-sub{font-size:10px;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:.12em;font-weight:500}
+.logo-wrap{margin-bottom:36px}
+.nav-sections{flex:1}
+.nav-section{margin-bottom:24px}
+.nav-stitle{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-weight:500;margin-bottom:8px;padding-left:4px}
+.nav-item{width:100%;display:flex;align-items:baseline;gap:10px;padding:6px 8px;margin-bottom:1px;background:transparent;border:none;border-radius:4px;text-align:left;font-size:14px;color:#4a3f2e;font-weight:400;transition:color .1s,background .1s}
+.nav-item:hover{background:rgba(0,0,0,.04)}
+.nav-item.active{color:var(--clay);font-weight:500}
+.nav-item.active .nav-num{color:var(--clay)}
+.nav-num{font-family:var(--serif);font-size:11px;font-style:italic;color:var(--faint);font-variant-numeric:tabular-nums;flex-shrink:0}
+.sfooter{font-size:11px;color:var(--muted);line-height:1.5;padding-top:18px;border-top:1px solid var(--border);margin-top:8px}
+.sfooter-quote{font-style:italic;font-family:var(--serif);font-size:13px}
+.live-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.live-badge{display:none;align-items:center;gap:4px;font-size:10px;font-weight:500;color:var(--olive);background:var(--olive-bg);border:1px solid var(--olive-bd);padding:2px 8px;border-radius:99px}
+.refresh-btn{font-size:12px;font-weight:500;color:var(--muted);background:transparent;border:1px solid var(--border);border-radius:99px;padding:4px 12px}
+.refresh-btn:hover{color:var(--ink);border-color:var(--faint)}
+
+/* Panels */
+.panel{display:none}.panel.active{display:block}
+
+/* Hero */
+.hero{margin-bottom:44px;max-width:720px}
+.kicker{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-weight:500;margin-bottom:16px}
+.hero-h1{font-family:var(--serif);font-size:52px;font-weight:400;letter-spacing:-.025em;line-height:1.05;color:var(--ink)}
+.hero-h1 em{color:var(--clay);font-style:italic}
+.hero-sub{margin-top:20px;font-size:16px;line-height:1.55;color:var(--body);font-family:var(--serif)}
+.hero-sub strong{color:var(--clay);font-weight:600}
+.hero-sub strong.n{color:var(--ink)}
+
+/* KPI strip */
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);background:var(--white);border-radius:14px;padding:4px;box-shadow:var(--sh);margin-bottom:36px}
+.kpi-cell{padding:22px 24px}
+.kpi-cell+.kpi-cell{border-left:1px solid var(--bl)}
+.kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:500}
+.kpi-num{font-family:var(--serif);font-size:42px;font-weight:400;letter-spacing:-.025em;margin-top:4px;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.kpi-num.alert{color:var(--clay)}
+.kpi-sub{font-size:12px;color:var(--muted);margin-top:8px;font-style:italic;font-family:var(--serif)}
+
+/* Two-col */
+.two-col{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;margin-bottom:44px}
+
+/* Section heading */
+.sh{margin-bottom:16px;display:flex;align-items:baseline;gap:14px}
+.sh-n{font-family:var(--serif);font-size:14px;color:var(--faint);font-style:italic;font-variant-numeric:tabular-nums}
+.sh-k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-weight:500}
+.sh h2{margin:2px 0 0;font-family:var(--serif);font-size:24px;font-weight:400;letter-spacing:-.015em}
+
+/* Tab header */
+.tab-hdr{margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border);max-width:720px}
+.tab-hdr h1{font-family:var(--serif);font-size:44px;font-weight:400;letter-spacing:-.02em}
+.tab-hdr p{margin:8px 0 0;font-size:15px;color:var(--body);font-family:var(--serif);font-style:italic}
+
+/* Cards */
+.card{background:var(--white);border-radius:14px;box-shadow:var(--shl)}
+
+/* Critical stock */
+.crit-row{display:grid;grid-template-columns:1fr auto auto;gap:20px;align-items:center;padding:14px 22px;border-top:1px solid var(--bl)}
+.crit-row:first-child{border-top:none}
+.crit-name{font-size:14px;font-weight:500;color:var(--ink)}
+.crit-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.crit-qty{font-size:13px;font-variant-numeric:tabular-nums;font-family:var(--serif);white-space:nowrap}
+.crit-qty .qv{color:var(--clay);font-weight:600}
+.crit-qty .qm{color:var(--faint)}
+.pedir-btn{padding:6px 14px;font-size:12px;font-weight:500;background:var(--clay);color:#fff;border:none;border-radius:99px}
+.pedir-btn:hover{opacity:.85}
+
+/* Sparkline */
+.spark-box{padding:22px}
+.spark-num{font-family:var(--serif);font-size:36px;font-weight:400;letter-spacing:-.02em;color:var(--ink)}
+.spark-unit{font-size:16px;color:var(--muted);margin-left:6px}
+.spark-sub{font-size:12px;color:var(--muted);margin-bottom:18px;margin-top:2px}
+.spark-labels{display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--faint)}
+
+/* Movement rows */
+.mov-row{display:grid;grid-template-columns:120px 100px 1fr;gap:24px;padding:18px 22px;border-top:1px solid var(--bl);align-items:baseline}
+.mov-row:first-child{border-top:none}
+.mov-full-row{display:grid;grid-template-columns:130px 100px 110px 1fr;gap:24px;padding:16px 24px;border-top:1px solid var(--bl);align-items:baseline}
+.mov-full-row:first-child{border-top:none}
+.mov-date{font-family:var(--serif);font-size:13px;color:var(--muted);font-style:italic;font-variant-numeric:tabular-nums}
+.mov-iname{font-size:14px;font-weight:500}
+.mov-idet{font-size:13px;color:var(--muted)}
+.mov-cat{font-size:12px;color:var(--muted)}
+
+/* Badges */
+.badge-a{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;border-radius:99px}
+.ba-saida{background:var(--clay-bg);color:var(--clay)}
+.ba-entrada{background:var(--olive-bg);color:var(--olive)}
+.ba-ajuste{background:var(--bl);color:var(--body)}
+
+/* Pills */
+.pill{display:inline-block;font-size:11px;font-weight:500;padding:3px 12px;border-radius:99px}
+.p-ok{background:var(--olive-bg);color:var(--olive)}
+.p-alert{background:var(--clay-bg);color:var(--clay)}
+.p-neutral{background:var(--bl);color:var(--body)}
+
+/* Tables */
+.tbl-wrap{background:var(--white);border-radius:14px;overflow:hidden;box-shadow:var(--shl)}
+.tbl-wrap table{width:100%;border-collapse:collapse}
+.tbl-wrap th{text-align:left;padding:14px 22px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-weight:500;border-bottom:1px solid var(--bl)}
+.tbl-wrap td{padding:14px 22px;font-size:13px;color:var(--body);border-bottom:1px solid #f5efe2;font-variant-numeric:tabular-nums}
+.tbl-wrap tr:last-child td{border-bottom:none}
+.tbl-wrap tr:hover td{background:rgba(245,241,234,.5)}
+.td-b{font-weight:500;color:var(--ink);font-variant-numeric:normal}
+.td-m{color:var(--muted)}
+.td-c{color:var(--muted);font-size:11px;font-family:var(--mono)}
+
+/* Controls */
+.controls{display:flex;gap:8px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.search-input{flex:1;min-width:200px;padding:8px 14px;border:1px solid var(--border);border-radius:99px;font-size:13px;font-family:inherit;background:var(--white);color:var(--ink);outline:none}
+.search-input:focus{border-color:var(--clay)}
+.fp{padding:7px 16px;font-size:12px;font-weight:500;background:transparent;color:var(--body);border:1px solid var(--border);border-radius:99px}
+.fp:hover{border-color:var(--faint)}
+.fp.active{background:#2a241e;color:#f5f1ea;border-color:#2a241e}
+.count-lbl{font-size:12px;color:var(--muted);font-family:var(--serif);font-style:italic;margin-left:auto}
+
+/* Demanda */
+.dem-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.dem-card{background:var(--white);border-radius:12px;padding:20px;box-shadow:var(--shl)}
+.dem-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.dem-date{font-family:var(--serif);font-size:12px;font-style:italic;color:var(--muted);font-variant-numeric:tabular-nums}
+.dem-tipo{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:500;margin-bottom:4px}
+.dem-desc{font-size:15px;font-weight:500}
+
+/* Roteiros */
+.rot-hdr{margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--border);max-width:760px}
+.rot-h1{font-family:var(--serif);font-size:44px;font-weight:400;letter-spacing:-.02em}
+.rot-h1 em{font-style:italic}
+.rot-sub{margin:12px 0 0;font-size:15px;color:var(--body);font-family:var(--serif);font-style:italic;line-height:1.55}
+.rot-filters{display:flex;align-items:center;gap:8px;margin-bottom:28px;flex-wrap:wrap}
+.rot-count{margin-left:auto;font-size:12px;color:var(--muted);font-family:var(--serif);font-style:italic}
+.rot-blocks{display:flex;flex-direction:column;gap:36px}
+.rot-bh{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+.rot-bn{font-family:var(--serif);font-size:14px;color:var(--faint);font-style:italic;font-variant-numeric:tabular-nums}
+.rot-bk{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-weight:500}
+.rot-bh2{margin:2px 0 0;font-family:var(--serif);font-size:26px;font-weight:400;letter-spacing:-.015em}
+.rot-list{background:var(--white);border-radius:14px;box-shadow:var(--shl);overflow:hidden}
+.rot-row{display:grid;grid-template-columns:70px 1fr auto;gap:24px;align-items:center;padding:20px 26px;border-top:1px solid var(--bl)}
+.rot-row:first-child{border-top:none}
+.rot-cod{font-family:var(--serif);font-size:22px;font-weight:400;color:var(--clay);font-style:italic;font-variant-numeric:tabular-nums}
+.rot-titulo{font-size:17px;font-weight:500;color:var(--ink);letter-spacing:-.005em}
+.rot-tipo{font-size:12px;color:var(--muted);margin-top:3px;font-family:var(--serif);font-style:italic}
+.chips{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:99px;text-decoration:none;border:1px solid}
+.chip:hover{opacity:.8}
+.chip-al{background:var(--olive-bg);color:var(--olive);border-color:var(--olive-bd)}
+.chip-tc{background:var(--clay-bg);color:var(--clay);border-color:var(--clay-bd)}
+.chip-pdf{background:var(--bg);color:var(--body);border-color:var(--border);font-family:var(--mono)}
+.chip-sl{background:#1a1510;color:#d4c9b8;border-color:#3a2e22}
+.chip-arr{font-size:10px;opacity:.6}
+
+/* States */
+.loading-msg{font-family:var(--serif);font-size:18px;font-style:italic;color:var(--muted);padding:60px 0}
+.error-msg{font-family:var(--serif);font-size:18px;font-style:italic;color:var(--clay);padding:60px 0}
+.empty-msg{padding:22px;font-size:13px;color:var(--muted);font-style:italic;font-family:var(--serif)}
+
+/* ============ RESPONSIVE — Tablet & Mobile ============ */
+@media (max-width:980px){
+  html,body{height:auto;overflow:auto}
+  .app{flex-direction:column;height:auto;overflow:visible}
+  .sidebar{width:100%;min-width:0;height:auto;padding:20px 22px;border-right:none;border-bottom:1px solid var(--border);overflow:visible;position:sticky;top:0;z-index:10;background:var(--sidebar)}
+  .main{flex:none;height:auto;overflow:visible;padding:28px 24px 60px}
+  .logo-wrap{margin-bottom:16px;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .logo-name{font-size:18px}
+  .logo-sub{margin-top:0}
+  .nav-sections{flex:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+  .nav-section{margin-bottom:4px}
+  .nav-stitle{margin-bottom:4px}
+  .nav-item{padding:6px 8px;font-size:13px}
+  .sfooter{margin-top:14px;padding-top:14px}
+  .live-row{margin-bottom:8px}
+  .sfooter-quote{font-size:12px}
+
+  /* Hero */
+  .hero{margin-bottom:28px}
+  .hero-h1{font-size:34px;line-height:1.1}
+  .hero-sub{font-size:14px;margin-top:14px}
+  .tab-hdr{margin-bottom:22px;padding-bottom:16px}
+  .tab-hdr h1{font-size:30px}
+  .tab-hdr p{font-size:14px}
+
+  /* KPI */
+  .kpi-strip{grid-template-columns:repeat(2,1fr);margin-bottom:24px;border-radius:12px}
+  .kpi-cell{padding:16px 14px}
+  .kpi-cell+.kpi-cell{border-left:none}
+  .kpi-cell:nth-child(even){border-left:1px solid var(--bl)}
+  .kpi-cell:nth-child(n+3){border-top:1px solid var(--bl)}
+  .kpi-num{font-size:28px}
+  .kpi-label{font-size:10px}
+
+  /* Two-col / Dem-grid */
+  .two-col{grid-template-columns:1fr;gap:16px;margin-bottom:28px}
+  .dem-grid{grid-template-columns:1fr;gap:12px}
+
+  /* Section heading */
+  .sh h2{font-size:20px}
+
+  /* Critical / Mov / Roteiro rows */
+  .crit-row{grid-template-columns:1fr auto;gap:8px 14px;padding:14px 18px;align-items:start}
+  .crit-row .pedir-btn{grid-column:1/-1;justify-self:start;margin-top:4px}
+  .mov-row{grid-template-columns:1fr;gap:4px;padding:14px 18px}
+  .mov-full-row{grid-template-columns:1fr;gap:4px;padding:14px 18px}
+  .mov-date{font-size:12px}
+  .rot-row{grid-template-columns:48px 1fr;gap:14px;padding:16px 18px}
+  .rot-row .chips{grid-column:1/-1;justify-content:flex-start;margin-top:4px;gap:6px}
+  .rot-cod{font-size:18px}
+  .rot-titulo{font-size:15px}
+  .rot-tipo{font-size:11px}
+  .rot-h1{font-size:30px}
+  .rot-bh2{font-size:20px}
+  .rot-hdr,.rot-bh{flex-wrap:wrap}
+
+  /* Sparkline */
+  .spark-box{padding:18px}
+  .spark-num{font-size:28px}
+
+  /* Tables — scroll horizontal pra não estourar */
+  .tbl-wrap{border-radius:10px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tbl-wrap table{min-width:560px}
+  .tbl-wrap th,.tbl-wrap td{padding:10px 14px;font-size:12px}
+
+  /* Controls */
+  .controls{gap:6px}
+  .search-input{min-width:0;width:100%;flex:1 1 100%;order:-1}
+  .count-lbl{margin-left:0}
+  .fp{padding:6px 12px;font-size:11px}
+
+  /* Cards */
+  .card{border-radius:10px}
+
+  /* Pills/badges */
+  .chip{font-size:10px;padding:4px 10px}
+}
+
+@media (max-width:480px){
+  .nav-sections{grid-template-columns:1fr;gap:6px}
+  .sidebar{padding:16px 18px}
+  .main{padding:22px 16px 50px}
+  .hero-h1{font-size:28px}
+  .tab-hdr h1{font-size:26px}
+  .kpi-num{font-size:24px}
+  .kpi-cell{padding:14px 12px}
+  .rot-h1{font-size:26px}
+  .crit-name,.mov-iname,.rot-titulo{font-size:14px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo-wrap">
+      <div class="logo-name">Lab.<br>Orgânica</div>
+      <div class="logo-sub">UFSCar — <span id="sidebar-date">—</span></div>
+    </div>
+    <div class="nav-sections">
+      <div class="nav-section">
+        <div class="nav-stitle">Inventário</div>
+        <button class="nav-item active" data-tab="overview"><span class="nav-num">01</span> Visão geral</button>
+        <button class="nav-item" data-tab="reagentes"><span class="nav-num">02</span> Reagentes</button>
+        <button class="nav-item" data-tab="vidrarias"><span class="nav-num">03</span> Vidrarias</button>
+        <button class="nav-item" data-tab="utensilios"><span class="nav-num">04</span> Utensílios</button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-stitle">Operação</div>
+        <button class="nav-item" data-tab="demanda"><span class="nav-num">05</span> Demanda</button>
+        <button class="nav-item" data-tab="mov"><span class="nav-num">06</span> Movimentações</button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-stitle">Aulas</div>
+        <button class="nav-item" data-tab="roteiros"><span class="nav-num">07</span> Roteiros & Guias</button>
+      </div>
+    </div>
+    <div class="sfooter">
+      <div class="live-row">
+        <div class="live-badge" id="live-badge"><span>●</span>&nbsp;<span id="live-ts"></span></div>
+        <button class="refresh-btn" id="refresh-btn" onclick="reloadAll()">↻ Atualizar</button>
+      </div>
+      <div class="sfooter-quote">"Tudo se transforma."</div>
+      <div style="margin-top:4px">— Lavoisier</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="panel active" id="panel-overview"><div class="loading-msg">Carregando dados do laboratório…</div></div>
+    <div class="panel" id="panel-reagentes"><div class="loading-msg">Carregando…</div></div>
+    <div class="panel" id="panel-vidrarias"><div class="loading-msg">Carregando…</div></div>
+    <div class="panel" id="panel-utensilios"><div class="loading-msg">Carregando…</div></div>
+    <div class="panel" id="panel-demanda"><div class="loading-msg">Carregando…</div></div>
+    <div class="panel" id="panel-mov"><div class="loading-msg">Carregando…</div></div>
+    <div class="panel" id="panel-roteiros"></div>
+  </main>
+</div>
+
+<script>
+const SHEET_ID = '1_m-IwCmHpmMTgk3Y00iXkE4ks5EouesZ8zpWK8sJ6OM';
+const GIDS = { reagentes:'409301399', vidraria:'1506927653', consumiveis:'1822515473', tarefas:'1022015268', log:'351658904' };
+const BASE = 'https://lab-organica-ufscar.netlify.app';
+
+const ROTEIROS_DATA = [
+  { professor:'Profa. Marystela', aulas:[
+    {codigo:'A1',titulo:'Solubilidade',slug:'solubilidade',temPdf:true},
+    {codigo:'A2',titulo:'Cristalização',slug:'cristalizacao',temPdf:true},
+    {codigo:'A3',titulo:'Extração da Cafeína',slug:'cafeina',temPdf:true},
+    {codigo:'A4',titulo:'Ponto de Fusão e Densidade',slug:'pf_densidade',temPdf:true},
+    {codigo:'A5',titulo:'Síntese da Aspirina',slug:'aspirina',temPdf:true},
+    {codigo:'A6',titulo:'Fermentação e Destilação',slug:'destilacao',temPdf:true},
+    {codigo:'—',titulo:'Cromatografia',slug:'cromatografia',temPdf:false},
+    {codigo:'—',titulo:'pH e Tampões',slug:'pH_tampoes',temPdf:false},
+  ]},
+  { professor:'Prof. Vadim', aulas:[
+    {codigo:'A1',titulo:'pH e Tampões',slug:'pH_tampoes'},
+    {codigo:'A2',titulo:'Açúcares',slug:'acucares',slides:'slides_acucares'},
+    {codigo:'A3',titulo:'DNS',slug:'dns',slides:'slides_dns'},
+    {codigo:'A4',titulo:'Cromatografia',slug:'cromatografia_vadim',slides:'slides_cromatografia_vadim'},
+    {codigo:'A5',titulo:'Desnaturação',slug:'desnaturacao',slides:'slides_proteinas'},
+    {codigo:'A6',titulo:'Biureto',slug:'biureto'},
+    {codigo:'A7',titulo:'Cinética',slug:'cinetica'},
+  ]},
+];
+
+const S = {
+  tab:'overview', reagFilter:'ALL', rotFilter:'todos',
+  search:{reagentes:'',vidrarias:'',utensilios:'',mov:''},
+  data:{reagentes:[],vidraria:[],consumiveis:[],tarefas:[],log:[]},
+};
+
+// ── Helpers ──
+const esc = s => String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const cell = (row,i) => { const c=row?.c?.[i]; if(!c) return ''; const v=c.v; return (v===null||v===undefined)?'':String(v).trim(); };
+const isAlert = s => { const v=String(s??'').toUpperCase(); return v==='ABAIXO_MINIMO'||v==='FALTANDO'||v==='BAIXO'; };
+
+function pillHtml(s) {
+  const v=String(s??'').toUpperCase();
+  if(v==='OK') return `<span class="pill p-ok">OK</span>`;
+  if(v==='FALTANDO') return `<span class="pill p-alert">Faltando</span>`;
+  return `<span class="pill p-alert">Baixo</span>`;
+}
+function badgeAcao(a) {
+  const s=String(a??'').toLowerCase();
+  const cls=(s.includes('saída')||s.includes('saida')||s.includes('baixa'))?'ba-saida':s.includes('entrada')?'ba-entrada':'ba-ajuste';
+  return `<span class="badge-a ${cls}">${esc(a)}</span>`;
+}
+function demPill(s) {
+  const v=String(s??'').toLowerCase();
+  const open=v.includes('aberto')||v==='';
+  return `<span class="pill ${open?'p-alert':'p-ok'}">${esc(s||'Aberto')}</span>`;
+}
+function heroDate() {
+  const d=new Date();
+  const dias=['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+  const mes=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  return `${dias[d.getDay()]}, ${String(d.getDate()).padStart(2,'0')} de ${mes[d.getMonth()]} de ${d.getFullYear()}`;
+}
+function computeSpark(logData) {
+  const counts=new Array(14).fill(0);
+  const now=new Date();
+  logData.forEach(e => {
+    const m=String(e.data||'').match(/^(\d{2})\/(\d{2})/);
+    if(m){const d=new Date(now.getFullYear(),parseInt(m[2],10)-1,parseInt(m[1],10));const diff=Math.floor((now-d)/86400000);if(diff>=0&&diff<14)counts[13-diff]++;}
+  });
+  return counts;
+}
+function sparkSvg(data) {
+  const max=Math.max(...data,1),w=300,h=70;
+  const pts=data.map((v,i)=>`${(i/(data.length-1))*w},${h-(v/max)*h*.85-4}`).join(' ');
+  return `<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" style="display:block"><defs><linearGradient id="sf" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a64a1a" stop-opacity=".18"/><stop offset="100%" stop-color="#a64a1a" stop-opacity="0"/></linearGradient></defs><polyline points="0,${h} ${pts} ${w},${h}" fill="url(#sf)" stroke="none"/><polyline points="${pts}" fill="none" stroke="#a64a1a" stroke-width="1.4" stroke-linejoin="round"/></svg>`;
+}
+
+// ── Fetch ──
+async function fetchGviz(gid) {
+  const res=await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${gid}`);
+  if(!res.ok) throw new Error(`HTTP ${res.status}`);
+  const txt=await res.text();
+  const clean=txt.replace(/^\/\*[\s\S]*?\*\/\s*/,'').replace(/^google\.visualization\.Query\.setResponse\(/,'').replace(/\);$/,'');
+  return JSON.parse(clean).table?.rows??[];
+}
+
+// ── Parsers ──
+const parseReagentes = rows => rows.map(r=>({id:cell(r,0),nome:cell(r,1),qtd:cell(r,2),min:cell(r,3),caixa:cell(r,4),estoque:cell(r,5),obs:cell(r,6),status:cell(r,7)||'OK'})).filter(r=>r.nome);
+const parseVidraria  = rows => rows.map(r=>({id:cell(r,0),nome:cell(r,1),qtd:cell(r,2),local:cell(r,3),min:cell(r,4),obs:cell(r,5),status:cell(r,6)||'OK'})).filter(r=>r.nome);
+const parseConsum    = rows => rows.map(r=>({id:cell(r,0),nome:cell(r,1),qtd:cell(r,2),unidade:cell(r,3),min:cell(r,4),obs:cell(r,5),status:cell(r,6)||'OK'})).filter(r=>r.nome);
+const parseTarefas   = rows => rows.slice(1).map(r=>({data:cell(r,0),tipo:cell(r,1),desc:cell(r,2),status:cell(r,3)})).filter(r=>r.desc);
+const parseLog       = rows => rows.map(r=>({data:cell(r,0),acao:cell(r,1),cat:cell(r,2),item:cell(r,3),detalhe:cell(r,4),quem:cell(r,5)})).filter(r=>r.item);
+
+// ── Renderers ──
+function renderOverview() {
+  const {reagentes,vidraria,consumiveis,tarefas,log}=S.data;
+  const alerts=[
+    ...reagentes.filter(r=>isAlert(r.status)).map(r=>({...r,_cat:'Reagente'})),
+    ...vidraria.filter(r=>isAlert(r.status)).map(r=>({...r,_cat:'Vidraria'})),
+    ...consumiveis.filter(r=>isAlert(r.status)).map(r=>({...r,_cat:'Utensílio'})),
+  ];
+  const demAberta=tarefas.filter(t=>String(t.status??'').toLowerCase().includes('aberto')||t.status==='').length;
+  const spark=computeSpark(log);
+  const mov7=spark.slice(7).reduce((a,b)=>a+b,0);
+  const title=alerts.length===0?'O laboratório está <em>em ordem</em>.':alerts.length<=3?'O laboratório está <em>quase em ordem</em>.':'O laboratório precisa de <em>atenção</em>.';
+
+  const critRows=alerts.slice(0,5).map(r=>`
+    <div class="crit-row">
+      <div><div class="crit-name">${esc(r.nome)}</div><div class="crit-sub">${esc(r.id)}${r.caixa?` · Caixa ${esc(r.caixa)}`:r.local?` · ${esc(r.local)}`:` · ${esc(r._cat)}`}</div></div>
+      <div class="crit-qty"><span class="qv">${esc(r.qtd)}</span><span class="qm"> / ${esc(r.min)}</span></div>
+      <button class="pedir-btn" onclick="alert('Funcionalidade em breve')">Pedir →</button>
+    </div>`).join('');
+
+  const movRows=log.slice(0,6).map(m=>`
+    <div class="mov-row">
+      <span class="mov-date">${esc(m.data)}</span>
+      ${badgeAcao(m.acao)}
+      <div><span class="mov-iname">${esc(m.item)}</span><span class="mov-idet"> — ${esc(m.detalhe)}</span></div>
+    </div>`).join('');
+
+  document.getElementById('panel-overview').innerHTML=`
+    <div class="hero">
+      <div class="kicker">Boletim — ${heroDate()}</div>
+      <h1 class="hero-h1">${title}</h1>
+      <p class="hero-sub">Há <strong>${alerts.length} ${alerts.length===1?'item':'itens'}</strong> abaixo do estoque mínimo e <strong class="n">${demAberta} ${demAberta===1?'demanda':'demandas'} em aberto</strong>.${log.length?` Atividade ${mov7>15?'intensa':'estável'} nos últimos 7 dias.`:''}</p>
+    </div>
+    <div class="kpi-strip">
+      <div class="kpi-cell"><div class="kpi-label">Reagentes</div><div class="kpi-num">${reagentes.length}</div><div class="kpi-sub">catalogados</div></div>
+      <div class="kpi-cell"><div class="kpi-label">Vidrarias</div><div class="kpi-num">${vidraria.length}</div><div class="kpi-sub">tipos em estoque</div></div>
+      <div class="kpi-cell"><div class="kpi-label">Em alerta</div><div class="kpi-num alert">${alerts.length}</div><div class="kpi-sub">abaixo do mín.</div></div>
+      <div class="kpi-cell"><div class="kpi-label">Demandas</div><div class="kpi-num">${demAberta}</div><div class="kpi-sub">em aberto</div></div>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="sh"><span class="sh-n">01</span><div><div class="sh-k">Atenção</div><h2>Estoque crítico</h2></div></div>
+        <div class="card">${alerts.length?critRows:`<div class="empty-msg">Nenhum item abaixo do mínimo — estoque OK.</div>`}</div>
+      </div>
+      <div>
+        <div class="sh"><span class="sh-n">02</span><div><div class="sh-k">Pulso</div><h2>14 dias</h2></div></div>
+        <div class="card spark-box">
+          <div class="spark-num">${mov7}<span class="spark-unit">mov.</span></div>
+          <div class="spark-sub">nos últimos 7 dias</div>
+          ${sparkSvg(spark)}
+          <div class="spark-labels"><span>−14d</span><span>−7d</span><span>hoje</span></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="sh"><span class="sh-n">03</span><div><div class="sh-k">Diário</div><h2>Últimas movimentações</h2></div></div>
+      <div class="card">${movRows||`<div class="empty-msg">Nenhuma movimentação registrada.</div>`}</div>
+    </div>`;
+}
+
+function renderReagentes() {
+  const q=S.search.reagentes.toLowerCase(), f=S.reagFilter;
+  const rows=S.data.reagentes.filter(r=>{
+    if(f==='OK'&&r.status!=='OK') return false;
+    if(f==='ALERT'&&!isAlert(r.status)) return false;
+    return !q||(r.nome+r.id+(r.obs||'')).toLowerCase().includes(q);
+  });
+  const tbody=rows.map(r=>`<tr><td class="td-c">${esc(r.id)}</td><td class="td-b">${esc(r.nome)}</td><td>${esc(r.qtd)}</td><td>${esc(r.caixa)}</td><td>${esc(r.min)}</td><td>${pillHtml(r.status)}</td></tr>`).join('');
+  const pid='panel-reagentes';
+  document.getElementById(pid).innerHTML=`
+    <div class="tab-hdr"><h1>Reagentes</h1><p>Inventário químico — soluções, sólidos e padrões</p></div>
+    <div class="controls">
+      <input id="sr" class="search-input" placeholder="Buscar reagente…" value="${esc(q)}" oninput="S.search.reagentes=this.value;renderReagentes();document.getElementById('sr')?.focus()">
+      <button class="fp ${f==='ALL'?'active':''}" onclick="S.reagFilter='ALL';renderReagentes()">Todos</button>
+      <button class="fp ${f==='OK'?'active':''}" onclick="S.reagFilter='OK';renderReagentes()">OK</button>
+      <button class="fp ${f==='ALERT'?'active':''}" onclick="S.reagFilter='ALERT';renderReagentes()">Abaixo do mín.</button>
+      <span class="count-lbl">${rows.length} itens</span>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr><th>Cód.</th><th>Substância</th><th>Quantidade</th><th>Caixa</th><th>Mínimo</th><th></th></tr></thead><tbody>${tbody}</tbody></table></div>`;
+}
+
+function renderVidrarias() {
+  const q=S.search.vidrarias.toLowerCase();
+  const rows=S.data.vidraria.filter(r=>!q||(r.nome+(r.local||'')).toLowerCase().includes(q));
+  const tbody=rows.map(r=>`<tr><td class="td-c">${esc(r.id)}</td><td class="td-b">${esc(r.nome)}</td><td>${esc(r.qtd)}</td><td>${esc(r.local)}</td><td>${esc(r.min)}</td><td>${pillHtml(r.status)}</td></tr>`).join('');
+  document.getElementById('panel-vidrarias').innerHTML=`
+    <div class="tab-hdr"><h1>Vidrarias</h1><p>Béqueres, balões, condensadores e demais peças</p></div>
+    <div class="controls">
+      <input id="sv" class="search-input" placeholder="Buscar peça…" value="${esc(q)}" oninput="S.search.vidrarias=this.value;renderVidrarias();document.getElementById('sv')?.focus()">
+      <span class="count-lbl">${rows.length} itens</span>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr><th>Cód.</th><th>Peça</th><th>Em estoque</th><th>Local</th><th>Mínimo</th><th></th></tr></thead><tbody>${tbody}</tbody></table></div>`;
+}
+
+function renderUtensilios() {
+  const q=S.search.utensilios.toLowerCase();
+  const rows=S.data.consumiveis.filter(r=>!q||r.nome.toLowerCase().includes(q));
+  const tbody=rows.map(r=>`<tr><td class="td-c">${esc(r.id)}</td><td class="td-b">${esc(r.nome)}</td><td>${esc(r.qtd)}</td><td>${esc(r.unidade)}</td><td>${esc(r.min)}</td><td class="td-m">${esc(r.obs)}</td></tr>`).join('');
+  document.getElementById('panel-utensilios').innerHTML=`
+    <div class="tab-hdr"><h1>Utensílios</h1><p>Materiais de consumo e ferramentas auxiliares</p></div>
+    <div class="controls">
+      <input id="su" class="search-input" placeholder="Buscar item…" value="${esc(q)}" oninput="S.search.utensilios=this.value;renderUtensilios();document.getElementById('su')?.focus()">
+      <span class="count-lbl">${rows.length} itens</span>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr><th>Cód.</th><th>Item</th><th>Quantidade</th><th>Unid.</th><th>Mínimo</th><th>Notas</th></tr></thead><tbody>${tbody}</tbody></table></div>`;
+}
+
+function renderDemanda() {
+  const cards=S.data.tarefas.map(t=>`
+    <div class="dem-card">
+      <div class="dem-top"><span class="dem-date">${esc(t.data)}</span>${demPill(t.status)}</div>
+      <div class="dem-tipo">${esc(t.tipo)}</div>
+      <div class="dem-desc">${esc(t.desc)}</div>
+    </div>`).join('');
+  document.getElementById('panel-demanda').innerHTML=`
+    <div class="tab-hdr"><h1>Demanda</h1><p>Pedidos, reposições e manutenções em andamento</p></div>
+    <div class="dem-grid">${cards||`<div class="empty-msg">Nenhuma demanda registrada.</div>`}</div>`;
+}
+
+function renderMov() {
+  const q=S.search.mov.toLowerCase();
+  const rows=S.data.log.filter(r=>!q||(r.item+r.detalhe+(r.acao||'')).toLowerCase().includes(q));
+  const items=rows.map(m=>`
+    <div class="mov-full-row">
+      <span class="mov-date">${esc(m.data)}</span>
+      ${badgeAcao(m.acao)}
+      <span class="mov-cat">${esc(m.cat)}</span>
+      <div><span class="mov-iname">${esc(m.item)}</span><span class="mov-idet"> — ${esc(m.detalhe)}</span></div>
+    </div>`).join('');
+  document.getElementById('panel-mov').innerHTML=`
+    <div class="tab-hdr"><h1>Movimentações</h1><p>Registro cronológico de entradas, saídas e ajustes</p></div>
+    <div class="controls">
+      <input id="sm" class="search-input" placeholder="Buscar no log…" value="${esc(q)}" oninput="S.search.mov=this.value;renderMov();document.getElementById('sm')?.focus()">
+      <span class="count-lbl">${rows.length} registros</span>
+    </div>
+    <div class="card">${items||`<div class="empty-msg">Nenhuma movimentação registrada.</div>`}</div>`;
+}
+
+function renderRoteiros() {
+  const f=S.rotFilter;
+  const totalAulas=ROTEIROS_DATA.reduce((a,p)=>a+p.aulas.filter(au=>f==='todos'||(f==='aluno')||(f==='tecnico')).length,0);
+  const filterBtns=[['todos','Todos'],['aluno','Roteiro do Aluno'],['tecnico','Guia do Técnico']]
+    .map(([id,lbl])=>`<button class="fp ${f===id?'active':''}" onclick="S.rotFilter='${id}';renderRoteiros()">${lbl}</button>`).join('');
+
+  const blocos=ROTEIROS_DATA.map((bloco,bi)=>{
+    const aulas=bloco.aulas;
+    if(!aulas.length) return '';
+    const rows=aulas.map((a,ai)=>{
+      const chips=[];
+      if(f==='todos'||f==='aluno') chips.push(`<a href="${BASE}/roteiro_aluno_${a.slug}.html" target="_blank" class="chip chip-al">Aluno <span class="chip-arr">↗</span></a>`);
+      if(f==='todos'||f==='tecnico') chips.push(`<a href="${BASE}/guia_tecnico_${a.slug}.html" target="_blank" class="chip chip-tc">Técnico <span class="chip-arr">↗</span></a>`);
+      if(a.slides&&(f==='todos')) chips.push(`<a href="${BASE}/${a.slides}.pptx" download class="chip chip-sl">Slides ↓</a>`);
+      return `<div class="rot-row"><span class="rot-cod">${esc(a.codigo)}</span><div><div class="rot-titulo">${esc(a.titulo)}</div><div class="rot-tipo">Roteiro web · Guia web${a.slides?' · Slides':''}</div></div><div class="chips">${chips.join('')}</div></div>`;
+    }).join('');
+    return `<div><div class="rot-bh"><span class="rot-bn">${String(bi+1).padStart(2,'0')}</span><div><div class="rot-bk">Docente · ${aulas.length} práticas</div><h2 class="rot-bh2">${esc(bloco.professor)}</h2></div></div><div class="rot-list">${rows}</div></div>`;
+  }).join('');
+
+  document.getElementById('panel-roteiros').innerHTML=`
+    <div class="rot-hdr">
+      <div class="kicker">Sumário das Aulas — 2026/1</div>
+      <h1 class="rot-h1">Roteiros & <em>Guias Técnicos</em></h1>
+      <p class="rot-sub">${ROTEIROS_DATA.reduce((a,p)=>a+p.aulas.length,0)} práticas catalogadas entre ${ROTEIROS_DATA.length} docentes. Cada aula traz roteiro do aluno, guia do técnico e PDFs para impressão.</p>
+    </div>
+    <div class="rot-filters">${filterBtns}<span class="rot-count">${totalAulas} práticas</span></div>
+    <div class="rot-blocks">${blocos}</div>`;
+}
+
+function renderAll() {
+  renderOverview(); renderReagentes(); renderVidrarias();
+  renderUtensilios(); renderDemanda(); renderMov(); renderRoteiros();
+}
+
+// ── Navigation ──
+document.querySelectorAll('.nav-item').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const tab=btn.dataset.tab;
+    S.tab=tab;
+    document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById(`panel-${tab}`).classList.add('active');
+  });
+});
+
+// ── Load ──
+async function reloadAll() {
+  const btn=document.getElementById('refresh-btn');
+  const badge=document.getElementById('live-badge');
+  btn.textContent='⌛ Carregando…'; btn.disabled=true; badge.style.display='none';
+  try {
+    const [rR,vR,cR,tR,lR]=await Promise.all([fetchGviz(GIDS.reagentes),fetchGviz(GIDS.vidraria),fetchGviz(GIDS.consumiveis),fetchGviz(GIDS.tarefas),fetchGviz(GIDS.log)]);
+    S.data.reagentes=parseReagentes(rR); S.data.vidraria=parseVidraria(vR);
+    S.data.consumiveis=parseConsum(cR); S.data.tarefas=parseTarefas(tR); S.data.log=parseLog(lR);
+    renderAll();
+    const now=new Date();
+    document.getElementById('live-ts').textContent=now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    badge.style.display='inline-flex';
+  } catch(err) {
+    console.error('Erro ao carregar:',err);
+    document.getElementById('panel-overview').innerHTML=`<div class="error-msg">Erro ao carregar dados. Verifique a conexão e tente novamente.</div>`;
+  } finally {
+    btn.textContent='↻ Atualizar'; btn.disabled=false;
+  }
+}
+
+// ── Init ──
+const d=new Date();
+document.getElementById('sidebar-date').textContent=`N.° ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+renderRoteiros();
+reloadAll();
+</script>
+</body>
+</html>
